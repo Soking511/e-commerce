@@ -8,8 +8,6 @@ import productRoute from "./products/productRoute";
 const app: express.Application = express()
 app.use(express.json());
 
-// const port = 3300;
-
 dotenv.config();
 dbConnection();
 

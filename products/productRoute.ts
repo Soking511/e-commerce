@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAllProducts, createProduct, getProductByID, deleteProduct, updateProduct, getAllProductsFromSubcategory } from '../controllers/productController';
+import { getAllProducts, createProduct, getProductByID, deleteProduct, updateProduct, getAllProductsFromSubcategory } from './productController';
 const productRoute: Router = Router( );
 
 productRoute.route( '/' )

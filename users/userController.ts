@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import User from "../interfaces/userInterface";
-import UserModel from "../models/userModel";
+import User from "./userInterface";
+import UserModel from "./userModel";
 import asyncHandler from 'express-async-handler';
 import mongoose from "mongoose";
 

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProduct = exports.deleteProduct = exports.getProductByID = exports.createProduct = exports.getAllProductsFromSubcategory = exports.getAllProducts = void 0;
-const productModel_1 = __importDefault(require("../models/productModel"));
+const productModel_1 = __importDefault(require("./productModel"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const mongoose_1 = __importDefault(require("mongoose"));
 exports.getAllProducts = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

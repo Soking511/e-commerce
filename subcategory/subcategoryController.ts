@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import SubCategory from "../interfaces/subcategoryInterface";
-import SubcategoriesModel from "../models/subcategoryModel";
+import SubCategory from "./subcategoryInterface";
+import SubcategoriesModel from "./subcategoryModel";
 import asyncHandler from 'express-async-handler';
 
 export const getAllSubCategories = asyncHandler( async ( req:Request, res: Response, next: NextFunction )  => {

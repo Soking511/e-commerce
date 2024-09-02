@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCategory, deleteCategory, getAllCategories, getCategoryByID, updateCategory } from '../controllers/categoriesController';
+import { createCategory, deleteCategory, getAllCategories, getCategoryByID, updateCategory } from './categoriesController';
 const categoriesRoute:Router = Router( );
 
 // categoriesRoute.get( '/', getAllCategories);

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const subcategoryController_1 = require("../controllers/subcategoryController");
+const subcategoryController_1 = require("./subcategoryController");
 const subcategoryRoute = (0, express_1.Router)();
 subcategoryRoute.route('/')
     .get(subcategoryController_1.getAllSubCategories)

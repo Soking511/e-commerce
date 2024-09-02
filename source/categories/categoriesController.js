@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateCategory = exports.deleteCategory = exports.createCategory = exports.getCategoryByID = exports.getAllCategories = void 0;
-const categoriesModel_1 = __importDefault(require("../models/categoriesModel"));
+const categoriesModel_1 = __importDefault(require("./categoriesModel"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 exports.getAllCategories = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const categories = yield categoriesModel_1.default.find();

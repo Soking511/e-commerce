@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import SubCategories from "../interfaces/subcategoryInterface";
+import SubCategories from "./subcategoryInterface";
 
 const subcategoriesSchema = new Schema<SubCategories>( {
   name: {type:String, required:true, trim:true, unique: true },
