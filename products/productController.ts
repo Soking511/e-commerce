@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import Product from "../interfaces/productInterface";
-import ProductsModel from "../models/productModel";
+import Product from "./productInterface";
+import ProductsModel from "./productModel";
 import asyncHandler from 'express-async-handler';
-import productModel from "../models/productModel";
+import productModel from "./productModel";
 import mongoose from "mongoose";
 
 export const getAllProducts = asyncHandler( async ( req:Request, res: Response, next: NextFunction )  => {

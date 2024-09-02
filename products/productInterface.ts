@@ -1,4 +1,4 @@
-import SubCategory from "../../subcategory/interfaces/subcategoryInterface";
+import SubCategory from "../../subcategory/subcategoryInterface";
 
 export default interface Product extends Document{
   name: string;

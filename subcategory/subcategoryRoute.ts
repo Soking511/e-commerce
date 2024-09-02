@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createSubCategory, deleteSubCategory, getAllSubCategories, getSubCategoryByID, updateSubCategory } from '../controllers/subcategoryController';
+import { createSubCategory, deleteSubCategory, getAllSubCategories, getSubCategoryByID, updateSubCategory } from './subcategoryController';
 const subcategoryRoute:Router = Router( );
 
 subcategoryRoute.route( '/' )

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import Categories from "../interfaces/categoriesInterface";
-import categoriesModel from "../models/categoriesModel";
+import Categories from "./categoriesInterface";
+import categoriesModel from "./categoriesModel";
 import asyncHandler from 'express-async-handler';
 
 export const getAllCategories = asyncHandler( async ( req:Request, res: Response, next: NextFunction )  => {

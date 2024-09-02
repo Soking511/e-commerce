@@ -1,9 +1,9 @@
 import express, { response } from "express";
 import dotenv from "dotenv";
 import dbConnection from "./config/db";
-import categoriesRoute from "./categories/routes/categoriesRoute";
-import subcategoryRoute from "./subcategory/routes/subcategoryRoute";
-import productRoute from "./products/routes/productRoute";
+import categoriesRoute from "./categories/categoriesRoute";
+import subcategoryRoute from "./subcategory/subcategoryRoute";
+import productRoute from "./products/productRoute";
 
 const app: express.Application = express()
 app.use(express.json());
