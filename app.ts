@@ -1,9 +1,20 @@
-import express from "express";
+import express, { response } from "express";
+import dotenv from "dotenv";
+import dbConnection from "./config/db";
+import categoriesRoute from "./routes/categoriesRoute";
+
 const app: express.Application = express()
-const port = 3000
+// const port = process.env.PORT;
+const port = 3000;
+app.use(express.json());
+
+dotenv.config();
+dbConnection();
+
+app.use('/api/v1/categories', categoriesRoute )
 
 app.get('/', (req:express.Request, res:express.Response) => {
-  res.send('Hello World!')
+  res.json({msg:' Hello API'})
 })
 
 app.listen(port, () => {
