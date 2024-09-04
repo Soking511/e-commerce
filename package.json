@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npm tsc",
     "start": "node dist/app.js",
-    "dev": "nodemon app.ts"
+    "dev": "NODE_ENV=product nodemon app.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createSubcategory, deleteSubcategory, getAllSubcategories, getSubcategoriesFromCategory, getSubcategoryByID, updateSubcategory } from './subcategoryController';
+import { createSubcategory, deleteSubcategory, getAllSubcategories, getSubcategoryByID, updateSubcategory } from './subcategoryController';
 const subcategoryRoute:Router = Router( {mergeParams: true} );
 
 subcategoryRoute.route( '/' )
-  .get( getSubcategoriesFromCategory, getAllSubcategories )
+  .get( getAllSubcategories )
   .post( createSubcategory );
 
   subcategoryRoute.route( '/:id' )

@@ -3,6 +3,8 @@ import asyncHandler from 'express-async-handler';
 import { Model } from "mongoose";
 import { FilterData } from "./moreInterfaces/filterData";
 import APIErrors from "../utils/apiErrors";
+import categoriesModel from "./categories/categoriesModel";
+import subcategoryModel from "./subcategory/subcategoryModel";
 
 export const getAll = <modelType>( model: Model<any>, modelName:string ) =>
   asyncHandler( async( req:Request, res:Response, next:NextFunction ) => {
@@ -11,6 +13,7 @@ export const getAll = <modelType>( model: Model<any>, modelName:string ) =>
       filterData = req.filterData;
 
     const document: modelType[] = await model.find(filterData);
+    if ( !document ) return next( new APIErrors( `The Document [${req.params.id}] not found`, 404 ) );
     res.status(200).json( {data:document} );
   })
 
@@ -39,5 +42,8 @@ export const DELETE = <modelType>( model:Model<any> ) =>
   asyncHandler( async( req:Request, res:Response, next:NextFunction ) => {
     const document: modelType | null = await model.findByIdAndDelete( req.params.id );
     if ( !document ) return next( new APIErrors( `The Document [${req.params.id}] not found`, 404 ) );
+    if ( model == categoriesModel )
+      await subcategoryModel.deleteMany({ category: req.params.id });
+
     res.status(204).json()
   })

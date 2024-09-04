@@ -8,6 +8,6 @@ const globalErrors = (err:CustomErrors, req:Request, res:Response, next:NextFunc
       message:err.message,
       ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
-};
+}; 
 
 export default globalErrors;

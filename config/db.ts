@@ -6,8 +6,6 @@ const dbConnection =()=>{
   mongoose.connect( process.env.DB! ) // Link Data Base
   .then( ()=> {
     console.log( "Connected!" )
-  }).catch(( error )=>{
-    console.log( `We Have That Error: ${error}` );
   })
 }
 

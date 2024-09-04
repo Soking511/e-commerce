@@ -5,10 +5,11 @@ import * as all from './Apps/moreInterfaces/index'
 import mountRoutes from "./Apps/index";
 import { Server } from "http";
 
-const app: express.Application = express(), port = process.env.PORT
-app.use(express.json());
 dotenv.config();
+const app: express.Application = express()
+const port = process.env.PORT;
 
+app.use(express.json());
 
 dbConnection();
 mountRoutes(app);
