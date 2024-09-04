@@ -13,7 +13,6 @@ export const getAll = <modelType>( model: Model<any>, modelName:string ) =>
     res.status(200).json( {data:document} );
   })
 
-
 export const getOne = <modelType>( model: Model<any> ) =>
   asyncHandler( async( req:Request, res:Response, next:NextFunction) =>{
     const document: modelType | null = await model.findById(req.params.id);
@@ -32,7 +31,7 @@ export const PUT = <modelType>( model:Model<any> ) =>
     res.status(200).json( {data:document} );
   })
 
-export const DELETE = <modelType>( model:Model<any>) =>
+export const DELETE = <modelType>( model:Model<any> ) =>
   asyncHandler( async( req:Request, res:Response, next:NextFunction ) => {
     const document: modelType | null = await model.findByIdAndDelete( req.params.id );
     res.status(204).json()

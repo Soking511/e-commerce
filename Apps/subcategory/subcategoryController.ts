@@ -16,5 +16,6 @@ export const getSubcategoriesFromCategory = ( req:Request, res:Response, next: N
     filterData.category = req.params.categoryId;
   }
   req.filterData = filterData;
+  // console.log( req.params );
   next( );
 }

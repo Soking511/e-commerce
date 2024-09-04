@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import dotenv from "dotenv";
 import dbConnection from "./config/db";
 import * as all from './Apps/moreInterfaces/index'
