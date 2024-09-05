@@ -5,14 +5,21 @@ import { FilterData } from "./moreInterfaces/filterData";
 import APIErrors from "../utils/apiErrors";
 import categoriesModel from "./categories/categoriesModel";
 import subcategoryModel from "./subcategory/subcategoryModel";
+import Features from "../utils/features";
+import model from './users/userModel';
 
 export const getAll = <modelType>( model: Model<any>, modelName:string ) =>
   asyncHandler( async( req:Request, res:Response, next:NextFunction ) => {
     let filterData: any = {};
+
     if ( req.filterData )
       filterData = req.filterData;
 
-    const document: modelType[] = await model.find(filterData);
+    // const document: modelType[] = await model.find(filterData);
+    const features:Features = new Features( model.find( filterData ), req.query ).sort()
+    const { mongooseQuery } = features;
+    const documents = modelType[] = await mongooseQuery;
+    
     if ( !document ) return next( new APIErrors( `The Document [${req.params.id}] not found`, 404 ) );
     res.status(200).json( {data:document} );
   })

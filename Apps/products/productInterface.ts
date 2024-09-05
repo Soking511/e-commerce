@@ -1,8 +1,7 @@
 import SubCategory from "../subcategory/subcategoryInterface";
 import Categories from "../categories/categoriesInterface";
 
-export default interface Product extends Document{
-  populate: any;
+export default interface Products extends Document{
   name: string;
   description: string;
   price: number;
@@ -15,5 +14,4 @@ export default interface Product extends Document{
   cover: string;
   ratingAverage: number;
   ratingCount: number;
-  // couponID: Coupon;
 };
