@@ -20,8 +20,8 @@ export const getAllProductsFromSubcategory = asyncHandler( async ( req:Request, 
   res.status(200).json( {data:SubcategoryProducts} );
 } )
 
-export const getAllProducts = getAll<Product>( productModel, 'products' );
+export const getAllProducts = getAll<Product>( productModel, 'product' );
 export const getProductByID = getOne<Product>( productModel );
 export const createProduct = POST<Product>( productModel );
 export const deleteProduct = DELETE<Product>( productModel  );
-export const updateProduct  = PUT<Product>( productModel );
+export const updateProduct = PUT<Product>( productModel );

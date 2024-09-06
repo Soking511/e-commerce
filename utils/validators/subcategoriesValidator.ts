@@ -4,7 +4,6 @@ import validatorMiddleware from "../../middlewares/validatorMiddleware";
 import categoriesModel from "../../Apps/categories/categoriesModel";
 import productModel from "../../Apps/products/productModel";
 import Products from "../../Apps/products/productInterface";
-import subcategoryModel from "../../Apps/subcategory/subcategoryModel";
 
 export const createSubcategoryValidator:RequestHandler[] = [
   check( 'name' )
@@ -12,7 +11,7 @@ export const createSubcategoryValidator:RequestHandler[] = [
     .isLength({min:2, max:20}).withMessage('Name Length Must Be Between 2 > 20')
     .custom(async(valueName) => {
       const category = await categoriesModel.findOne( {name:valueName} );
-      if (category) throw new Error( 'category is Already exist.' );
+      if (category) { throw new Error( 'category is Already exist.' ); }
       return true;
     }),
 
@@ -39,7 +38,7 @@ export const deleteSubcategoryValidator: RequestHandler[] = [
       const products = await productModel.find({ subcategory: val });
       if (products.length > 0) {
         const bulkOption = products.map((product: Products) => ({
-          deleteOne: { filter: { _id: subcategoryModel._id } }
+          deleteOne: { filter: { _id: product._id } }
         }))
         await productModel.bulkWrite(bulkOption)
       }

@@ -1,17 +1,18 @@
 import { Router } from 'express';
 import { getAllProducts, createProduct, getProductByID, deleteProduct, updateProduct, getAllProductsFromSubcategory } from './productController';
+import { deleteProductValidator, updateProductValidator, createProductValidator, getProductsByIDValidator } from '../../utils/validators/productsValidator';
 const productRoute: Router = Router( );
 
 productRoute.route( '/' )
   .get( getAllProducts )
-  .post( createProduct );
+  .post( createProductValidator, createProduct );
 
   productRoute.route( '/:id' )
-  .get( getProductByID )
-  .delete( deleteProduct )
-  .put( updateProduct );
+  .get( getProductsByIDValidator, getProductByID )
+  .delete( deleteProductValidator, deleteProduct )
+  .put( updateProductValidator, updateProduct );
 
-  productRoute.route( '/subcategory/:id' )
+  productRoute.route( '/product/:id' )
   .get( getAllProductsFromSubcategory )
 
   export default productRoute;

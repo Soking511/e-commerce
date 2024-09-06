@@ -1,10 +1,9 @@
-import Categories from "../categories/categoriesInterface";;
+import { Document } from "mongoose";
+import { Categories } from "../categories/categoriesInterface";;
 
-export default interface SubCategory extends Document{
-  populate: any;
+export interface Subcategories extends Document{
   name: string;
   image: string;
   category: Categories;
-  // childOF:any;
 };
 

@@ -1,4 +1,4 @@
-import Categories from "./categoriesInterface";
+import { Categories } from "./categoriesInterface";
 import categoriesModel from "./categoriesModel";
 import { DELETE, getAll, getOne, POST, PUT } from "../httpMethods";
 import { Request, NextFunction } from "express";

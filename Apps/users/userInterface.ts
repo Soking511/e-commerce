@@ -1,4 +1,4 @@
-export default interface User extends Document{
+export interface User extends Document{
   firstName:string;
   lastName: string;
   email:string;
@@ -7,8 +7,4 @@ export default interface User extends Document{
   image: string;
   verified: boolean;
 
-  // PaymentInfo; Payment;
-  // address: Address;
-  // paymentInfo:
-  // orderHistory:
 }
