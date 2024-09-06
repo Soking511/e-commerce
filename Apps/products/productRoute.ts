@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { getAllProducts, createProduct, getProductByID, deleteProduct, updateProduct, getAllProductsFromSubcategory } from './productController';
+import { getAllProducts, createProduct, getProductByID, deleteProduct, updateProduct, getAllProductsFromSubcategory, resizeProductImages, uploadProductImages } from './productController';
 import { deleteProductValidator, updateProductValidator, createProductValidator, getProductsByIDValidator } from '../../utils/validators/productsValidator';
+
 const productRoute: Router = Router( );
 
 productRoute.route( '/' )
   .get( getAllProducts )
-  .post( createProductValidator, createProduct );
+  .post( uploadProductImages, resizeProductImages, createProductValidator, createProduct );
 
   productRoute.route( '/:id' )
   .get( getProductsByIDValidator, getProductByID )

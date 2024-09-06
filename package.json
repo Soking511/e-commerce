@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npm tsc",
     "start": "node dist/app.js",
-    "dev": "NODE_ENV=development nodemon app.ts"
+    "dev": "NODE_ENV=product nodemon app.ts"
   },
   "keywords": [],
   "author": "",
@@ -19,13 +19,17 @@
     "express-validator": "^7.2.0",
     "mongodb": "^6.8.0",
     "moongose": "^1.0.0",
+    "multer": "^1.4.5-lts.1",
     "node_module": "^0.0.0",
+    "sharp": "^0.31.0",
     "tsc": "^2.0.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.5.4",
+    "@types/sharp": "^0.32.0",
     "mongoose": "^8.6.0",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
