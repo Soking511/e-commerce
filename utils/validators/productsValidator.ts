@@ -53,11 +53,11 @@ export const createProductValidator:RequestHandler[] = [
         return true;
       }),
 
-      check( 'subcategories' ).isMongoId().withMessage('Invalid Mongo ID')
-      .notEmpty().withMessage('Enter SubCategory')
+      check( 'subcategory' ).isMongoId().withMessage('Invalid Mongo ID')
+      .notEmpty().withMessage('Enter Subcategory')
       .custom( async( value:string, {req} ) => {
-        const subcategories = await subcategoriesModel.findById( value );
-        if ( !subcategories )
+        const subcategory = await subcategoriesModel.findById( value );
+        if ( !subcategory )
           throw new Error('subcategory not exist');
 
         return true;
@@ -129,16 +129,6 @@ export const updateProductValidator:RequestHandler[] = [
 export const deleteProductValidator: RequestHandler[] = [
   check('id')
     .isMongoId().withMessage('invalid mongo id')
-
-    // .custom(async (val: string) => {
-    //   const products = await productModel.find({ subcategory: val });
-    //   if (products.length > 0) {
-    //     const bulkOption = products.map((product: Products) => ({
-    //       deleteOne: { filter: { _id: product._id } }
-    //     }))
-    //     await productModel.bulkWrite(bulkOption)
-    //   }
-    // })
     ,
   validatorMiddleware
 ];

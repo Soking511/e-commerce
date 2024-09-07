@@ -7,7 +7,7 @@ const subcategoriesSchema = new Schema<Subcategories>( {
   images: [String],
   cover: String,
   category: { type: Schema.Types.ObjectId, ref: 'categories' },
-  child:{ productsModel:Products, type: Schema.Types.ObjectId, ref: 'categories' }
+  child:{ productsModel:Products, type: Schema.Types.ObjectId, ref: 'subcategories' }
 }, { timestamps: true });
 
 subcategoriesSchema.pre<Subcategories>(/^find/, function (next) {

@@ -12,8 +12,7 @@ subcategoryRoute.route( '/' )
 
   subcategoryRoute.route( '/:id' )
   .get( getSubcategoryByIDValidator, getSubcategoryByID )
-  // .delete( deleteSubcategoryValidator, deleteSubcategory )
-  .delete( childDeleteValidator(Products, 'subcategory'), deleteSubcategory )
+  .delete( deleteSubcategoryValidator, childDeleteValidator(Products, 'subcategory'), deleteSubcategory )
   .put( uploadSubcategoryImages, resizeSubcategoryImages, updateSubcategoryValidator, updateSubcategory );
 
 
