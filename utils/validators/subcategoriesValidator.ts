@@ -3,7 +3,7 @@ import { check } from "express-validator";
 import validatorMiddleware from "../../middlewares/validatorMiddleware";
 import categoriesModel from "../../Apps/categories/categoriesModel";
 import productModel from "../../Apps/products/productModel";
-import Products from "../../Apps/products/productInterface";
+import {Products} from "../../Apps/products/productInterface";
 
 export const createSubcategoryValidator:RequestHandler[] = [
   check( 'name' )
@@ -44,5 +44,5 @@ export const deleteSubcategoryValidator: RequestHandler[] = [
   //     }
   //   }),
   // validatorMiddleware
-  
+
 ];

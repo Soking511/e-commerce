@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Product from "./productInterface";
+import {Products} from "./productInterface";
 import asyncHandler from 'express-async-handler';
 import productModel from "./productModel";
 import { getAll, getOne, POST, DELETE, PUT } from "../httpMethods";
@@ -38,8 +38,8 @@ export const resizeProductImages = asyncHandler(async (req: Request, res: Respon
   next();
 })
 
-export const getAllProducts = getAll<Product>( productModel, 'product' );
-export const getProductByID = getOne<Product>( productModel );
-export const createProduct = POST<Product>( productModel );
-export const deleteProduct = DELETE<Product>( productModel  );
-export const updateProduct = PUT<Product>( productModel );
+export const getAllProducts = getAll<Products>( productModel, 'product' );
+export const getProductByID = getOne<Products>( productModel );
+export const createProduct = POST<Products>( productModel );
+export const deleteProduct = DELETE<Products>( productModel  );
+export const updateProduct = PUT<Products>( productModel );

@@ -1,19 +1,18 @@
 import {Subcategories} from "../subcategory/subcategoryInterface";
 import {Categories} from "../categories/categoriesInterface";
 
-export default interface Products{
-  // _id: any;
-  populate(arg0: { path: string; select: string; }): unknown;
+import { Document } from "mongoose";
+export interface Products extends Document {
   name: string;
   description: string;
+  category: Categories;
+  subcategory: Subcategories;
+  quantity: number;
+  sold: number;
   price: number;
   priceAfterDiscount: number;
-  stockQuantity: number;
-  sold: number;
-  subcategory: Subcategories;
-  category: Categories;
-  images: string[];
   cover: string;
+  images: string[];
   ratingAverage: number;
   ratingCount: number;
 };
