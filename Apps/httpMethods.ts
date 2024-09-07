@@ -6,7 +6,8 @@ import Features from '../utils/features';
 
 export const getAll = <modelType>(model: Model<any>, modelName: string) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    let searchLength: number = 0, filterData: any = {};
+    let filterData: any = {};
+    let searchLength: number = 0;
     if (req.filterData)
       filterData = req.filterData;
 

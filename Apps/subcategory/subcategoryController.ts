@@ -7,8 +7,8 @@ import { NextFunction, Request, Response } from "express";
 import asyncHandler from 'express-async-handler';
 import { uploadMultiImages } from "../../middlewares/uploadImages";
 
-export const uploadProductImages = uploadMultiImages([{ name: 'cover', maxCount:1 }, { name:'images', maxCount:5}]);
-export const resizeProductImages = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+export const uploadSubcategoryImages = uploadMultiImages([{ name: 'cover', maxCount:1 }, { name:'images', maxCount:5}]);
+export const resizeSubcategoryImages = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   if (req.files) {
 
     if (req.files.cover) {

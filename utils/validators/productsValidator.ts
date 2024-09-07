@@ -136,14 +136,15 @@ export const deleteProductValidator: RequestHandler[] = [
   check('id')
     .isMongoId().withMessage('invalid mongo id')
 
-    .custom(async (val: string) => {
-      const products = await productModel.find({ subcategory: val });
-      if (products.length > 0) {
-        const bulkOption = products.map((product: Products) => ({
-          deleteOne: { filter: { _id: product._id } }
-        }))
-        await productModel.bulkWrite(bulkOption)
-      }
-    }),
+    // .custom(async (val: string) => {
+    //   const products = await productModel.find({ subcategory: val });
+    //   if (products.length > 0) {
+    //     const bulkOption = products.map((product: Products) => ({
+    //       deleteOne: { filter: { _id: product._id } }
+    //     }))
+    //     await productModel.bulkWrite(bulkOption)
+    //   }
+    // })
+    ,
   validatorMiddleware
 ];
