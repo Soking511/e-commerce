@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { check } from "express-validator";
 import validatorMiddleware from "../../middlewares/validatorMiddleware";
 import categoriesModel from "../../Apps/categories/categoriesModel";
-import subcategoryModel from "../../Apps/subcategory/subcategoryModel";
+import subcategoriesModel from "../../Apps/subcategory/subcategoryModel";
 import productModel from "../../Apps/products/productModel";
 import {Products} from "../../Apps/products/productInterface";
 import "../../Apps/categories/categoriesInterface"
@@ -44,7 +44,7 @@ export const createProductValidator:RequestHandler[] = [
     }),
 
   check( 'category' ).optional().isMongoId().withMessage('Invalid Mongo ID')
-      .notEmpty().withMessage('Enter Subcategory')
+      .notEmpty().withMessage('Enter Category')
       .custom( async( value:string, {req} ) => {
         const category = await categoriesModel.findById( value );
         if ( !category )
@@ -53,20 +53,17 @@ export const createProductValidator:RequestHandler[] = [
         return true;
       }),
 
-    check( 'subcategory' ).optional().isMongoId().withMessage('Invalid Mongo ID')
-      .notEmpty().withMessage('Enter Subcategory')
+      check( 'subcategories' ).optional().isMongoId().withMessage('Invalid Mongo ID')
+      .notEmpty().withMessage('Enter SubCategory')
       .custom( async( value:string, {req} ) => {
-        const subcategory = await subcategoryModel.findById( value );
-        if ( !subcategory )
+        const subcategories = await subcategoriesModel.findById( value );
+        if ( !subcategories )
           throw new Error('subcategory not exist');
 
-        if (subcategory.category._id!.toString() !== req.body.category)
-          throw new Error('subcategory not exist in this category');
-
         return true;
-      })
-  , validatorMiddleware
-]
+      }),
+    validatorMiddleware
+  ];
 
 export const getProductsByIDValidator:RequestHandler[] = [
   check( 'id' )
@@ -108,7 +105,7 @@ export const updateProductValidator:RequestHandler[] = [
     }),
 
   check( 'category' ).optional().isMongoId().withMessage('Invalid Mongo ID')
-      .notEmpty().withMessage('Enter Subcategory')
+      .notEmpty().withMessage('Enter Category')
       .custom( async( value:string, {req} ) => {
         const category = await categoriesModel.findById( value );
         if ( !category )
@@ -120,12 +117,12 @@ export const updateProductValidator:RequestHandler[] = [
     check( 'subcategory' ).optional().isMongoId().withMessage('Invalid Mongo ID')
       .notEmpty().withMessage('Enter Subcategory')
       .custom( async( value:string, {req} ) => {
-        const subcategory = await subcategoryModel.findById( value );
+        const subcategory = await subcategoriesModel.findById( value );
         if ( !subcategory )
           throw new Error('subcategory not exist');
 
-        // if ( subcategory.category._id! !== req.body.category )
-          // throw new Error( `subcategory not exist in this category: ${req.body.category.name}`);
+        if ( subcategory.category._id! !== req.body.category )
+          throw new Error( `subcategory not exist in this category: ${req.body.category.name}`);
 
         return true;
       })
