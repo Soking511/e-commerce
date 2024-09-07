@@ -53,7 +53,7 @@ export const createProductValidator:RequestHandler[] = [
         return true;
       }),
 
-      check( 'subcategories' ).optional().isMongoId().withMessage('Invalid Mongo ID')
+      check( 'subcategories' ).isMongoId().withMessage('Invalid Mongo ID')
       .notEmpty().withMessage('Enter SubCategory')
       .custom( async( value:string, {req} ) => {
         const subcategories = await subcategoriesModel.findById( value );
@@ -104,29 +104,26 @@ export const updateProductValidator:RequestHandler[] = [
       return true;
     }),
 
-  check( 'category' ).optional().isMongoId().withMessage('Invalid Mongo ID')
-      .notEmpty().withMessage('Enter Category')
-      .custom( async( value:string, {req} ) => {
-        const category = await categoriesModel.findById( value );
-        if ( !category )
-          throw new Error('category not exist');
+    check( 'category' ).optional().isMongoId().withMessage('Invalid Mongo ID')
+    .notEmpty().withMessage('Enter Category')
+    .custom( async( value:string, {req} ) => {
+      const category = await categoriesModel.findById( value );
+      if ( !category )
+        throw new Error('category not exist');
 
-        return true;
-      }),
+      return true;
+    }),
 
-    check( 'subcategory' ).optional().isMongoId().withMessage('Invalid Mongo ID')
-      .notEmpty().withMessage('Enter Subcategory')
-      .custom( async( value:string, {req} ) => {
-        const subcategory = await subcategoriesModel.findById( value );
-        if ( !subcategory )
-          throw new Error('subcategory not exist');
+    check( 'subcategories' ).optional().isMongoId().withMessage('Invalid Mongo ID')
+    .notEmpty().withMessage('Enter SubCategory')
+    .custom( async( value:string, {req} ) => {
+      const subcategories = await subcategoriesModel.findById( value );
+      if ( !subcategories )
+        throw new Error('subcategory not exist');
 
-        if ( subcategory.category._id! !== req.body.category )
-          throw new Error( `subcategory not exist in this category: ${req.body.category.name}`);
-
-        return true;
-      })
-  , validatorMiddleware
+      return true;
+    }),
+  validatorMiddleware
 ]
 
 export const deleteProductValidator: RequestHandler[] = [
