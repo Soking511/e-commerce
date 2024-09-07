@@ -1,6 +1,7 @@
-export interface Categories extends Document{
+export interface Categories{
   _id: any;
   name: string;
-  image: string;
+  images: string[];
+  cover:string;
+  // category: Categories;
 };
-

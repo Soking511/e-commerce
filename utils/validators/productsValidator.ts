@@ -5,6 +5,7 @@ import categoriesModel from "../../Apps/categories/categoriesModel";
 import subcategoryModel from "../../Apps/subcategory/subcategoryModel";
 import productModel from "../../Apps/products/productModel";
 import Products from "../../Apps/products/productInterface";
+import "../../Apps/categories/categoriesInterface"
 
 export const createProductValidator:RequestHandler[] = [
   check( 'name' )
@@ -45,8 +46,8 @@ export const createProductValidator:RequestHandler[] = [
   check( 'category' ).optional().isMongoId().withMessage('Invalid Mongo ID')
       .notEmpty().withMessage('Enter Subcategory')
       .custom( async( value:string, {req} ) => {
-        const subcategory = await subcategoryModel.findById( value );
-        if ( !subcategory )
+        const category = await categoriesModel.findById( value );
+        if ( !category )
           throw new Error('category not exist');
 
         return true;
@@ -56,11 +57,11 @@ export const createProductValidator:RequestHandler[] = [
       .notEmpty().withMessage('Enter Subcategory')
       .custom( async( value:string, {req} ) => {
         const subcategory = await subcategoryModel.findById( value );
-        if ( !subcategory ){
-          throw new Error('subcategory not exist');}
+        if ( !subcategory )
+          throw new Error('subcategory not exist');
 
-        if ( subcategory.category._id! !== req.body.category ){
-          throw new Error( `subcategory not exist in this category: ${req.body.category.name}`);}
+        if (subcategory.category._id!.toString() !== req.body.category)
+          throw new Error('subcategory not exist in this category');
 
         return true;
       })
@@ -109,8 +110,8 @@ export const updateProductValidator:RequestHandler[] = [
   check( 'category' ).optional().isMongoId().withMessage('Invalid Mongo ID')
       .notEmpty().withMessage('Enter Subcategory')
       .custom( async( value:string, {req} ) => {
-        const subcategory = await subcategoryModel.findById( value );
-        if ( !subcategory )
+        const category = await categoriesModel.findById( value );
+        if ( !category )
           throw new Error('category not exist');
 
         return true;
@@ -123,8 +124,8 @@ export const updateProductValidator:RequestHandler[] = [
         if ( !subcategory )
           throw new Error('subcategory not exist');
 
-        if ( subcategory.category._id! !== req.body.category )
-          throw new Error( `subcategory not exist in this category: ${req.body.category.name}`);
+        // if ( subcategory.category._id! !== req.body.category )
+          // throw new Error( `subcategory not exist in this category: ${req.body.category.name}`);
 
         return true;
       })

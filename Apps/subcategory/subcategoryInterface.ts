@@ -3,7 +3,8 @@ import { Categories } from "../categories/categoriesInterface";;
 
 export interface Subcategories extends Document{
   name: string;
-  image: string;
+  images: string[];
+  cover:string;
   category: Categories;
 };
 

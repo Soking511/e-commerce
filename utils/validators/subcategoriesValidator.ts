@@ -11,7 +11,7 @@ export const createSubcategoryValidator:RequestHandler[] = [
     .isLength({min:2, max:20}).withMessage('Name Length Must Be Between 2 > 20')
     .custom(async(valueName) => {
       const category = await categoriesModel.findOne( {name:valueName} );
-      if (category) { throw new Error( 'category is Already exist.' ); }
+      if (category) { throw new Error( 'Subcategory is Already exist.' ); }
       return true;
     }),
 

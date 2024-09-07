@@ -12,7 +12,7 @@ export default interface Products extends Document{
   sold: number;
   subcategory: Subcategories;
   category: Categories;
-  image: string[];
+  images: string[];
   cover: string;
   ratingAverage: number;
   ratingCount: number;

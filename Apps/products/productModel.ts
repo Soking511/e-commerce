@@ -5,12 +5,12 @@ import categoriesModel from "../categories/categoriesModel";
 const productSchema = new Schema<Products>( {
   name: {type:String, required:true, trim:true, unique: true },
   price: {type:Number, required:true, min: 1 },
-  priceAfterDiscount: {type:Number, required:true, min: 1 },
+  priceAfterDiscount: {type:Number, min: 1 },
   stockQuantity: {type:Number, default:0, min:0},
   sold: {type:Number, default:0, min:0},
   category: { type:Schema.Types.ObjectId, ref:'category'},
   subcategory: { type:Schema.Types.ObjectId, ref:'subcategories'},
-  image: [String],
+  images: [String],
   cover: String,
   ratingAverage: Number,
   ratingCount: Number
