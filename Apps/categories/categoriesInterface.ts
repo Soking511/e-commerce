@@ -1,5 +1,6 @@
-export interface Categories{
-  _id: any;
+import { Document } from "mongoose";
+export interface Categories extends Document{
+  // _id: any;
   name: string;
   images: string[];
   cover:string;
