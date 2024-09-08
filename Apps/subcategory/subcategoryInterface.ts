@@ -8,8 +8,8 @@ export interface Subcategories extends Document{
   cover:string;
   category: Categories;
   child: {
-    productsModel: typeof Products;  
-    type: Types.ObjectId[];          // Array of product ObjectIds
+    productsModel: typeof Products;
+    type: Types.ObjectId[];         
   };
 };
 

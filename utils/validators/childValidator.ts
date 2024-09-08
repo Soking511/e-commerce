@@ -1,8 +1,7 @@
-import { RequestHandler } from "express";
-import { check } from "express-validator";
-import productModel from "../../Apps/products/productModel";
-import validatorMiddleware from "../../middlewares/validatorMiddleware";
-import { Model } from "mongoose";
+import { Request, Response, NextFunction, RequestHandler } from 'express';
+import { check, validationResult } from 'express-validator';
+import { Model } from 'mongoose';
+import validatorMiddleware from '../../middlewares/validatorMiddleware';
 
 export const childDeleteValidator = ( childModel: Model<any>, parentField: string ): RequestHandler[] => [
   check('id')
@@ -16,9 +15,6 @@ export const childDeleteValidator = ( childModel: Model<any>, parentField: strin
         }));
         await childModel.bulkWrite(bulkOption);
       }
-    }),
-
-  validatorMiddleware
+    })
+  , validatorMiddleware
 ];
-
-
