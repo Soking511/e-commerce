@@ -12,6 +12,7 @@ export const childDeleteValidator = ( childModel: Model<any>, parentField: strin
       if (childDocs.length > 0) {
         const bulkOption = childDocs.map((doc: any) => ({
           deleteOne: { filter: { _id: doc._id } }
+          
         }));
         await childModel.bulkWrite(bulkOption);
       }
