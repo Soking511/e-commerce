@@ -23,6 +23,7 @@ export const Login = asyncHandler(async (req: Request, res: Response, next: Next
   if (!currentUser || !(await bcrypt.compare(req.body.password, currentUser.password))) {
     return next(new APIErrors('invalid email or password', 401))
   }
+
   const token = createToken(currentUser._id, currentUser.role)
   res.cookie('jwt', token, {
     httpOnly: true,
@@ -40,15 +41,19 @@ export const Logout = (req: Request, res: Response) => {
   res.status(200).json({ message: 'Logged Out Successfully' });
 };
 
-export const protectRoute = async( req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.jwt;
-  if ( !token )
-    return next(new Error( 'You are not logged in!' ))
+export const protectRoute = (redirectRoute: string) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const token = req.cookies.jwt;
+    if ( !token )
+      return next(new Error( 'You are not logged in!' ))
 
-  const verifyJWT = jwt.verify(token, process.env.JWT_SECRET!);
-  if ( !verifyJWT )
-    return next(new Error( 'Invalid token, Please log in' ));
-    //
-    //
+    const verifyJWT = jwt.verify(token, process.env.JWT_SECRET!);
+    if ( !verifyJWT )
+      return next(new Error( 'Invalid token, Please log in' ));
 
+    console.log(redirectRoute);
+    next();
+  }
 };
+
+

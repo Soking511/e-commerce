@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { check, validationResult } from 'express-validator';
+import { RequestHandler } from 'express';
+import { check } from 'express-validator';
 import { Model } from 'mongoose';
 import validatorMiddleware from '../../middlewares/validatorMiddleware';
 
-export const childDeleteValidator = ( childModel: Model<any>, parentField: string ): RequestHandler[] => [
+export const childDeleteValidator = (childModel: Model<any>, parentField: string): RequestHandler[] => [
   check('id')
     .isMongoId()
     .withMessage('Invalid Mongo ID')
@@ -12,10 +12,9 @@ export const childDeleteValidator = ( childModel: Model<any>, parentField: strin
       if (childDocs.length > 0) {
         const bulkOption = childDocs.map((doc: any) => ({
           deleteOne: { filter: { _id: doc._id } }
-          
         }));
         await childModel.bulkWrite(bulkOption);
       }
-    })
-  , validatorMiddleware
+    }),
+  validatorMiddleware
 ];

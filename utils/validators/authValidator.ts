@@ -28,7 +28,6 @@ export const registerValidator: RequestHandler[] = [ // name, email, password, c
     .isMobilePhone(['ar-EG']).withMessage( 'Invalid Egyptian Phone Number')
 ]
 
-
 export const loginValidator: RequestHandler[] = [
   check('email')
     .notEmpty().withMessage('Email Address is Required')
