@@ -38,21 +38,20 @@ export const Logout = (req: Request, res: Response) => {
     maxAge: 0,
     httpOnly: true,
   });
+  // res.redirect('/') // for go home after logout
   res.status(200).json({ message: 'Logged Out Successfully' });
 };
 
-export const protectRoute = (redirectRoute: string) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.jwt;
-    if ( !token )
-      return next(new Error( 'You are not logged in!' ))
+export const protectRoute = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies.jwt;
+  if ( !token )
+    return next(new Error( 'You are not logged in!' ))
 
-    const verifyJWT = jwt.verify(token, process.env.JWT_SECRET!);
-    if ( !verifyJWT )
-      return next(new Error( 'Invalid token, Please log in' ));
+  const verifyJWT = jwt.verify(token, process.env.JWT_SECRET!);
+  if ( !verifyJWT )
+    return next(new Error( 'Invalid token, Please log in' ));
 
-    next();
-  }
+  next();
 };
 
 
