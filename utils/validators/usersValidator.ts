@@ -22,7 +22,7 @@ export const createUserValidator:RequestHandler[] = [
     .isLength({min:6, max:20}).withMessage('Password Length Must Be Between 8 & 20')
     .custom(async (inputPassword:string, {req}) => {
       if ( inputPassword !== req.body.confirmPassword )
-        throw new Error(`Password Dosn't Match!`);
+        throw new Error(`Password Doesn't Match!`);
 
       return true;
     }),
@@ -32,8 +32,8 @@ export const createUserValidator:RequestHandler[] = [
     .isLength({min:6, max:20}).withMessage('Password Length Must Be Between 8 & 20'),
 
   check('phone').optional()
-    .isMobilePhone(['ar-EG']).withMessage('Phone Number Must Be Egyption Number')
-    
+    .isMobilePhone(['ar-EG']).withMessage('Phone Number Must Be Egyptian Number')
+
   , validatorMiddleware
 ]
 
@@ -45,7 +45,16 @@ export const getUserByIDValidator:RequestHandler[] = [
 
 export const updateUserValidator:RequestHandler[] = [
   check( 'id' ).isMongoId().withMessage('Invalid Mongo ID'),
-  check( 'name' ).optional().isLength({min:2, max:20}).withMessage('Name Length Must Be Between 2 > 20')
+  check( 'name' )
+  .notEmpty( ).withMessage('User Name Required')
+  .isLength({min:2, max:20}).withMessage('Name Length Must Be Between 2 > 20'),
+
+  check('phone').optional()
+    .isMobilePhone(['ar-EG']).withMessage('Phone Number Must Be Egyptian Number'),
+
+  check('active').optional()
+    .isBoolean().withMessage('Active Must Be Boolean ( true or false )')
+
   , validatorMiddleware
 ]
 
@@ -56,5 +65,22 @@ export const deleteUserValidator:RequestHandler[] = [
 ]
 
 export const changeUserPasswordValidator:RequestHandler[] = [
-  //
+  check( 'id' )
+    .isMongoId().withMessage('Invalid Mongo ID'),
+
+  check( 'password' )
+    .notEmpty().withMessage('Password is Required')
+    .isLength({min:8, max:20}).withMessage('Password Length Must Be Between 8 & 20')
+    .custom(async (inputPassword:string, {req}) => {
+      if ( inputPassword !== req.body.confirmPassword )
+        throw new Error(`Password Doesn't Match!`);
+
+      return true;
+    }),
+
+  check( 'confirmPassword')
+    .notEmpty().withMessage('Confirm Password is Required')
+    .isLength({min:6, max:20}).withMessage('Password Length Must Be Between 8 & 20')
+  , validatorMiddleware
+
 ]

@@ -3,7 +3,7 @@ import {Users} from "./userInterface"
 import bcrypt from 'bcryptjs';
 
 const usersSchema = new Schema<Users>({
-  Name: {type:String, required:true},
+  name: {type:String, required:true},
   email: {type:String, unique: true, required:true},
   password: {type:String, required:true},
   phoneNumber: String,
@@ -23,6 +23,6 @@ export default model<Users>( 'users', usersSchema )
 usersSchema.pre<Users>( 'save', async function (next) {
   if (this.isModified('password'))
     this.password = await bcrypt.hash(this.password, 13);
-  
+
   next()
 } )

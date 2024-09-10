@@ -5,12 +5,14 @@ import productsRoute from "./products/productRoute"
 import globalErrors from "../middlewares/globalErrors"
 import APIErrors from '../utils/apiErrors';
 import usersRoute from "./users/userRoute"
+import authRoute from "./auth/authRoute"
 
 const mountRoutes = (app:Application) => {
   app.use('/api/v1/categories', categoriesRoute );
   app.use('/api/v1/subcategory', subcategoryRoute );
   app.use('/api/v1/products', productsRoute );
-  app.use('/api/v1/users', usersRoute );
+  app.use('/api/v1/users', usersRoute)
+  app.use('/api/v1/auth', authRoute)
   app.all( '*', (req:Request, res:Response, next:NextFunction) => {
     return next( new APIErrors( `This Route[${req.originalUrl}] not found !`, 400 ))
   } );

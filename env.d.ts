@@ -3,5 +3,10 @@ declare namespace NodeJS{
     readonly PORT: number;
     readonly DB: string;
     readonly NODE_ENV: 'development' | 'product';
+    readonly JWT_Expire: string;
+    readonly JWT_RESET_EXPIRE: string;
+    readonly JWT_KEY: string;
+    readonly JWT_SECRET: string;
+
   }
 }
