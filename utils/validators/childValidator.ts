@@ -3,7 +3,7 @@ import { check } from 'express-validator';
 import { Model } from 'mongoose';
 import validatorMiddleware from '../../middlewares/validatorMiddleware';
 
-export const childDeleteValidator = (childModel: Model<any>, parentField: string): RequestHandler[] => [
+export const deleteChildValidator = (childModel: Model<any>, parentField: string): RequestHandler[] => [
   check('id')
     .isMongoId()
     .withMessage('Invalid Mongo ID')

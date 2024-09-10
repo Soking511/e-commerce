@@ -6,11 +6,27 @@ const productRoute: Router = Router( );
 
 productRoute.route( '/' )
   .get( getAllProducts )
-  .post( uploadProductImages, resizeProductImages, createProductValidator, createProduct );
+  .post(
+    uploadProductImages,
+    resizeProductImages,
+    createProductValidator,
+    createProduct
+  );
 
 productRoute.route( '/:id' )
-  .get( getProductsByIDValidator, getProductByID )
-  .delete( deleteProductValidator, deleteProduct )
-  .put( uploadProductImages, resizeProductImages, updateProductValidator, updateProduct );
+  .get(
+    getProductsByIDValidator,
+    getProductByID
+  )
+  .delete(
+    deleteProductValidator,
+    deleteProduct
+  )
+  .put(
+    uploadProductImages,
+    resizeProductImages,
+    updateProductValidator,
+    updateProduct
+  );
 
   export default productRoute;
