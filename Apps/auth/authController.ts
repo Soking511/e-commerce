@@ -51,7 +51,6 @@ export const protectRoute = (redirectRoute: string) => {
     if ( !verifyJWT )
       return next(new Error( 'Invalid token, Please log in' ));
 
-    console.log(redirectRoute);
     next();
   }
 };

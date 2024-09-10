@@ -11,7 +11,8 @@ const categoriesRoute:Router = Router( );
 categoriesRoute.use('/:categoryId/subcategory', subcategoryRoute);
 
 categoriesRoute.route( '/' )
-  .get( protectRoute('categories'), getAllCategories )
+  // .get( protectRoute('category'), getAllCategories ) // for test
+  .get( protectRoute('category'), getAllCategories )
   .post( uploadCategoryImages, resizeCategoryImages, createCategoryValidator, createCategory );
 
 categoriesRoute.route( '/:id' )
