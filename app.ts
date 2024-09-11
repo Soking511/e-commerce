@@ -16,9 +16,9 @@ app.use(express.json());
 dbConnection();
 mountRoutes(app);
 
-let server:Server = app.listen(port, () => console.log(`Example app listening on port ${port}`) );
+let server:Server = app.listen(port);
 
-process.on( 'unhandledRejection', (err:Error) =>{
+process.on( 'unhandledRejection', (err:Error) => {
   console.error( `unhandledRejection: ${err.name} | ${err.message}` )
   server.close(() => {
     console.error('shutting the server down');

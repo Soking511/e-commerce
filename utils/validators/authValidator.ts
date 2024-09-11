@@ -1,39 +1,66 @@
 import { RequestHandler } from "express";
 import { check } from "express-validator";
+import validatorMiddleware from "../../middlewares/validatorMiddleware";
+import usersModel from "../../Apps/users/userModel";
 
-export const registerValidator: RequestHandler[] = [ // name, email, password, confirmPassword, phone
+export const registerValidator: RequestHandler[] = [
   check('name')
-    .notEmpty().withMessage('Input Your Name')
-    .isLength({min:2, max:15}).withMessage('Your Name Length Must Be Between 2 and 15 characters'),
-
+    .notEmpty().withMessage('user name required')
+    .isLength({ min: 2, max: 50 }).withMessage('name length must be between 2 & 50'),
   check('email')
-    .notEmpty().withMessage('Email Address is Required')
-    .isEmail().withMessage('Invalid Email Address'),
-
-  check('password')
-    .notEmpty().withMessage('Password is required')
-    .isLength({min:8, max:20}).withMessage('Password Length Must Be Between 8 & 20')
-    .custom((inputPassword:string, {req}) => {
-      if ( inputPassword !== req.body.confirmPassword )
-        throw new Error(`Password Doesn't Match`);
-
+    .notEmpty().withMessage('Email is Required')
+    .isEmail().withMessage('Invalid Email')
+    .custom(async (val: string) => {
+      const user = await usersModel.findOne({ email: val });
+      if (user) throw new Error('Email is already exist');
       return true;
     }),
-
+  check('role').optional()
+    .custom((val: string, { req }) => {
+      req.body.role = 'user';
+      return true;
+    }),
+  check('password')
+    .notEmpty().withMessage('password is required')
+    .isLength({ min: 6, max: 20 }).withMessage('password length from 6 to 20 char')
+    .custom((val: string, { req }) => {
+      if (val !== req.body.confirmPassword) { throw new Error("password doesn't match") };
+      return true;
+    }),
   check('confirmPassword')
-    .notEmpty().withMessage('Confirm Password is Required')
-    .isLength({min:8, max:20}).withMessage('Confirm Password Length Must Be Between 8 & 20'),
-
-  check('phone').optional()
-    .isMobilePhone(['ar-EG']).withMessage( 'Invalid Egyptian Phone Number')
-]
+    .notEmpty().withMessage('password is required')
+    .isLength({ min: 6, max: 20 }).withMessage('password length from 6 to 20 char'),
+  check('phone').optional().isMobilePhone(['ar-EG']),
+  validatorMiddleware
+];
 
 export const loginValidator: RequestHandler[] = [
   check('email')
-    .notEmpty().withMessage('Email Address is Required')
+    .notEmpty().withMessage('Email is Required')
     .isEmail().withMessage('Invalid Email'),
-
   check('password')
-    .notEmpty().withMessage('Password is required')
-    .isLength({min:8, max:20}).withMessage('Password Length Must Be Between 8 & 20')
-]
+    .notEmpty().withMessage('password is required')
+    .isLength({ min: 6, max: 20 }).withMessage('password length from 6 to 20 char'),
+  validatorMiddleware
+];
+
+export const forgetPasswordValidator: RequestHandler[] = [
+  check('email')
+    .notEmpty().withMessage('Email is Required')
+    .isEmail().withMessage('Invalid Email'),
+  validatorMiddleware
+];
+
+export const resetPasswordValidator: RequestHandler[] = [
+  check('password')
+    .notEmpty().withMessage('password is required')
+    .isLength({ min: 6, max: 20 }).withMessage('password length from 6 to 20 char')
+    .custom((val: string, { req }) => {
+      if (val !== req.body.confirmPassword) throw new Error("password doesn't match");
+      return true;
+    }),
+  check('confirmPassword')
+    .notEmpty().withMessage('password is required')
+    .isLength({ min: 6, max: 20 }).withMessage('password length from 6 to 20 char'),
+  validatorMiddleware
+];

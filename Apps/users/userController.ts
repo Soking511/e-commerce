@@ -1,11 +1,13 @@
 import { Users } from "./userInterface";
 import { DELETE, getAll, getOne, POST, PUT } from "../httpMethods";
-import { uploadMultiImages } from "../../middlewares/uploadImages";
+import { uploadMultiImages, uploadSingleImage } from "../../middlewares/uploadImages";
 import { NextFunction, Request, Response } from "express";
 import usersModel from "./userModel";
 import sharp from "sharp";
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
+import { createToken } from "../../utils/createToken";
+
 export const uploadUserImage = uploadMultiImages([{ name: 'cover', maxCount:1 }, { name:'images', maxCount:5}]);
 export const resizeUserImage = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   if (req.file) {
@@ -18,6 +20,8 @@ export const resizeUserImage = asyncHandler(async (req: Request, res: Response, 
   }
   next();
 })
+
+// Manager [Section]
 
 export const getAllUsers = getAll<Users>( usersModel, 'User' );
 export const getUserByID = getOne<Users>( usersModel );
@@ -38,4 +42,29 @@ export const changeUserPassword = asyncHandler( async( req:Request, res:Response
     password: bcrypt.hash(req.body.password, 13),
     passwordChangedAt: Date.now()
   })
+})
+
+// Native User [Section]
+
+export const setUserId = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user?._id) req.params.id = req.user._id.toString();
+  next();
+};
+
+export const updateLoggedUser = asyncHandler( async( req:Request, res:Response, next:NextFunction ) =>{
+  const user = await usersModel.findByIdAndUpdate(req.params.id,{
+    name: req.body.name,
+    phone: req.body.phone,
+    image: req.body.image,
+  }, {new:true} );
+  res.status(200).json({ data:user });
+})
+
+export const changeLoggedUserPassword = asyncHandler( async( req:Request, res:Response, next:NextFunction ) => {
+  const user = await usersModel.findByIdAndUpdate( req.params.id,{
+    password: bcrypt.hash(req.body.password, 13),
+    passwordChangedAt: Date.now()
+  })
+  const token = createToken( user?._id, user?.role! );
+  res.status(200).json({ token, data: user });
 })

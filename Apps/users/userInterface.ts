@@ -7,7 +7,7 @@ export interface Users extends Document{
   image: string;
   verified: boolean;
   role: UserRoles;
-  passwordChangedAt: Date | number;
+  passwordChangedAt: Date|number;
   resetCode: string | number;
   resetCodeExpireTime: Date | number | undefined;
   resetCodeVerify: boolean | undefined;

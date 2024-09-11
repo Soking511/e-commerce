@@ -3,12 +3,16 @@ import { createSubcategory, deleteSubcategory, getAllSubcategories, getSubcatego
 import { createSubcategoryValidator, deleteSubcategoryValidator, getSubcategoryByIDValidator, updateSubcategoryValidator } from '../../utils/validators/subcategoriesValidator';
 import Products from "../../Apps/products/productModel";
 import { deleteChildValidator } from '../../utils/validators/childValidator';
+import { isActive, isHaveAccess, protectRoutes } from '../auth/authController';
 
 const subcategoryRoute:Router = Router( {mergeParams: true} );
 
 subcategoryRoute.route( '/' )
   .get( getAllSubcategories )
   .post(
+    isActive,
+    isHaveAccess('admin', 'manager'),
+    protectRoutes,
     uploadSubcategoryImages,
     resizeSubcategoryImages,
     createSubcategoryValidator,
@@ -22,12 +26,18 @@ subcategoryRoute.route( '/' )
   )
 
   .delete(
+    isActive,
+    isHaveAccess('admin', 'manager'),
+    protectRoutes,
     deleteSubcategoryValidator,
     deleteChildValidator(Products, 'subcategory'),
     deleteSubcategory
   )
 
   .put(
+    isActive,
+    isHaveAccess('admin', 'manager'),
+    protectRoutes,
     uploadSubcategoryImages,
     resizeSubcategoryImages,
     updateSubcategoryValidator,

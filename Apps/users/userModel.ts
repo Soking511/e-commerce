@@ -11,18 +11,18 @@ const usersSchema = new Schema<Users>({
   role:{type: String, enum:['manager', 'admin', 'user'], default:'user'},
   image: String,
   phone: {type:String},
-  active: {type: Boolean, default: true},
+  // active: {type: Boolean, default: true},
   resetCode: String,
   passwordChangedAt: Date,
   resetCodeExpireTime: Date,
   resetCodeVerify: Boolean
 }, {timestamps: true} )
 
+
+usersSchema.pre<Users>('save', async function (next) {
+  if (!this.isModified('password')) next();
+  this.password = await bcrypt.hash(this.password, 13);
+  next();
+})
+
 export default model<Users>( 'users', usersSchema )
-
-usersSchema.pre<Users>( 'save', async function (next) {
-  if (this.isModified('password'))
-    this.password = await bcrypt.hash(this.password, 13);
-
-  next()
-} )

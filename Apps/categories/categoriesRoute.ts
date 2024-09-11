@@ -5,18 +5,20 @@ import { deleteChildValidator } from '../../utils/validators/childValidator';
 import subcategoriesModel from '../subcategory/subcategoryModel';
 import subcategoryRoute from '../subcategory/subcategoryRoute';
 import Products from "../../Apps/products/productModel";
-import { protectRoute } from '../auth/authController';
+import { isActive, isHaveAccess, protectRoutes } from '../auth/authController';
 const categoriesRoute:Router = Router( );
 
 categoriesRoute.use('/:categoryId/subcategory', subcategoryRoute);
 
 categoriesRoute.route( '/' )
   .get(
-    // protectRoute,
     getAllCategories
   )
 
   .post(
+    isActive,
+    isHaveAccess('admin', 'manager'),
+    protectRoutes,
     uploadCategoryImages,
     resizeCategoryImages,
     createCategoryValidator,
@@ -30,12 +32,18 @@ categoriesRoute.route( '/:id' )
   )
 
   .delete(
+    isActive,
+    isHaveAccess('admin', 'manager'),
+    protectRoutes,
     deleteCategoryValidator,
     deleteChildValidator(subcategoriesModel, 'category'),
     deleteChildValidator(Products, 'subcategory'),
     deleteCategory
   )
   .put(
+    isActive,
+    isHaveAccess('admin', 'manager'),
+    protectRoutes,
     uploadCategoryImages,
     resizeCategoryImages,
     updateCategoryValidator,

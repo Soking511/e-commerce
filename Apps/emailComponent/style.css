@@ -1,0 +1,47 @@
+#mainDIV{
+  width: 332px;
+  height: 245px;
+  border-radius: 12px;
+  background-color: #02072C;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#hr{
+  border: none;
+  height: 1px;
+  background-color: #ffffff;
+  width: 100%;
+  margin-left: 0;
+  opacity: 0.64;
+}
+
+span{
+  font-size: 12px;
+}
+
+h2{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.37);
+  padding:20px;
+}
+
+#titleName{
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#resetCode{
+  color:rgba(1, 204, 79, 0.795)
+}
+
+p{
+  margin-left: 10px;
+  padding-bottom:30px;
+}
+
+body{
+  color:#ffffff;
+  font-family: 'Roboto', sans-serif;
+}

@@ -22,4 +22,5 @@ const mountRoutes = (app:Application) => {
 }
 
 
+
 export default mountRoutes;
