@@ -32,7 +32,6 @@ subcategoryRoute.route( '/' )
     resizeSubcategoryImages,
     updateSubcategoryValidator,
     updateSubcategory
-  );
-
+  )
 
 export default subcategoryRoute;

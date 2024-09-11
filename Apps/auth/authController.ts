@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import bcrypt from 'bcryptjs';
-import userModel from "../users/userModel";
+import usersModel from "../users/userModel";
 import { createToken } from "../../utils/createToken";
 import APIErrors from "../../utils/apiErrors";
 import { Users } from "../users/userInterface";
 import jwt from "jsonwebtoken";
+import { changeUserPasswordValidator } from './../../utils/validators/usersValidator';
 
 export const Register = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const currentUser: Users = await userModel.create(req.body);
@@ -43,15 +44,26 @@ export const Logout = (req: Request, res: Response) => {
 };
 
 export const protectRoute = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.jwt;
-  if ( !token )
-    return next(new Error( 'You are not logged in!' ))
+  let token = ''
+  if ( req.headers.authorization && req.headers.authorization.startsWith('Bearer') ){
+    token = req.headers.authorization.split( ' ' )[1];
+  } else {
+    return next(new APIErrors( 'You are not logged in!', 401 ));
+  }
 
-  const verifyJWT = jwt.verify(token, process.env.JWT_SECRET!);
+  const verifyJWT: any = jwt.verify(token, process.env.JWT_KEY!);
   if ( !verifyJWT )
     return next(new Error( 'Invalid token, Please log in' ));
 
+  const currentUser = usersModel.findById( verifyJWT._id );
+  if ( currentUser.passwordChangedAt instanceof Date )
   next();
 };
 
+export const isActive = asyncHandler((req:Request, res:Response, next:NextFunction) =>{
+  if (!req.user?.active)
+    return next(new APIErrors('You are nont active!',403))
+
+  next();
+})
 
