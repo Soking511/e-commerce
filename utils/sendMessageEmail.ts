@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 
 const templatePath = path.resolve(__dirname, '../Apps/emailComponent/index.html');
-let emailComponent = fs.createReadStream(templatePath);
 
 const sendMessageEmail = async (options: EmailOptions) => {
   const transporter = nodemailer.createTransport({
@@ -16,6 +15,7 @@ const sendMessageEmail = async (options: EmailOptions) => {
       pass: process.env.EMAIL_PASSWORD,
     },
   });
+
   let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
   let customizedTemplate = emailTemplate.replace('<span id="resetCode"></span> </span>', `<span id="resetCode">${options.message}</span>`)
 

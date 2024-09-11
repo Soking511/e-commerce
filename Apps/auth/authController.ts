@@ -79,8 +79,6 @@ export const forgetPassword = asyncHandler(async (req: Request, res: Response, n
   await user.save();
   const message: string = `Your Reset Password Code is ${resetCode}`;
   try {
-    // document!.getElementById('codeReset')!.textContent = message;
-
     await sendMessageEmail({ email: user.email, subject: 'Reset Password', message });
     await user.save({ validateModifiedOnly: true });
   } catch (err) {
