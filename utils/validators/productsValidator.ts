@@ -3,8 +3,6 @@ import { check } from "express-validator";
 import validatorMiddleware from "../../middlewares/validatorMiddleware";
 import categoriesModel from "../../Apps/categories/categoriesModel";
 import subcategoriesModel from "../../Apps/subcategory/subcategoryModel";
-import productModel from "../../Apps/products/productModel";
-import {Products} from "../../Apps/products/productInterface";
 import "../../Apps/categories/categoriesInterface"
 
 export const createProductValidator:RequestHandler[] = [
