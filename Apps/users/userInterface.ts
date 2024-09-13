@@ -11,6 +11,16 @@ export interface Users extends Document{
   resetCode: string | number;
   resetCodeExpireTime: Date | number | undefined;
   resetCodeVerify: boolean | undefined;
+  // address[];
+}
+
+
+
+type UserAddress = {
+  street: string;
+  state: string;
+  city: string;
+  postalCode: string;
 }
 
 type UserRoles = 'manager' | 'admin' | 'user'

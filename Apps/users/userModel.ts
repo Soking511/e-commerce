@@ -11,11 +11,18 @@ const usersSchema = new Schema<Users>({
   role:{type: String, enum:['manager', 'admin', 'user'], default:'user'},
   image: String,
   phone: {type:String},
-  // active: {type: Boolean, default: true},
+  active: {type: Boolean, default: true},
   resetCode: String,
   passwordChangedAt: Date,
   resetCodeExpireTime: Date,
-  resetCodeVerify: Boolean
+  resetCodeVerify: Boolean,
+  wishlist: [{ type: Schema.Types.ObjectId, ref: 'products' }],
+  address: [{
+    street: String,
+    city: String,
+    state: String,
+    postalCode: String
+  }],
 }, {timestamps: true} )
 
 

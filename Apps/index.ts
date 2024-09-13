@@ -6,6 +6,8 @@ import globalErrors from "../middlewares/globalErrors"
 import APIErrors from '../utils/apiErrors';
 import usersRoute from "./users/userRoute"
 import authRoute from "./auth/authRoute"
+import addressRoute from "./address/addressRoute"
+import reviewsRoute from "./reviews/reviewsRoute"
 
 const mountRoutes = (app:Application) => {
   app.use('/api/v1/categories', categoriesRoute );
@@ -13,6 +15,8 @@ const mountRoutes = (app:Application) => {
   app.use('/api/v1/products', productsRoute );
   app.use('/api/v1/users', usersRoute)
   app.use('/api/v1/auth', authRoute)
+  app.use('/api/v1/address', addressRoute)
+  app.use('/api/v1/reviews', reviewsRoute)
   app.all( '*', (req:Request, res:Response, next:NextFunction) => {
     return next( new APIErrors( `This Route[${req.originalUrl}] not found !`, 400 ))
   } );
