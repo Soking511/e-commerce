@@ -5,13 +5,11 @@ import { Reviews } from "./reviewsInterface";
 import reviewsModel from "./reviewsModel";
 
 
-export const filterReviews = (typeSearch:string) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    let filterData: FilterData = {};
-    if (req.params.productId && typeSearch == 'reviews') { filterData.product = req.params.productId };
-    if (req.user?.role==='user' && !req.params.productId ) { filterData.user = req.user._id };
-    next();
-  };
+export const filterReviews = (req: Request, res: Response, next: NextFunction) => {
+  let filterData: FilterData = {};
+  if (req.params.productId) { filterData.product = req.params.productId };
+  if (req.user?.role==='user' && !req.params.productId ) { filterData.user = req.user._id };
+  next();
 }
 
 export const setProductAndUserId = (req: Request, res: Response, next: NextFunction) => {

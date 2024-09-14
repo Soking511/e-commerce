@@ -46,7 +46,7 @@ export const getUserByIDValidator:RequestHandler[] = [
 
 export const updateUserValidator:RequestHandler[] = [
   check( 'id' ).isMongoId().withMessage('Invalid Mongo ID'),
-  check( 'name' )
+  check( 'name' ).optional()
   .notEmpty( ).withMessage('User Name Required')
   .isLength({min:2, max:20}).withMessage('Name Length Must Be Between 2 > 20'),
 

@@ -1,22 +1,20 @@
-import { Schema, model } from "mongoose";
-import { Items } from "./cartInterface";
-import Products from "../products/productModel"
+import { Schema, model } from 'mongoose';
+import { Carts } from './cartInterface';
 
-const itemsSchema = new Schema<Items>( {
-  product:Products,
-  quantity: Number,
-  unitPrice: Number,
-  Subtotal: Number,
-  order: { type: Schema.Types.ObjectId, ref: 'orders' },
-  child:{ productsModel:Products, type: Schema.Types.ObjectId }
+const cartsSchema: Schema = new Schema<Carts>({
+  items: [{
+    product: { type: Schema.Types.ObjectId, ref: 'products' },
+    quantity: { type: Number, default: 1 },
+    price: Number
+  }],
+  totalPrice: Number,
+  totalPriceAfterDiscount: Number,
+  user: { type: Schema.Types.ObjectId, ref: 'users' },
+}, { timestamps: true })
 
-}, { timestamps: true });
-
-itemsSchema.pre<Items>(/^find/, function (next) {
-  this.populate({ path: 'orders', select: 'name' })
-  next();
+cartsSchema.pre<Carts>(/^find/, function (next) {
+  this.populate({ path: 'items.product', select: 'name cover' })
+  next()
 })
 
-
-
-export default model<Items>('items', itemsSchema)
+export default model<Carts>('carts', cartsSchema)

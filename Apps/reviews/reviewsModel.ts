@@ -27,18 +27,6 @@ reviewsSchema.statics.calcRatingAndQuantity = async function (productId) {
   }
 };
 
-// reviewsSchema.statics.getReviewOwnerID = async function (userId: string, productId: string): Promise<boolean> {
-//   try {
-//     const result = await this.aggregate([
-//       { $match: { user: userId, product: productId } }
-//     ]);
-//     return result.length > 0;
-//   } catch (error) {
-//     throw new Error( 'ERROR');
-//   }
-// };
-
-
 reviewsSchema.post<Reviews>('save', async function () { await (this.constructor as any).calcRatingAndQuantity(this.product) })
 reviewsSchema.pre<Reviews>(/^find/, function (next) {
   this.populate({ path: 'user', select: 'name image' })

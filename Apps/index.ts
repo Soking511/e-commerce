@@ -8,6 +8,8 @@ import usersRoute from "./users/userRoute"
 import authRoute from "./auth/authRoute"
 import addressRoute from "./address/addressRoute"
 import reviewsRoute from "./reviews/reviewsRoute"
+import cartRoute from "./cart/cartRoute"
+import ordersRoute from "./order/orderRoute"
 
 const mountRoutes = (app:Application) => {
   app.use('/api/v1/categories', categoriesRoute );
@@ -17,6 +19,8 @@ const mountRoutes = (app:Application) => {
   app.use('/api/v1/auth', authRoute)
   app.use('/api/v1/address', addressRoute)
   app.use('/api/v1/reviews', reviewsRoute)
+  app.use('/api/v1/carts', cartRoute)
+  app.use('/api/v1/orders', ordersRoute)
   app.all( '*', (req:Request, res:Response, next:NextFunction) => {
     return next( new APIErrors( `This Route[${req.originalUrl}] not found !`, 400 ))
   } );

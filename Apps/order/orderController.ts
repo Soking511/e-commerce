@@ -37,8 +37,8 @@ export const createCashOrder = asyncHandler(async (req: Request, res: Response, 
       const productCatch = await productModel.findOne({ _id: item.product._id });
 
       if (cartCatch && productCatch) {
-        if (!(cartCatch.quantity >= productCatch.quantity - 1)) {
-          const cart: any = await cartModel.findOneAndUpdate({ product: item.product._id }, {
+        if (!(item.quantity >= productCatch.quantity - 1)) {
+          const cart: any = await cartModel.findByIdAndUpdate( {id: item.product._id}, {
             $pull: { items: { _id: item.product._id } }
           }, { new: true });
           calcTotalPrice(cart);
@@ -49,15 +49,15 @@ export const createCashOrder = asyncHandler(async (req: Request, res: Response, 
       return {
         updateOne: {
           filter: { _id: item.product._id },
-          update: { $inc: { quantity: -item.quantity, sold: item.quantity } }
+          update: { $inc: { quantity: -item.quantity, sold: +item.quantity } }
         }
       };
     })
+
   );
 
   await productModel.bulkWrite(bulkOption);
   await cartModel.deleteOne({ user: req.user?._id });
-
 
   res.status(200).json({ data: order })
 });
