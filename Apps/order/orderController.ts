@@ -1,53 +1,81 @@
-// import { Subcategories } from "./itemInterface";
-// import { DELETE, getAll, getOne, POST, PUT } from "../httpMethods";
-// import subcategoryModel from "./itemModel";
-// import { FilterData } from "../moreInterfaces/filterData";
-// import sharp from "sharp";
-// import { NextFunction, Request, Response } from "express";
-// import asyncHandler from 'express-async-handler';
-// import { uploadMultiImages } from "../../middlewares/uploadImages";
 
-// export const uploadSubcategoryImages = uploadMultiImages([{ name: 'cover', maxCount:1 }, { name:'images', maxCount:5}]);
-// export const resizeSubcategoryImages = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-//   if (req.files) {
+import asyncHandler from 'express-async-handler';
+import { NextFunction, Request, Response } from "express";
+import { FilterData } from '../moreInterfaces/filterData';
+import { CartItems } from '../cart/cartInterface';
+import { getAll, getOne } from '../httpMethods';
+import { Orders } from './orderInterface';
+import orderModel from './orderModel';
+import cartModel from '../cart/cartModel';
+import APIErrors from '../../utils/apiErrors';
+import productModel from '../products/productModel';
+import { calcTotalPrice } from '../cart/cartController';
 
-//     if (req.files.cover) {
-//       const imgName = `subcategories-${Date.now()}-cover.webp`;
-//       await sharp(req.files.cover[0].buffer)
-//         .resize(500, 500)
-//         .toFormat('webp')
-//         .webp({ quality: 95 })
-//         .toFile(`uploads/subcategories/${imgName}`)
+export const filterOrders = asyncHandler((req: Request, res: Response, next: NextFunction) => {
+  const filterData: FilterData = {};
+  if (req.user?.role === 'user') { filterData.user = req.user._id };
+  next();
+});
 
-//       req.body.cover = imgName;
-//     }
-//     if (req.files.images) {
-//       req.body.images = [];
-//       await Promise.all(req.files.images.map(async (image: any, index: number) => {
-//         const imgName = `subcategories-${Date.now()}N${index}-.webp`;
-//         await sharp(image.buffer)
-//           .toFormat('webp')
-//           .webp({ quality: 95 })
-//           .toFile(`uploads/subcategories/${imgName}`);
+export const getAllOrders = getAll<Orders>(orderModel, 'orders');
+export const getOrder = getOne<Orders>(orderModel)
 
-//         req.body.images.push(imgName);
-//       }))
-//     }
-//   }
-//   next();
-// })
+export const createCashOrder = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const taxPrice: number = 100;
+  const cart: any = await cartModel.findOne({ user: req.user?._id });
+  if (!cart) { return next(new APIErrors("you don't have cart to checkout", 400)) };
+  const order = await orderModel.create({
+    items: cart.items,
+    taxPrice,
+    totalPrice: cart.totalPriceAfterDiscount ? cart.totalPriceAfterDiscount : cart.totalPrice,
+    address: req.body.address,
+    user: req.user?._id
+  });
+  const bulkOption = await Promise.all(
+    cart.items.map(async (item: CartItems) => {
+      const cartCatch = await cartModel.findOne({ _id: item.product._id });
+      const productCatch = await productModel.findOne({ _id: item.product._id });
 
-// export const filterSubcategories = (req: Request, res: Response, next: NextFunction) => {
-//   let filterData: FilterData = {};
-//   if (req.params.categoryId) {
-//     filterData.category = req.params.categoryId;
-//   }
-//   req.filterData = filterData;
-//   next();
-// }
+      if (cartCatch && productCatch) {
+        if (!(cartCatch.quantity >= productCatch.quantity - 1)) {
+          const cart: any = await cartModel.findOneAndUpdate({ product: item.product._id }, {
+            $pull: { items: { _id: item.product._id } }
+          }, { new: true });
+          calcTotalPrice(cart);
+          await cart.save();
+        }
+      }
 
-// export const getAllSubcategories = getAll<Subcategories>( subcategoryModel, 'subcategory' );
-// export const getSubcategoryByID = getOne<Subcategories>( subcategoryModel );
-// export const createSubcategory = POST<Subcategories>( subcategoryModel );
-// export const deleteSubcategory = DELETE<Subcategories>( subcategoryModel );
-// export const updateSubcategory = PUT<Subcategories>( subcategoryModel );
+      return {
+        updateOne: {
+          filter: { _id: item.product._id },
+          update: { $inc: { quantity: -item.quantity, sold: item.quantity } }
+        }
+      };
+    })
+  );
+
+  await productModel.bulkWrite(bulkOption);
+  await cartModel.deleteOne({ user: req.user?._id });
+
+
+  res.status(200).json({ data: order })
+});
+
+// update order paid
+export const payOrder = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const order = await orderModel.findByIdAndUpdate(req.params.id, {
+    isPaid: true,
+    paidAt: Date.now()
+  }, { new: true })
+  res.status(200).json({ data: order })
+});
+
+// update order delivered
+export const deliverOrder = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const order = await orderModel.findByIdAndUpdate(req.params.id, {
+    isDelivered: true,
+    deliveredAt: Date.now()
+  }, { new: true })
+  res.status(200).json({ data: order })
+});

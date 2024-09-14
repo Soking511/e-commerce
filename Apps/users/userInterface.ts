@@ -14,13 +14,10 @@ export interface Users extends Document{
   // address[];
 }
 
-
-
-type UserAddress = {
+type UserRoles = 'manager' | 'admin' | 'user'
+export interface UserAddress {
   street: string;
-  state: string;
   city: string;
+  state: string;
   postalCode: string;
 }
-
-type UserRoles = 'manager' | 'admin' | 'user'

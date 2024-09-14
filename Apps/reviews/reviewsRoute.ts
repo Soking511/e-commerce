@@ -5,7 +5,7 @@ import { filterReviews, getAllReviews, setProductAndUserId, createReview, getRev
 
 const reviewsRoute: Router = Router({ mergeParams: true })
 reviewsRoute.route('/')
-  .get(filterReviews, getAllReviews)
+  .get(filterReviews , getAllReviews)
   .post(protectRoutes, isActive, isHaveAccess('user'), setProductAndUserId, createReviewValidator, createReview);
 
 reviewsRoute.get('/me', protectRoutes, isActive, isHaveAccess('user'), filterReviews, getAllReviews)

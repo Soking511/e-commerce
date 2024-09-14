@@ -28,6 +28,7 @@ export const updateAddress = asyncHandler(async (req: Request, res: Response, ne
         addressToUpdate[field] = req.body[field];
       }
     });
+
     await req.user?.save();
     res.status(200).json({ msg: "Address updated successfully" });
   } catch (err) {

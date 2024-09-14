@@ -1,47 +1,19 @@
-// import { Router } from 'express';
-// import { createSubcategory, deleteSubcategory, getAllSubcategories, getSubcategoryByID, resizeSubcategoryImages, updateSubcategory, uploadSubcategoryImages } from './itemController';
-// import { createSubcategoryValidator, deleteSubcategoryValidator, getSubcategoryByIDValidator, updateSubcategoryValidator } from '../../utils/validators/subcategoriesValidator';
-// import Products from "../products/productModel";
-// import { deleteChildValidator } from '../../utils/validators/childValidator';
-// import { isActive, isHaveAccess, protectRoutes } from '../auth/authController';
+import { Router } from "express";
+import { isActive, isHaveAccess, protectRoutes } from "../auth/authController";
+import { createOrderValidator, getOrderValidator } from "../../utils/validators/orderValidator";
+import { filterOrders, getAllOrders, createCashOrder, getOrder, payOrder, deliverOrder } from "./orderController";
 
-// const subcategoryRoute:Router = Router( {mergeParams: true} );
+const ordersRoute: Router = Router();
+ordersRoute.use(protectRoutes, isActive)
 
-// subcategoryRoute.route( '/' )
-//   .get( getAllSubcategories )
-//   .post(
-//     isActive,
-//     isHaveAccess('admin', 'manager'),
-//     protectRoutes,
-//     uploadSubcategoryImages,
-//     resizeSubcategoryImages,
-//     createSubcategoryValidator,
-//     createSubcategory
-//   );
+ordersRoute.route('/')
+  .get(filterOrders, getAllOrders)
+  .post(isHaveAccess('user'), createOrderValidator, createCashOrder);
 
-//   subcategoryRoute.route( '/:id' )
-//   .get(
-//     getSubcategoryByIDValidator,
-//     getSubcategoryByID
-//   )
+ordersRoute.route('/:id').get(getOrderValidator, getOrder)
 
-//   .delete(
-//     isActive,
-//     isHaveAccess('admin', 'manager'),
-//     protectRoutes,
-//     deleteSubcategoryValidator,
-//     deleteChildValidator(Products, 'subcategory'),
-//     deleteSubcategory
-//   )
+ordersRoute.use(isHaveAccess('manager', 'admin'))
+ordersRoute.route('/:id/paid').put(getOrderValidator, payOrder)
+ordersRoute.route('/:id/delivered').put(getOrderValidator, deliverOrder)
 
-//   .put(
-//     isActive,
-//     isHaveAccess('admin', 'manager'),
-//     protectRoutes,
-//     uploadSubcategoryImages,
-//     resizeSubcategoryImages,
-//     updateSubcategoryValidator,
-//     updateSubcategory
-//   )
-
-// export default subcategoryRoute;
+export default ordersRoute;

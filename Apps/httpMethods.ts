@@ -40,6 +40,7 @@ export const PUT = <modelType>(model: Model<any>) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const document: modelType | null = await model.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!document) { return next(new ApiErrors('Document not found', 404)) }
+    // document.save();
     res.status(200).json({ data: document })
   })
 

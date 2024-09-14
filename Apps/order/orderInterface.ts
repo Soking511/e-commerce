@@ -1,20 +1,18 @@
-import { Document, Types } from "mongoose";
-import userModel from "../users/userModel";
-import { Users } from "../users/userInterface";
-import { Items } from "../orderItem/itemInterface";
+import { Document } from "mongoose";
+import { CartItems } from "../cart/cartInterface";
+import { UserAddress, Users }  from "../users/userInterface";
 
-export interface Orders extends Document{
-  user:Users;
-  orderDate:Date;
+export interface Orders extends Document {
+  items: CartItems;
   totalPrice: number;
-  orderStatus:string;
-  items:Items;
-  child: {
-    usersModel: typeof userModel;
-    type: Types.ObjectId[];
-  };
-  // shippingAddress: Address;
-  // paymentStatus:string;
-  // paymentMethod: Payments;
-};
+  paymentMethod: Payment;
+  deliveredAt: Date | number;
+  isDelivered: boolean;
+  paidAt: Date | number;
+  isPaid: boolean;
+  taxPrice: number;
+  address: UserAddress;
+  user: Users;
+}
 
+type Payment = 'cash' | 'card'
