@@ -19,16 +19,21 @@ export const deleteUserCart = asyncHandler(async (req: Request, res: Response, n
 
 export const addProductToCart = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const product = await productModel.findById(req.body.product);
-  if (!product || product.quantity < ( req.body.quantity || 1) ) { return next(new Error('product not found or no stock quantity')) };
+  if (!product) return next(new Error('product not found'));
   let cart: any = await cartModel.findOne({ user: req.user?._id });
   if (!cart) {
+    if (!( product.quantity > 0 )) return next(new Error('product not available more quantity'));
     cart = await cartModel.create({
       user: req.user?._id,
       items: [{ product: product._id, price: product.price }],
     })
   } else {
+
     const productIndex: number = cart.items.findIndex((item: CartItems) => item.product._id!.toString() === req.body.product.toString());
     if (productIndex > -1) {
+      if ( cart.items[productIndex].quantity >= product.quantity )
+        return next(new Error('product not available more quantity'));
+
       cart.items[productIndex].quantity += 1;
     } else {
       cart.items.push({ product: product._id, price: product.price })

@@ -1,7 +1,7 @@
 import { Categories } from "./categoriesInterface";
 import categoriesModel from "./categoriesModel";
 import { DELETE, getAll, getOne, POST, PUT } from "../httpMethods";
-import { uploadMultiImages} from "../../middlewares/uploadImages";
+import { uploadMultiImages } from "../../middlewares/uploadImages";
 import sharp from "sharp";
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from 'express-async-handler';

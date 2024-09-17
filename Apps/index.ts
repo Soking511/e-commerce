@@ -10,6 +10,17 @@ import addressRoute from "./address/addressRoute"
 import reviewsRoute from "./reviews/reviewsRoute"
 import cartRoute from "./cart/cartRoute"
 import ordersRoute from "./order/orderRoute"
+import { Users } from "../Apps/users/userInterface";
+import { FilterData } from "../Apps/moreInterfaces/filterData";
+
+declare module 'express'{
+  interface Request{
+    filterData?: FilterData;
+    files?:any;
+    file?:any;
+    user?:Users;
+  }
+}
 
 const mountRoutes = (app:Application) => {
   app.use('/api/v1/categories', categoriesRoute );
@@ -28,7 +39,6 @@ const mountRoutes = (app:Application) => {
   app.use( globalErrors );
 
 }
-
 
 
 export default mountRoutes;

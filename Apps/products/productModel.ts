@@ -16,10 +16,13 @@ const productsSchema: Schema = new Schema<Products>({
   subcategory: { type: Schema.Types.ObjectId, ref: 'subcategories' }
 }, { timestamps: true })
 
+productsSchema.virtual('reviews', { ref: 'reviews', localField: '_id', foreignField: 'product' })
+
 productsSchema.pre<Products>(/^find/, function (next) {
   this.populate({ path: 'category', select: 'name' })
   this.populate({ path: 'subcategory', select: 'name' })
   next();
 })
+
 
 export default model<Products>('products', productsSchema)

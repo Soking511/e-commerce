@@ -33,7 +33,7 @@ export const createCashOrder = asyncHandler(async (req: Request, res: Response, 
   });
   const bulkOption = await Promise.all(
     cart.items.map(async (item: CartItems) => {
-      const cartCatch = await cartModel.findOne({ _id: item.product._id });
+      const cartCatch = await cartModel.findOne({ _id: item.product._id, user: { $ne: req.user?._id } });
       const productCatch = await productModel.findOne({ _id: item.product._id });
 
       if (cartCatch && productCatch) {
