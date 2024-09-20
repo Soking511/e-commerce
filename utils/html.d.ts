@@ -6,3 +6,5 @@ declare module '*.html' {
 declare module './emailComponent' {
   export function greet(): void;
 }
+
+declare module 'sharp';

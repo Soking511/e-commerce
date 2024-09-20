@@ -30,7 +30,7 @@ export const getOne = <modelType>(model: Model<any>, populateOptions?: string) =
       query = query.populate(populateOptions);
     }
     const document: modelType | null = await query;
-    if (!document) { return next(new ApiErrors(req.__('not_found'), 404)) }
+    if (!document) { return next(new ApiErrors(('not_found'), 404)) }
     res.status(200).json({ data: document })
   })
 

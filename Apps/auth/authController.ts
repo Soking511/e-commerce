@@ -8,6 +8,7 @@ import { Users } from "../users/userInterface";
 import jwt from "jsonwebtoken";
 import crypto from 'crypto';
 import sendMessageEmail from "../../utils/sendMessageEmail";
+import { sanitizeFilter } from "mongoose";
 
 const codeExpireTimeLimit = 10 * 60 * 1000;
 
@@ -49,6 +50,7 @@ export const protectRoutes = asyncHandler(async (req: Request, res: Response, ne
   if (user.passwordChangedAt instanceof Date) {
     if (user.passwordChangedAt.getTime()/1000 > JWTVerify.iat) { return next(new APIErrors('Please, login again!', 401)) }
   }
+  // req.user = sanitizeUser(user);
   req.user = user;
   next();
 });
