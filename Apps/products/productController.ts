@@ -38,8 +38,8 @@ export const resizeProductImages = asyncHandler(async (req: Request, res: Respon
   next();
 })
 
-export const getAllProducts = getAll<Products>( productModel, 'product' );
-export const getProductByID = getOne<Products>( productModel );
+export const getAllProducts = getAll<Products>( productModel, 'products' );
+export const getProductByID = getOne<Products>(productModel, 'reviews');
 export const createProduct = POST<Products>( productModel );
 export const deleteProduct = DELETE<Products>( productModel  );
 export const updateProduct = PUT<Products>( productModel );

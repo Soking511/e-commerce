@@ -8,9 +8,9 @@ export const getAll = <modelType>(model: Model<any>, modelName: string) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let filterData: any = {};
     let searchLength: number = 0;
-    if (req.filterData)
-      filterData = req.filterData;
-
+    if (req.filterData) {
+      filterData = req.filterData
+    }
     if (req.query) {
       const searchResult: Features = new Features(model.find(filterData), req.query).filter().search(modelName)
       const searchData: modelType[] = await searchResult.mongooseQuery;
@@ -22,7 +22,7 @@ export const getAll = <modelType>(model: Model<any>, modelName: string) =>
     const documents: modelType[] = await mongooseQuery;
     res.status(200).json({ length: documents.length, pagination: paginationResult, data: documents })
   });
-
+  
 export const getOne = <modelType>(model: Model<any>, populateOptions?: string) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let query = model.findById(req.params.id);

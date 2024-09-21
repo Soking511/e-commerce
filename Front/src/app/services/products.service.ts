@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ProductsService {
   private baseUrl: string = '';
   private productsRoute: string = '';
@@ -19,22 +20,13 @@ export class ProductsService {
   }
 
   getAllProducts(limit: number = 16, page: number = 1, sort: string = '-createdAt', search: string, category?: string, subcategory?: string): Observable<any> {
-    if (category) {
-      return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}?limit=${limit}&page=${page}&sort=${sort}&search=${search}&category=${category}`, {
-        headers: {
-          "X-API-KEY": `${this.apiKey}`
-        },
-        withCredentials: true
-      })
-    }
-    else {
-      return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}?limit=${limit}&page=${page}&sort=${sort}&search=${search}`, {
-        headers: {
-          "X-API-KEY": `${this.apiKey}`
-        },
-        withCredentials: true
-      })
-    }
+    console.log(category);
+    return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}?limit=${limit}&page=${page}&sort=${sort}&search=${search}&category=${category}`, {
+      headers: {
+        "X-API-KEY": `${this.apiKey}`
+      },
+      withCredentials: true
+    })
   }
 
   getProduct(productId: string): Observable<any> {
