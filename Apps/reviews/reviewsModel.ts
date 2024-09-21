@@ -30,7 +30,7 @@ reviewsSchema.statics.calcRatingAndQuantity = async function (productId: Schema.
 
 reviewsSchema.post<Reviews>('findOneAndDelete', async function (doc: Reviews) {
   if (doc && doc.product) {
-    await (reviewsModel as any).calcRatingAndQuantity(doc.product);
+    await (doc.constructor as any).calcRatingAndQuantity(doc.product);
   }
 });
 

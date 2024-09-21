@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { GlobalService } from './global.service';
 import { Login, ResetPassword, SendMail, Register, VerifyCode } from '../interfaces/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -9,16 +9,19 @@ import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
   private baseUrl: string = '';
   private authRoute: string = '';
   private apiKey: string = '';
   currentUser = new BehaviorSubject(null);
   authPhoto: string = 'images/phone.svg'
+
   constructor(private _GlobalService: GlobalService, private _HttpClient: HttpClient, private _Router: Router) {
     this.baseUrl = this._GlobalService.baseURL;
     this.authRoute = this._GlobalService.authRoute;
     this.apiKey = this._GlobalService.apiKey;
+
     if (localStorage.getItem('user') !== null) {
       this.saveCurrentUser();
     }
@@ -39,7 +42,7 @@ export class AuthService {
     }
   }
 
-  Register(formData: Register): Observable<any> {
+  register(formData: Register): Observable<any> {
     return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/Register`, formData
       , {
         headers: {
@@ -50,9 +53,6 @@ export class AuthService {
   }
 
   login(formData: Login): Observable<any> {
-
-    // console.log('API Key:', this.apiKey);
-    // console.log('CSRF Token:', Cookies.get('cookies'));
     return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/login`, formData
       , {
         headers: {
@@ -97,6 +97,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('user');
     this.currentUser.next(null);
-    this._Router.navigate(['/home'])
+    this._Router.navigate(['/login'])
   }
+
 }

@@ -13,7 +13,7 @@ import { calcTotalPrice } from '../cart/cartController';
 
 export const filterOrders = asyncHandler((req: Request, res: Response, next: NextFunction) => {
   const filterData: FilterData = {};
-  if (req.user?.role === 'user') { filterData.user = req.user._id };
+  if (req.user?.role === 'user') { filterData.user = req.user._id }; 
   next();
 });
 
