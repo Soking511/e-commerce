@@ -13,6 +13,9 @@ module.exports = {
           },
         },
       },
+      gridTemplateRows: {
+        '[auto,auto,1fr]': 'auto auto 1fr',
+      },
       animation: {
         "refine-slide": "refine 2s infinite",
       },

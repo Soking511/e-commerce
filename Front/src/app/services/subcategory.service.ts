@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class SubcategoryService {
   private baseUrl: string = '';
   private subcategoryRoute: string = '';
@@ -16,8 +17,8 @@ export class SubcategoryService {
     this.apiKey = this._GlobalService.apiKey;
   }
 
-  getAllSubcategories(): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}${this.subcategoryRoute}`, {
+  getAllSubcategories(category?: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseUrl}${this.subcategoryRoute}${category? `?category=${category}`:''}`, {
       headers: {
         "X-API-KEY": `${this.apiKey}`
       },

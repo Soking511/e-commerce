@@ -4,11 +4,12 @@ import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from "./navbar/navbar.component";
 import { FooterComponent } from "./footer/footer.component";
 import { NotificationComponent } from './notification/notification.component';
+import { BestSellerComponent } from "./best-seller/best-seller.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HomeComponent, NavbarComponent, FooterComponent, NotificationComponent],
+  imports: [RouterOutlet, HomeComponent, NavbarComponent, FooterComponent, NotificationComponent, BestSellerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

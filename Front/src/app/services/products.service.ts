@@ -20,13 +20,12 @@ export class ProductsService {
   }
 
   getAllProducts(limit: number = 16, page: number = 1, sort: string = '-createdAt', search: string, category?: string, subcategory?: string): Observable<any> {
-    console.log(category);
-    return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}?limit=${limit}&page=${page}&sort=${sort}&search=${search}&category=${category}`, {
-      headers: {
-        "X-API-KEY": `${this.apiKey}`
-      },
-      withCredentials: true
-    })
+      return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}?limit=${limit}&page=${page}&sort=${sort}&search=${search}${category? `&category=${category}`:''}${subcategory? `&subcategory=${subcategory}`:''}`, {
+        headers: {
+          "X-API-KEY": `${this.apiKey}`
+        },
+        withCredentials: true
+      })
   }
 
   getProduct(productId: string): Observable<any> {

@@ -20,6 +20,7 @@
     "@angular/router": "^18.2.0",
     "@popperjs/core": "^2.11.8",
     "animate.css": "^4.1.1",
+    "aspect-ratio": "^2.1.5",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "rxjs": "~7.8.0",

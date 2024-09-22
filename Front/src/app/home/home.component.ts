@@ -27,19 +27,19 @@ export class HomeComponent {
   products: Products[] = [];
   categories: Categories[] = [];
   subcategories: Categories[] = [];
-  categoryForm = new FormGroup({
-    _id: new FormControl(null, [Validators.required]),
-  });
+  categoryForm = new FormGroup({ _id: new FormControl("All", [Validators.required])});
+  subcategoryForm = new FormGroup({ _id: new FormControl("All", [Validators.required]) });
   imgDomain: string = '';
   pagination: Pagination = {};
   limit: number = 16;
   page: number = 1;
   sort: string = '-createdAt'
   search: string = '';
+
   constructor(private _ProductsService: ProductsService, private _CategoryService: CategoryService, private _SubcategoryService: SubcategoryService, private _ActivatedRoute: ActivatedRoute) { }
 
   loadProducts() {
-    this.subscription = this._ProductsService.getAllProducts(this.limit, this.page, '-sold', this.search).subscribe({
+    this.subscription = this._ProductsService.getAllProducts(this.limit, this.page, '-quantity', this.search).subscribe({
       next: (res) => {
         this.products = res.data;
         this.pagination = res.pagination;
@@ -49,17 +49,17 @@ export class HomeComponent {
   }
 
   loadSearch() {
-    const selectedCategory = this.categoryForm.get('_id')?.value||'All';
-    // console.log(selectedCategory);
-    this.subscription = this._ProductsService.getAllProducts(16, 1, '-sold', this.search,  ( selectedCategory !== 'All' )?  selectedCategory : '').subscribe({
-
-      next: (res) => {
-        this.products = res.data;
-        this.pagination = res.pagination;
-      },
-      error: (err) => { }
-    })
-  }
+    this.subscription = this._ProductsService.getAllProducts(16, 1, '-quantity', this.search,
+      ( this.categoryForm.get('_id')?.value! !== 'All')? this.categoryForm.get('_id')?.value!:null!,
+      ( this.subcategoryForm.get('_id')?.value! !== 'All')? this.subcategoryForm.get('_id')?.value!:null! )
+      .subscribe({
+        next: (res) => {
+          this.products = res.data;
+          this.pagination = res.pagination;
+        },
+        error: (err) => { }
+      })
+    }
 
   loadCategories() {
     this.subscription = this._CategoryService.getAllCategories().subscribe({
@@ -68,11 +68,13 @@ export class HomeComponent {
     })
   }
 
-  loadSubCategories() {
-    this.subscription = this._SubcategoryService.getAllSubcategories().subscribe({
+  loadSubCategories(category?:string) {
+    console.log(category);
+    this.subscription = this._SubcategoryService.getAllSubcategories(( category !== 'All')? category:null!).subscribe({
       next: (res) => { this.subcategories = res.data },
       error: (err) => { }
     })
+    this.loadSearch();
   }
 
 
