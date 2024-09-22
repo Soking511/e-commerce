@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
     this._AuthService.login(formData.value).subscribe({
       next:(res) => {
         localStorage.setItem('user', res.token );
+        // console.log(localStorage.getItem('user'));
         this._AuthService.saveCurrentUser();
         this._Router.navigate(['/home']);
       },

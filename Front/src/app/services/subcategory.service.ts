@@ -6,20 +6,19 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService {
+
+export class SubcategoryService {
   private baseUrl: string = '';
-  private productsRoute: string = '';
-  productImages: string = ``
+  private subcategoryRoute: string = '';
   apiKey: string = ``
   constructor(private _GlobalService: GlobalService, private _HttpClient: HttpClient) {
     this.baseUrl = this._GlobalService.baseURL;
-    this.productsRoute = this._GlobalService.productsRoute;
-    this.productImages = this._GlobalService.productsImage;
+    this.subcategoryRoute = this._GlobalService.subcategoryRoute;
     this.apiKey = this._GlobalService.apiKey;
   }
 
-  getAllProducts(limit: number = 16, page: number = 1, sort: string = '-createdAt', search: string): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}?limit=${limit}&page=${page}&sort=${sort}&search=${search}`, {
+  getAllSubcategories(category?: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseUrl}${this.subcategoryRoute}${category? `?category=${category}`:''}`, {
       headers: {
         "X-API-KEY": `${this.apiKey}`
       },

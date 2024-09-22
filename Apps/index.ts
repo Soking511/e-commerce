@@ -24,7 +24,7 @@ declare module 'express'{
 
 const mountRoutes = (app: Application) => {
   app.use((req: Request, res: Response, next: NextFunction) => {
-    res.cookie('cookies', req.csrfToken());
+    // res.cookie('cookies', req.csrfToken());
     console.log(req.headers);
     next();
   });
