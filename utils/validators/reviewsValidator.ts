@@ -16,8 +16,8 @@ export const createReviewValidator: RequestHandler[] = [
   check('user')
     .notEmpty().withMessage('user required')
     .isMongoId().withMessage('invalid user id')
-    .custom(async (val: string) => {
-      const review = await reviewsModel.findOne({ user: val });
+    .custom(async (val: string, { req }) => {
+      const review = await reviewsModel.findOne({ user: val, product:req.params!.productId});
       if (review) { throw new Error('you created review before') };
       return true;
     }),
@@ -38,9 +38,9 @@ export const updateReviewValidator: RequestHandler[] = [
       }
       return true;
     }),
-  check('comment')
+  check('comment').optional()
     .optional().isLength({ min: 10, max: 500 }).withMessage('invalid comment length'),
-  check('rate')
+  check('rate').optional()
     .optional().isFloat({ min: 1, max: 5 }).withMessage('invalid rate'),
   validatorMiddleware
 ];

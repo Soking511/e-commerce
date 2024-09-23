@@ -9,10 +9,11 @@ reviewsRoute.route('/')
   .post(protectRoutes, isActive, isHaveAccess('user'), setProductAndUserId, createReviewValidator, createReview);
 
 reviewsRoute.get('/me', protectRoutes, isActive, isHaveAccess('user'), filterReviews, getAllReviews)
+// reviewsRoute.put('/me/:reviewID', protectRoutes, isActive, isHaveAccess('user'), updateReviewValidator, updateRevi)
 
 reviewsRoute.route('/:id')
   .get(getReviewValidator, getReview)
   .put(protectRoutes, isActive, isHaveAccess('user'), updateReviewValidator, updateReview)
-  .delete(protectRoutes, isActive, deleteReviewValidator, deleteReview);
+  .delete(protectRoutes, isActive, deleteReviewValidator, deleteReview)
 
 export default reviewsRoute;
