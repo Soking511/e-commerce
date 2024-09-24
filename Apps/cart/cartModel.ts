@@ -17,4 +17,4 @@ cartsSchema.pre<Carts>(/^find/, function (next) {
   next()
 })
 
-export default model<Carts>('carts', cartsSchema)
+export default model<Carts>('carts', cartsSchema) 

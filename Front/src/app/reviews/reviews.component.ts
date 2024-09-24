@@ -1,14 +1,15 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Reviews } from '../interfaces/reviews';
 import { AuthService } from '../services/auth.service';
 import { ReviewsService } from '../services/reviews.service';
 import { ProductsService } from '../services/products.service';
 import { Products } from '../interfaces/products';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../services/notification.service';
 import { BehaviorSubject } from 'rxjs';
+import { ProductComponent } from '../product/product.component';
 
 @Component({
   selector: 'app-reviews',
@@ -17,7 +18,9 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './reviews.component.html',
   styleUrl: './reviews.component.scss'
 })
+
 export class ReviewsComponent implements OnInit, OnDestroy {
+  @ViewChild(ProductComponent) productComponent!: ProductComponent;
   subscription: any;
   product: Products = {};
   reviews: Reviews[] = [];
@@ -41,7 +44,9 @@ export class ReviewsComponent implements OnInit, OnDestroy {
     private _ReviewsService: ReviewsService,
     private _ProductsService: ProductsService,
     private _ActivatedRoute: ActivatedRoute,
-    private _NotificationService: NotificationService
+    private _NotificationService: NotificationService,
+    private _ProductComponent: ProductComponent,
+    private _Router: Router
   ) { }
 
   getProduct(productId: string) {
@@ -55,6 +60,7 @@ export class ReviewsComponent implements OnInit, OnDestroy {
 
   loadProductReviews(productId: string) {
     this.subscription = this._ProductsService.getProductReview(productId).subscribe({
+
       next: (res) => { this.reviews = res.data; },
       error: (err) => { },
     });
@@ -63,8 +69,9 @@ export class ReviewsComponent implements OnInit, OnDestroy {
   deleteReview() {
     this._ReviewsService.removeReview(this.currentReviewID).subscribe({
       next: (res) => {
-        this.getProduct(this.currentReviewID);
-        this._NotificationService.showNotification('Review deleted successfully!', 'success');
+        this.showEditor(false);
+        this.showDelete(false);
+        location.reload();
       },
       error: (err) => {
         this._NotificationService.showNotification('Failed to delete review', 'error');
@@ -75,7 +82,7 @@ export class ReviewsComponent implements OnInit, OnDestroy {
   addReview(productID:string, reviewForm: any) {
     this._ReviewsService.addReview(productID, reviewForm.value).subscribe({
       next: (res) => {
-        this.getProduct(productID);
+        location.reload();
         this._NotificationService.showNotification('Review Added successfully!', 'success');
       },
       error: (err) => {

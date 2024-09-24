@@ -10,7 +10,7 @@ cartRoute.route('/')
   .get(getUserCart)
   .post(addProductToCartValidator, addProductToCart)
   .delete(deleteUserCart);
-  
+
 cartRoute.put('/applyCoupon', applyCoupon)
 cartRoute.route('/:itemId')
   .put(updateProductQuantityValidator, updateProductQuantity)
