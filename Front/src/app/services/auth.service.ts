@@ -67,7 +67,7 @@ export class AuthService {
       , {
         headers: {
           "X-API-KEY": `${this.apiKey}`,
-          "X-CSRF-Token": `${Cookies.get('cookies')}`
+          "X-CSRF-Token": `${Cookies.get('cookies')}`,
         }, withCredentials: true
       })
   }

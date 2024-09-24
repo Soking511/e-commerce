@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalService } from './global.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import cookies from 'js-cookie'
 
 @Injectable({
   providedIn: 'root'

@@ -2,8 +2,11 @@ import { Router } from 'express';
 import { getAllProducts, createProduct, getProductByID, deleteProduct, updateProduct, resizeProductImages, uploadProductImages } from './productController';
 import { deleteProductValidator, updateProductValidator, createProductValidator, getProductsByIDValidator } from '../../utils/validators/productsValidator';
 import { isActive, isHaveAccess, protectRoutes } from '../auth/authController';
+import reviewsRoute from '../reviews/reviewsRoute';
 
 const productRoute: Router = Router( );
+
+productRoute.use( '/:productId/reviews', reviewsRoute )
 
 productRoute.route( '/' )
   .get( getAllProducts )

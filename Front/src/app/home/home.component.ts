@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FooterComponent } from '../footer/footer.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { BestSellerComponent } from "../best-seller/best-seller.component";
@@ -13,6 +13,8 @@ import { ProductComponent } from '../product/product.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Pagination } from '../interfaces/pagination';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CartService } from '../services/cart.service';
+import { CartComponent } from '../cart/cart.component';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +25,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 
 export class HomeComponent {
+  @ViewChild(CartComponent) _CartComponent!: CartComponent;
   subscription: any;
   products: Products[] = [];
   categories: Categories[] = [];
@@ -36,7 +39,12 @@ export class HomeComponent {
   sort: string = '-createdAt'
   search: string = '';
 
-  constructor(private _ProductsService: ProductsService, private _CategoryService: CategoryService, private _SubcategoryService: SubcategoryService, private _ActivatedRoute: ActivatedRoute) { }
+  constructor(
+    private _ProductsService: ProductsService,
+    private _CategoryService: CategoryService,
+    private _SubcategoryService: SubcategoryService,
+    private _ActivatedRoute: ActivatedRoute
+) { }
 
   loadProducts() {
     this.subscription = this._ProductsService.getAllProducts(this.limit, this.page, '-quantity', this.search).subscribe({
@@ -66,6 +74,11 @@ export class HomeComponent {
       next: (res) => { this.categories = res.data },
       error: (err) => { }
     })
+  }
+
+  addProductToCart(product:any){
+    console.log('clicked');
+    this._CartComponent.addProductToCart(product);
   }
 
   loadSubCategories(category?:string) {

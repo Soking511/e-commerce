@@ -5,6 +5,7 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { FooterComponent } from "./footer/footer.component";
 import { NotificationComponent } from './notification/notification.component';
 import { BestSellerComponent } from "./best-seller/best-seller.component";
+import { NotificationService } from './services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -15,4 +16,6 @@ import { BestSellerComponent } from "./best-seller/best-seller.component";
 })
 export class AppComponent {
   title = 'Front';
+
+  constructor(private _NotificationService:NotificationService){ }
 }

@@ -7,16 +7,13 @@ class Features {
 
   filter() {
     const queryStringObj = { ...this.queryString }
-    // console.log(queryStringObj);
     const executedFields: string[] = ['page', 'limit', 'sort', 'fields', 'search'];
     executedFields.forEach((field: string): void => {
       delete queryStringObj[field]
     });
     let queryStr: string = JSON.stringify(queryStringObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`)
-    // console.log(queryStr);
     this.mongooseQuery = this.mongooseQuery.find(JSON.parse(queryStr));
-    // console.log(JSON.parse(queryStr));
     return this;
   }
   // subcategories -> filter {category:val}
@@ -31,7 +28,6 @@ class Features {
     } else { this.mongooseQuery = this.mongooseQuery.sort('-createdAt') }
     return this;
   }
-
   limitFields() {
     if (this.queryString.fields) {
       const fields: string = this.queryString.fields.split(',').join(' ')
@@ -40,7 +36,6 @@ class Features {
     // else { this.mongooseQuery = this.mongooseQuery.select('-__v'); }
     return this;
   }
-
   search(modelName: string) {
     if (this.queryString.search) {
       let query: SearchQuery = {};

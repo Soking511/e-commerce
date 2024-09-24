@@ -28,13 +28,22 @@ export class ProductsService {
       })
   }
 
-  getProduct(productId: string): Observable<any> {
+  getProductByID(productId: string): Observable<any> {
     return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}/${productId}`, {
       headers: {
         "X-API-KEY": `${this.apiKey}`
       },
       withCredentials: true
-    }
-    )
+    })
+  }
+
+
+  getProductReview(productId: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}/${productId}/reviews`, {
+      headers: {
+        "X-API-KEY": `${this.apiKey}`
+      },
+      withCredentials: true
+    })
   }
 }

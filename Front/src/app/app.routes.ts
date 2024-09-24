@@ -7,5 +7,6 @@ export const routes: Routes = [
   {path:"products/:id", title:"product", loadComponent: () => import('./product/product.component').then(m => m.ProductComponent)},
   {path:"login", title:"Login", loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)},
   {path:"register", title:"Create Account", loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent)},
+  {path:"cart", title:"My Cart", loadComponent: () => import('./cart/cart.component').then(m => m.CartComponent)},
   {path:"**", title:"Not Found!", component:N404Component},
 ];

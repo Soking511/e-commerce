@@ -4,11 +4,13 @@ import { ProductsService } from '../services/products.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReviewsComponent } from "../reviews/reviews.component";
+import { ReviewsService } from '../services/reviews.service';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ReviewsComponent],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss'
 })
@@ -23,32 +25,14 @@ export class ProductComponent implements OnInit, OnDestroy {
     rate: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(5)]),
   });
 
-  constructor(private _ProductsService: ProductsService,
-    // private _ReviewsService: ReviewsService,
-    private _ActivatedRoute: ActivatedRoute) { }
+  constructor(private _ProductsService: ProductsService, private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute) { }
 
   loadProduct(productId: string) {
-    this.subscription = this._ProductsService.getProduct(productId).subscribe({
-      next: (res) => { this.product = res.data },
+    this.subscription = this._ProductsService.getProductByID(productId).subscribe({
+      next: (res) => { this.product = res.data;},
       error: (err) => { },
     })
   }
-
-  // addReview(productId: string, formData: FormGroup) {
-  //   this._ReviewsService.addReview(productId, formData.value).subscribe({
-  //     next: (res) => {
-  //       this.loadProduct(this.id);
-  //       alert('Review Added');
-  //     },
-  //     error: (err) => {
-  //       if (err.error.errors) {
-  //         this.reviewError = err.error.errors[0].msg;
-  //       } else {
-  //         this.reviewError = 'login first to add review';
-  //       }
-  //     }
-  //   })
-  // }
 
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
