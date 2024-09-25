@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
-import { GlobalService } from './global.service';
 import { Login, ResetPassword, SendMail, Register, VerifyCode } from '../interfaces/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
 import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
+import { GlobalService } from './global.service';
 @Injectable({
   providedIn: 'root'
 })

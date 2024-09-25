@@ -8,5 +8,8 @@ export const routes: Routes = [
   {path:"login", title:"Login", loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)},
   {path:"register", title:"Create Account", loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent)},
   {path:"cart", title:"My Cart", loadComponent: () => import('./cart/cart.component').then(m => m.CartComponent)},
-  {path:"**", title:"Not Found!", component:N404Component},
+  {path:"admin", title:"My Cart", loadComponent: () => import('./cart/cart.component').then(m => m.CartComponent)},
+  {path:"admin/category", title:"Categories", loadComponent: () => import('./admin/category/category.component').then(m => m.CategoryComponent)},
+  // {path:"**", title:"Not Found!", component:N404Component},import { CategoryComponent } from './admin/category/category.component';
+
 ];

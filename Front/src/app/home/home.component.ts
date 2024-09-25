@@ -3,10 +3,9 @@ import { FooterComponent } from '../footer/footer.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { BestSellerComponent } from "../best-seller/best-seller.component";
 import { NotificationComponent } from '../notification/notification.component';
-import { ProductsService } from '../services/products.service';
 import { Products } from '../interfaces/products';
 import { CommonModule } from '@angular/common';
-import { CategoryService } from '../services/category.service';
+import { CategoryService } from '../services/admin/category.service';
 import { Categories } from '../interfaces/categories';
 import { SubcategoryService } from '../services/subcategory.service';
 import { ProductComponent } from '../product/product.component';
@@ -15,6 +14,7 @@ import { Pagination } from '../interfaces/pagination';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CartService } from '../services/cart.service';
 import { CartComponent } from '../cart/cart.component';
+import { ProductsService } from '../services/products.service';
 
 @Component({
   selector: 'app-home',

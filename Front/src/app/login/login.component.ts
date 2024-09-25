@@ -29,9 +29,9 @@ export class LoginComponent implements OnInit {
         this._AuthService.saveCurrentUser();
         this._Router.navigate(['/home']);
       },
-      error:(err) => {
-        this.invalidLogin = err.error.message;
-      }
+      // error:(err) => {
+      //   this.invalidLogin = err.error.message;
+      // }
     })
   }
   ngOnInit(): void {
