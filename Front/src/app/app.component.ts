@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { NavbarComponent } from "./navbar/navbar.component";
-import { FooterComponent } from "./footer/footer.component";
-import { NotificationComponent } from './notification/notification.component';
+import { NavbarComponent } from "./Main Components/navbar/navbar.component";
+import { FooterComponent } from "./Main Components/footer/footer.component";
+import { NotificationComponent } from './Main Components/notification/notification.component';
 import { BestSellerComponent } from "./best-seller/best-seller.component";
 import { NotificationService } from './services/notification.service';
 

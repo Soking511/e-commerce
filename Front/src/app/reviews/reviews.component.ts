@@ -1,11 +1,11 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Reviews } from '../interfaces/reviews';
+import { Reviews } from '../Main Components/interfaces/reviews';
 import { AuthService } from '../services/auth.service';
 import { ReviewsService } from '../services/reviews.service';
 import { ProductsService } from '../services/products.service';
-import { Products } from '../interfaces/products';
+import { Products } from '../Main Components/interfaces/products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../services/notification.service';
 import { BehaviorSubject } from 'rxjs';

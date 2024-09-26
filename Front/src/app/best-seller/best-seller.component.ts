@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductsService } from '../services/products.service';
 import { RouterLink } from '@angular/router';
-import { Products } from '../interfaces/products';
-import { DescriptionPipe } from '../pipes/description.pipe';
+import { Products } from '../Main Components/interfaces/products';
+import { DescriptionPipe } from '../Main Components/pipes/description.pipe';
 
 @Component({
   selector: 'app-best-seller',

@@ -13,7 +13,7 @@ import { calcTotalPrice } from '../cart/cartController';
 
 export const filterOrders = asyncHandler((req: Request, res: Response, next: NextFunction) => {
   const filterData: FilterData = {};
-  if (req.user?.role === 'user') { filterData.user = req.user._id }; 
+  if (req.user?.role === 'user') { filterData.user = req.user._id };
   next();
 });
 
@@ -37,7 +37,7 @@ export const createCashOrder = asyncHandler(async (req: Request, res: Response, 
       const productCatch = await productModel.findOne({ _id: item.product._id });
 
       if (cartCatch && productCatch) {
-        if (!(item.quantity >= productCatch.quantity - 1)) {
+        if (!(item.quantity >= productCatch.quantity - item.quantity)) {
           const cart: any = await cartModel.findByIdAndUpdate( {id: item.product._id}, {
             $pull: { items: { _id: item.product._id } }
           }, { new: true });

@@ -1,25 +1,26 @@
 import { Component, ViewChild } from '@angular/core';
-import { FooterComponent } from '../footer/footer.component';
-import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../Main Components/footer/footer.component';
 import { BestSellerComponent } from "../best-seller/best-seller.component";
-import { NotificationComponent } from '../notification/notification.component';
-import { Products } from '../interfaces/products';
+import { NotificationComponent } from '../Main Components/notification/notification.component';
+import { Products } from '../Main Components/interfaces/products';
 import { CommonModule } from '@angular/common';
 import { CategoryService } from '../services/admin/category.service';
-import { Categories } from '../interfaces/categories';
+import { Categories } from '../Main Components/interfaces/categories';
 import { SubcategoryService } from '../services/subcategory.service';
 import { ProductComponent } from '../product/product.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Pagination } from '../interfaces/pagination';
+import { Pagination } from '../Main Components/interfaces/pagination';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CartService } from '../services/cart.service';
 import { CartComponent } from '../cart/cart.component';
 import { ProductsService } from '../services/products.service';
+import { CartService } from '../services/cart.service';
+import { AuthService } from '../services/auth.service';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule],
+  imports: [FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -43,6 +44,9 @@ export class HomeComponent {
     private _ProductsService: ProductsService,
     private _CategoryService: CategoryService,
     private _SubcategoryService: SubcategoryService,
+    private _CartService: CartService,
+    private _AuthService: AuthService,
+    private _NotificationService: NotificationService,
     private _ActivatedRoute: ActivatedRoute
 ) { }
 
@@ -77,12 +81,17 @@ export class HomeComponent {
   }
 
   addProductToCart(product:any){
-    console.log('clicked');
-    this._CartComponent.addProductToCart(product);
+    this._CartService.addProductToCart(product._id, this._AuthService.currentUser.value).subscribe({
+      next: (res) => {
+        this._NotificationService.showNotification('Added To Cart', 'success');
+      },
+      error: (err) => {
+        this._NotificationService.showNotification(err.message, 'error');
+      }
+    });
   }
 
   loadSubCategories(category?:string) {
-    console.log(category);
     this.subscription = this._SubcategoryService.getAllSubcategories(( category !== 'All')? category:null!).subscribe({
       next: (res) => { this.subcategories = res.data },
       error: (err) => { }

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GlobalService } from './global.service';
-import { Login, ResetPassword, SendMail, Register, VerifyCode } from '../interfaces/auth';
+import { Login, ResetPassword, SendMail, Register, VerifyCode } from '../Main Components/interfaces/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
 import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
-import { Reviews } from '../interfaces/reviews';
+import { Reviews } from '../Main Components/interfaces/reviews';
 
 @Injectable({
   providedIn: 'root'
@@ -33,12 +33,11 @@ export class ReviewsService {
   };
 
   addReview(productID: string, formData: Reviews): Observable<any> {
-
     return this._HttpClient.post(`${this.baseUrl}${this.productsRoute}/${productID}/reviews`, formData, {
       headers: {
+        authorization: `Bearer ${localStorage.getItem('user')}`,
         "X-API-KEY": `${this.apiKey}`,
-        "X-CSRF-Token": `${Cookies.get('cookies')}`,
-        authorization: `Bearer ${localStorage.getItem('user')}`
+        "X-CSRF-Token": `${Cookies.get('cookies')}`
       },
       withCredentials: true
     });
@@ -48,9 +47,9 @@ export class ReviewsService {
   updateReview(reviewID: string, formData: Reviews): Observable<any> {
     return this._HttpClient.put(`${this.baseUrl}${this.reviewsRoute}/${reviewID}`, formData, {
       headers: {
+        authorization: `Bearer ${localStorage.getItem('user')}`,
         "X-API-KEY": `${this.apiKey}`,
-        "X-CSRF-Token": `${Cookies.get('cookies')}`,
-        authorization: `Bearer ${localStorage.getItem('user')}`
+        "X-CSRF-Token": `${Cookies.get('cookies')}`
       },
       withCredentials: true
     });
@@ -60,9 +59,9 @@ export class ReviewsService {
   removeReview(reviewID: string): Observable<any> {
     return this._HttpClient.delete(`${this.baseUrl}${this.reviewsRoute}/${reviewID}`, {
       headers:{
+        authorization: `Bearer ${localStorage.getItem('user')}`,
         "X-API-KEY": `${this.apiKey}`,
-        "X-CSRF-Token": `${Cookies.get('cookies')}`,
-        authorization: `Bearer ${localStorage.getItem('user')}`
+        "X-CSRF-Token": `${Cookies.get('cookies')}`
       },
       withCredentials:true
     })
@@ -71,8 +70,8 @@ export class ReviewsService {
   getReviews(limit: number = 50, page: number = 1): Observable<any> {
     return this._HttpClient.get(`${this.baseUrl}${this.reviewsRoute}/me?limit=${limit}&page=${page}`, {
       headers: {
-        "X-API-KEY": `${this.apiKey}`,
-        authorization: `Bearer ${localStorage.getItem('user')}`
+        authorization: `Bearer ${localStorage.getItem('user')}`,
+        "X-API-KEY": `${this.apiKey}`
       },
       withCredentials: true
     })
@@ -81,8 +80,8 @@ export class ReviewsService {
   getReview(productID: string, user: string): Observable<any> {
     return this._HttpClient.get(`${this.baseUrl}${this.productsRoute}/${productID}`, {
       headers: {
-        "X-API-KEY": `${this.apiKey}`,
-        authorization: `Bearer ${localStorage.getItem('user')}`
+        authorization: `Bearer ${localStorage.getItem('user')}`,
+        "X-API-KEY": `${this.apiKey}`
       },
       withCredentials: true
     })

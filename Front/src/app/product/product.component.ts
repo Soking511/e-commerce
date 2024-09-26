@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Products } from '../interfaces/products';
+import { Products } from '../Main Components/interfaces/products';
 import { ProductsService } from '../services/products.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
