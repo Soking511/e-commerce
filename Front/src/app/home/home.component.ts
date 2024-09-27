@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FooterComponent } from '../Main Components/footer/footer.component';
-import { BestSellerComponent } from "../best-seller/best-seller.component";
+import { BestSellerComponent } from "./best-seller/best-seller.component";
 import { NotificationComponent } from '../Main Components/notification/notification.component';
 import { Products } from '../Main Components/interfaces/products';
 import { CommonModule } from '@angular/common';

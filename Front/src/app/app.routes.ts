@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { N404Component } from './Main Components/n404/n404.component';
 
 export const routes: Routes = [
+  // User Profile [Overview, Settings]
+  {path:"profile", title:"", loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent)},
   // Home
   {path:"", redirectTo:"home", pathMatch:"full"},
   {path:"home", title:"home", loadComponent: () => import('./home/home.component').then(m => m.HomeComponent)},
@@ -15,7 +17,7 @@ export const routes: Routes = [
   // Order View
   {path:"order", title:"Order View", loadComponent: () => import('./order/order.component').then(m => m.OrderComponent)},
   // Order Final View
-  {path:"order-details", title:"Order View", loadComponent: () => import('./order-details/order-details.component').then(m => m.OrderDetailsComponent)},
+  {path:"order-details", title:"Order View", loadComponent: () => import('./cart/order-details/order-details.component').then(m => m.OrderDetailsComponent)},
   // Admin Section
   {path:"admin", title:"My Cart", loadComponent: () => import('./cart/cart.component').then(m => m.CartComponent)},
   {path:"admin/category", title:"Categories", loadComponent: () => import('./admin/category/category.component').then(m => m.CategoryComponent)},

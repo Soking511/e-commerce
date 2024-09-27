@@ -4,7 +4,7 @@ import { ProductsService } from '../services/products.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ReviewsComponent } from "../reviews/reviews.component";
+import { ReviewsComponent } from "./reviews/reviews.component";
 import { ReviewsService } from '../services/reviews.service';
 
 @Component({

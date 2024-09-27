@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService } from '../services/order.service';
 import { CommonModule } from '@angular/common';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-order-details',
@@ -15,12 +15,11 @@ export class OrderDetailsComponent implements OnInit{
 
   constructor( private _OrderService:OrderService ){ }
 
+
   ngOnInit(): void {
       this._OrderService.getLastOne().subscribe({
-        next: (res) => { this.tempCart = res.data
-          console.log(this.tempCart);
-        },
-        // error: (error) => { }
+        next: (res) => { this.tempCart = res.data },
+        error: (error) => { }
       })
   }
 

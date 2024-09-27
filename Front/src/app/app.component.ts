@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from "./Main Components/navbar/navbar.component";
 import { FooterComponent } from "./Main Components/footer/footer.component";
 import { NotificationComponent } from './Main Components/notification/notification.component';
-import { BestSellerComponent } from "./best-seller/best-seller.component";
+import { BestSellerComponent } from "./home/best-seller/best-seller.component";
 import { NotificationService } from './services/notification.service';
 
 @Component({

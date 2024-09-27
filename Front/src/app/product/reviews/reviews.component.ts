@@ -1,15 +1,15 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Reviews } from '../Main Components/interfaces/reviews';
-import { AuthService } from '../services/auth.service';
-import { ReviewsService } from '../services/reviews.service';
-import { ProductsService } from '../services/products.service';
-import { Products } from '../Main Components/interfaces/products';
+import { Reviews } from '../../Main Components/interfaces/reviews';
+import { AuthService } from '../../services/auth.service';
+import { ReviewsService } from '../../services/reviews.service';
+import { ProductsService } from '../../services/products.service';
+import { Products } from '../../Main Components/interfaces/products';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from '../../services/notification.service';
 import { BehaviorSubject } from 'rxjs';
-import { ProductComponent } from '../product/product.component';
+import { ProductComponent } from '../product.component';
 
 @Component({
   selector: 'app-reviews',
