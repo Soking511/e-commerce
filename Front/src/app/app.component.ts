@@ -1,21 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { NavbarComponent } from "./Main Components/navbar/navbar.component";
-import { FooterComponent } from "./Main Components/footer/footer.component";
-import { NotificationComponent } from './Main Components/notification/notification.component';
-import { BestSellerComponent } from "./home/best-seller/best-seller.component";
-import { NotificationService } from './services/notification.service';
+import { FooterComponent } from './core/components/footer/footer.component';
+import { NavbarComponent } from './core/components/navbar/navbar.component';
+import { NotificationComponent } from './core/components/notification/notification.component';
+import { NotificationService } from './core/components/notification/services/notification.service';
+import { BestSellerComponent } from './features/home/best-seller/best-seller.component';
+import { HomeComponent } from './features/home/home.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HomeComponent, NavbarComponent, FooterComponent, NotificationComponent, BestSellerComponent],
+  imports: [
+    RouterOutlet,
+    HomeComponent,
+    NavbarComponent,
+    FooterComponent,
+    NotificationComponent,
+    BestSellerComponent,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  @ViewChild(HomeComponent) homeComponent!: HomeComponent;
+
+  onCartClicked() {
+    this.homeComponent.showSideCart(true);
+  }
+
   title = 'Front';
 
-  constructor(private _NotificationService:NotificationService){ }
+  constructor(private _NotificationService: NotificationService) { }
 }

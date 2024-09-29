@@ -5,11 +5,11 @@ import {  isActive, isHaveAccess, protectRoutes } from '../auth/authController';
 
 const usersRoute: Router = Router()
 
-// usersRoute.use(protectRoutes, isActive);
+usersRoute.use(protectRoutes, isActive);
 usersRoute.get('/me', setUserId, getUserByID)
-// usersRoute.put('/updateMe', updateLoggedUser, updateLoggedUser)
-// usersRoute.put('/changeMyPassword', changeLoggedUserPasswordValidator, changeLoggedUserPassword)
-// usersRoute.delete('/deleteMe', isHaveAccess('user'), deleteUserValidator, setUserId, deleteUser)
+usersRoute.put('/updateMe', updateLoggedUser, updateLoggedUser)
+usersRoute.put('/changeMyPassword', changeLoggedUserPasswordValidator, changeLoggedUserPassword)
+usersRoute.delete('/deleteMe', isHaveAccess('user'), deleteUserValidator, setUserId, deleteUser)
 
 // usersRoute.use(isHaveAccess('manager'));
 usersRoute.route('/')
