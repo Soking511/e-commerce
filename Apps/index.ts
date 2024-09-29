@@ -12,6 +12,7 @@ import cartRoute from "./cart/cartRoute"
 import ordersRoute from "./order/orderRoute"
 import { Users } from "../Apps/users/userInterface";
 import { FilterData } from "../Apps/moreInterfaces/filterData";
+import express from 'express';
 
 declare module 'express'{
   interface Request{
@@ -28,6 +29,8 @@ const mountRoutes = (app: Application) => {
     next();
   });
   app.use('/api/v1/categories', categoriesRoute );
+  // app.use('/api/v1/uploads');
+
   app.use('/api/v1/subcategory', subcategoryRoute );
   app.use('/api/v1/products', productsRoute );
   app.use('/api/v1/users', usersRoute)

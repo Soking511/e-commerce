@@ -8,7 +8,7 @@ import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 import { createToken } from "../../utils/createToken";
 
-export const uploadUserImage = uploadMultiImages([{ name: 'cover', maxCount:1 }, { name:'images', maxCount:5}]);
+export const uploadUserImage = uploadSingleImage('image');
 export const resizeUserImage = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   if (req.file) {
     const imgName = `Users-${Date.now()}-.webp`;

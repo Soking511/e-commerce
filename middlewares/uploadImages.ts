@@ -19,5 +19,7 @@ const uploadOption = (): multer.Multer => {
   return upload;
 }
 
-export const uploadSingleImage = (name: void, fieldName: string, Image?: new (width?: number, height?: number) => HTMLImageElement, p0?: string) => uploadOption().single(fieldName);
+
+export const uploadSingleImage = (fieldName: string) => uploadOption().single(fieldName);
+// export const uploadSingleImage = (name: void, fieldName: string, Image?: new (width?: number, height?: number) => HTMLImageElement, p0?: string) => uploadOption().single(fieldName);
 export const uploadMultiImages = (fields: FileFields[]) => uploadOption().fields(fields);
