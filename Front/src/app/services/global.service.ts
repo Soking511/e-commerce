@@ -27,4 +27,12 @@ export class GlobalService {
   fetchCities(): Observable<any> {
     return this._HttpClient.get(`https://rawcdn.githack.com/kamikazechaser/administrative-divisions-db/master/api/EG.json`);
   }
+
+  get(endpoint: string, ...params: string[]): Observable<any> {
+    const tempString: string = params.join('/');
+    const fullUrl = `${endpoint}/${tempString}`;
+    console.log(tempString);
+    return this._HttpClient.get(fullUrl);
+  }
+
 }
