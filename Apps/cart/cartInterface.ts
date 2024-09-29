@@ -15,3 +15,4 @@ export interface CartItems {
   quantity: number;
   price: number;
 }
+  

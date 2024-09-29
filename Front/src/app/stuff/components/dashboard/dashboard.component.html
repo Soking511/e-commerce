@@ -1,0 +1,55 @@
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+<style>
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+</style>
+
+<div class="bg-white w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-[#161931]">
+  <aside class="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
+    <div class="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
+      <h2 class="pl-3 mb-4 text-2xl font-semibold">Control Panel</h2>
+
+      @for(Operation of Operations; track Operation) {
+      <div class="flex flex-col">
+        <a (click)="showDashboardSections(Operation, !Operation.showSections)" class="flex items-center justify-between rounded-xl bg-gray-100 px-3 py-2.5 font-semibold cursor-pointer">
+          <h1>{{Operation.name}}</h1>
+          @if( Operation.showSections == true){
+
+          <span class="material-symbols-outlined">
+            arrow_drop_down
+
+          </span>
+          } @else {
+
+          <span class="material-symbols-outlined">
+            arrow_right
+          </span>
+          }
+        </a>
+        @if(Operation.childs) {
+        <div class="pl-6">
+          @for(child of Operation.childs; track child) {
+          <h1 [hidden]="!Operation.showSections" class="p-2 cursor-pointer" >{{child.name}}</h1>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+  </aside>
+
+
+
+  <main class="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
+    <div class="p-2 md:p-4">
+
+    </div>
+  </main>
+
+
+
+</div>

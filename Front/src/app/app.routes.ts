@@ -20,9 +20,11 @@ export const routes: Routes = [
   {path:"myOrders", title:"My Orders", loadComponent: () => import('./features/profile/orders/orders.component').then(m => m.OrdersComponent)},
   // Order Final View
   {path:"order-details", title:"Order View", loadComponent: () => import('./features/cart/order-details/order-details.component').then(m => m.OrderDetailsComponent)},
+
+
   // Admin Section
-  {path:"admin", title:"My Cart", loadComponent: () => import('./features/cart/cart.component').then(m => m.CartComponent)},
-  {path:"admin/category", title:"Categories", loadComponent: () => import('./features/admin/category/category.component').then(m => m.CategoryComponent)},
+  {path:"admin", title:"Stuff", loadComponent: () => import('./stuff/components/dashboard/dashboard.component').then(m => m.DashboardComponent)},
+
 
   // Error: 404 !
   {path:"**", title:"Not Found!", component:N404Component},
