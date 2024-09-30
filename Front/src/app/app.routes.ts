@@ -1,5 +1,7 @@
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { N404Component } from './core/components/n404/n404.component';
+import { NgModule } from '@angular/core';
+
 
 export const routes: Routes = [
   // User Profile [Overview, Settings]
@@ -24,8 +26,16 @@ export const routes: Routes = [
 
   // Admin Section
   {path:"admin", title:"Stuff", loadComponent: () => import('./stuff/components/dashboard/dashboard.component').then(m => m.DashboardComponent)},
+  {path:"admin/users", title:"Stuff", loadChildren: () => import("./stuff/components/users/users.component").then(m => m.UsersComponent)},
 
 
   // Error: 404 !
   {path:"**", title:"Not Found!", component:N404Component},
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+
+export class AppRoutingModule {}

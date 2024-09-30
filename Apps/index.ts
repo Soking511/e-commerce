@@ -13,6 +13,7 @@ import ordersRoute from "./order/orderRoute"
 import { Users } from "../Apps/users/userInterface";
 import { FilterData } from "../Apps/moreInterfaces/filterData";
 import express from 'express';
+import wishlistRoute from "./users/wishlistRoute"
 
 declare module 'express'{
   interface Request{
@@ -24,10 +25,10 @@ declare module 'express'{
 }
 
 const mountRoutes = (app: Application) => {
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    res.cookie('cookies', req.csrfToken());
-    next();
-  });
+  // app.use((req: Request, res: Response, next: NextFunction) => {
+  //   res.cookie('cookies', req.csrfToken());
+  //   next();
+  // });
   app.use('/api/v1/categories', categoriesRoute );
   // app.use('/api/v1/uploads');
 
@@ -38,6 +39,7 @@ const mountRoutes = (app: Application) => {
   app.use('/api/v1/address', addressRoute)
   app.use('/api/v1/reviews', reviewsRoute)
   app.use('/api/v1/carts', cartRoute)
+  app.use('/api/v1/wishlist', wishlistRoute);
   app.use('/api/v1/orders', ordersRoute)
   app.all( '*', (req:Request, res:Response, next:NextFunction) => {
     return next( new APIErrors( `This Route[${req.originalUrl}] not found !`, 400 ))

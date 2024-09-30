@@ -16,7 +16,8 @@ import { ProductsService } from '../product/services/products.service';
 import { BestSellerComponent } from './best-seller/best-seller.component';
 import { ApiService } from '../../core/services/api.service';
 import { Subcategories } from '../../shared/interfaces/subcategories';
-import { CartItems } from '../../shared/interfaces/order';
+import { CartItems, Order } from '../../shared/interfaces/order';
+import { Reviews } from '../../shared/interfaces/reviews';
 
 @Component({
   selector: 'app-home',
@@ -37,6 +38,7 @@ export class HomeComponent {
   products: Products[] = [];
   categories: Categories[] = [];
   subcategories: Subcategories[] = [];
+  userCart: any = {};
   categoryForm = new FormGroup({ _id: new FormControl("All", [Validators.required])});
   subcategoryForm = new FormGroup({ _id: new FormControl("All", [Validators.required]) });
   imgDomain: string = '';
@@ -45,18 +47,35 @@ export class HomeComponent {
   page: number = 1;
   sort: string = '-createdAt'
   search: string = '';
+  currentCart: any = {};
 
   constructor(
     private _ProductsService: ProductsService,
     private _ApiService: ApiService,
-    private _CartService: CartService,
-    private _AuthService: AuthService,
     private _NotificationService: NotificationService,
-    private _ActivatedRoute: ActivatedRoute
-) {
+    private _CartService: CartService,
+) { }
 
-}
+  updateUserCart( ){
+    this._ApiService.get<any>('carts', undefined, 'user').subscribe({
+      next: (res) => {
+        this.currentCart['cart'] = res.data;
+        for (let i = 0; i < res.data.items.length; i++) {
+          this.userCart[res.data.items[i].product._id] = {
+            quantity: res.data.items[i].product.quantity || 1,
+            name: res.data.items[i].product.name
+          };
+        }
+      },
+      error: (err) => { }
+    })
+  }
 
+  getProductItem(productId: string) {
+    const cartItems = this.currentCart?.cart?.items || [];
+    const productItem = cartItems.find((item: any) => item.product._id === productId);
+    if (productItem) return productItem;
+  }
 
   loadProducts() {
     this._ApiService.get<Products[]>('products', this.limit, undefined, `&page=${this.page}&sort=${this.sort}&search=${this.search}${( this.categoryForm.get('_id')?.value! !== 'All')? ('&category='+this.categoryForm.get('_id')?.value!):''}${( this.subcategoryForm.get('_id')?.value! !== 'All')? ('&subcategory='+this.subcategoryForm.get('_id')?.value!):'' }`).subscribe({
@@ -83,16 +102,58 @@ export class HomeComponent {
     })
   }
 
-  addProductToCart(product:any){
-    this._ApiService.post('carts', {product:product._id}).subscribe({
+  addProductToCart(product: any) {
+    this._ApiService.post<any>('carts', { product: product._id }).subscribe({
       next: (res) => {
-        this._NotificationService.showNotification('Added To Cart', 'success');
+        this.updateUserCart();
       },
       error: (err) => {
         this._NotificationService.showNotification(err.message, 'error');
       }
     });
   }
+
+  addProductToWishlist(product: any) {
+    this._ApiService.post<any>(`wishlist`, { product: product._id }).subscribe({
+      next: (res) => {
+        this.updateUserCart();
+        this._NotificationService.showNotification('Added to wishlist', 'success');
+      },
+      // error: (err) => {
+      //   this._NotificationService.showNotification(err.message, 'error');
+      // }
+    });
+  }
+
+  updateProductQuantity(at: any, num:number){
+    for (let item of this.currentCart['cart'].items) {
+      if (at._id=== item.product._id) {
+        if ( item.quantity+num >= 1 ){
+          let productInCart = item.product;
+          this._ApiService.update<any>(`carts`, { quantity: item.quantity+num }, item._id).subscribe({
+            next: (res) => {
+              this.updateUserCart();
+              console.log('done');
+            },
+            error: (err) => {
+              this._NotificationService.showNotification(err.message, 'error');
+            }
+          });
+        } else this._NotificationService.showNotification('enter valid quantity', 'error');
+
+      }
+    }
+  }
+
+  removeProductFromCart(item: any) {
+    this._ApiService.delete('carts', item).subscribe({
+      next: (res) => {
+        location.reload();
+      },
+      // error:(err) => { }
+    })
+  }
+
 
   changePage(page: number) {
     this.page = page;
@@ -109,6 +170,9 @@ export class HomeComponent {
   }
 
   ngOnInit(): void {
+
+    this.updateUserCart();
+
     this.imgDomain = this._ProductsService.productImages;
     this.loadProducts();
     this.loadCategories();

@@ -1,0 +1,58 @@
+<br>
+<h2 class="text-xl font-semibold sm:text-2xl">Users Accounts</h2> <br>
+<div class="flex flex-col md:flex-row gap-4 items-center justify-center">
+  <!-- Add Button -->
+  <button class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:bg-green-600 hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-300">
+    <span class="material-symbols-outlined align-middle">add_circle</span> Add
+  </button>
+
+  <!-- Delete Button -->
+  <button (click)="delete(selectUser)" class="bg-red-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:bg-red-600 hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-300">
+    <span class="material-symbols-outlined align-middle">delete</span> Delete
+  </button>
+
+  <!-- Update Button -->
+  <button class="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:bg-blue-600 hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+    <span class="material-symbols-outlined align-middle">update</span> Update
+  </button>
+</div>
+
+
+<div class="mt-8 overflow-x-auto"> <!-- Enable horizontal scrolling -->
+  <table class="min-w-full dark:divide-gray-700 bg-white shadow-md rounded-lg">
+
+    <thead class="text-gray-700">
+
+      <tr class="bg-black ">
+        <th class="py-3 px-4 text-left text-white text-base  rounded-tl-lg font-semibold text-4xl">Name</th>
+        <th class="py-3 px-4 text-left text-white text-base font-semibold text-4xl">Role</th>
+        <th class="py-3 px-4 text-left text-white text-base font-semibold text-4xl">Active</th>
+        <th class="py-3 px-4 text-left text-white text-base font-semibold text-4xl">Phone</th>
+        <th class="py-3 px-4 text-left text-white text-base rounded-tr-lg font-semibold text-4xl">Email</th>
+      </tr>
+    </thead>
+
+    <tbody class=" dark:divide-gray-700">
+      @for (User of Users; track User._id) {
+        <tr (click)="selectedUser(User)" [ngClass]="{ 'bg-green-100': selectUser == User, 'hover:bg-gray-100': (selectUser != User) }" class="cursor-pointer transition-colors duration-200">
+          <td class="py-4 px-4 text-base font-semibold text-gray-500">{{User.name}}</td>
+          <td class="py-4 px-4 text-base font-semibold text-gray-500">{{User.role}}</td>
+          <td class="py-4 px-4 text-base font-semibold text-gray-500">{{User.active ? 'Yes' : 'No'}}</td>
+          <td class="py-4 px-4 text-base font-semibold text-gray-500">{{User.phone}}</td>
+          <td class="py-4 px-4 text-base font-semibold text-gray-500">{{User.email}}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+</div>
+
+<style>
+  table {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .bg-green-100 {
+    background-color: #d1fae5 !important;
+  }
+</style>
