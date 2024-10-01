@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../../core/services/auth.service';
 import { ApiService } from '../../../core/services/api.service';
 import { Users } from '../../../shared/interfaces/uesrs';
+import { NotificationService } from '../../../core/components/notification/services/notification.service';
 
 @Component({
   selector: 'app-myprofile',
@@ -41,7 +42,7 @@ export class MyprofileComponent implements OnInit {
     },
   ];
 
-  constructor(private _AuthService: AuthService, private _ApiService: ApiService) {
+  constructor(private _AuthService: AuthService, private _ApiService: ApiService, private _NotificationService:NotificationService) {
     this.updateForm = new FormGroup({
       name: new FormControl(null, [Validators.required]),
       phone: new FormControl(null, [Validators.required])
@@ -63,8 +64,6 @@ export class MyprofileComponent implements OnInit {
           name: this.currentUser.name,
           phone: this.currentUser.phone,
         });
-        console.log(this.currentUser);
-        console.log( 'f', this.userImage+this.currentUser.image);
       },
       error: (err) => { }
     });
@@ -89,7 +88,7 @@ export class MyprofileComponent implements OnInit {
     formData.append('phone', this.updateForm.get('phone')?.value);
 
     this._ApiService.update('users', formData, this.currentUser._id).subscribe({
-      next: (res) => {},
+      next: (res) => { this.getCurrentUserInfo(); this._NotificationService.showNotification('Updated Successfully', 'success') },
       error: (err) => {}
     });
   }
@@ -97,7 +96,6 @@ export class MyprofileComponent implements OnInit {
   ngOnInit(): void {
     this.getCurrentUserInfo();
     this.userImage = this._AuthService.usersImage;
-    console.log(this.userImage+this.currentUser.image);
   }
 }
 

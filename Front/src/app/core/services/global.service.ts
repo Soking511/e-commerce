@@ -18,8 +18,8 @@ export class GlobalService {
   addressRoute: string = 'api/v1/address';
   reviewsRoute: string = 'api/v1/reviews';
   cartRoute: string = 'api/v1/carts';
-  productsImage: string = `${this.baseURL}/uploads/products/`;
-  usersImage: string = `${this.baseURL}/uploads/users/`;
+  productsImage: string = `${this.baseURL}uploads/products/`;
+  usersImage: string = `${this.baseURL}uploads/users/`;
   apiKey: string = 'secret123';
   constructor(private _HttpClient:HttpClient) { }
 

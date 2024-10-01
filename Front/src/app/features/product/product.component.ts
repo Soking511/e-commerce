@@ -15,7 +15,7 @@ import { ApiService } from '../../core/services/api.service';
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss'
 })
-export class ProductComponent implements OnInit, OnDestroy {
+export class ProductComponent implements OnInit {
   subscription: any;
   product: Products = {};
   imgDomain: string = '';
@@ -41,8 +41,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.loadProduct(this.id);
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
+
 
 }

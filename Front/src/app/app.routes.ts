@@ -23,12 +23,6 @@ export const routes: Routes = [
   // Order Final View
   {path:"order-details", title:"Order View", loadComponent: () => import('./features/cart/order-details/order-details.component').then(m => m.OrderDetailsComponent)},
 
-
-  // Admin Section
-  {path:"admin", title:"Stuff", loadComponent: () => import('./stuff/components/dashboard/dashboard.component').then(m => m.DashboardComponent)},
-  {path:"admin/users", title:"Stuff", loadChildren: () => import("./stuff/components/users/users.component").then(m => m.UsersComponent)},
-
-
   // Error: 404 !
   {path:"**", title:"Not Found!", component:N404Component},
 ];

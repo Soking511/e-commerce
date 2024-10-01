@@ -27,15 +27,19 @@ export const getAllUsers = getAll<Users>( usersModel, 'User' );
 export const getUserByID = getOne<Users>( usersModel );
 export const createUser = POST<Users>( usersModel );
 export const deleteUser = DELETE<Users>( usersModel );
-export const updateUser = asyncHandler( async( req:Request, res:Response, next:NextFunction ) =>{
-  const user = await usersModel.findByIdAndUpdate(req.params.id,{
-    name: req.body.name,
-    phone: req.body.phone,
-    image: req.body.image,
-    active: req.body.active
-  }, {new:true} );
-  res.status(200).json({ data:user });
-})
+export const updateUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const updates: Partial<{ name: string; phone: string; image: string; active: boolean }> = {};
+
+  if (req.body.name) updates.name = req.body.name;
+  if (req.body.phone) updates.phone = req.body.phone;
+  if (req.body.image) updates.image = req.body.image;
+  if (req.body.active !== undefined) updates.active = req.body.active;
+
+  const user = await usersModel.findByIdAndUpdate(req.params.id, updates, { new: true });
+
+  res.status(200).json({ data: user });
+});
+
 
 export const changeUserPassword = asyncHandler( async( req:Request, res:Response, next:NextFunction ) => {
   const user = await usersModel.findByIdAndUpdate( req.params.id,{

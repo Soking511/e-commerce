@@ -17,7 +17,7 @@ import { HomeComponent } from '../home/home.component';
   styleUrls: ['./cart.component.scss']
 })
 
-export class CartComponent implements OnInit, OnDestroy{
+export class CartComponent implements OnInit{
   currentUserCart: any = {};
   currentUserAddress: any = {};
   selectedAddress:any = {};
@@ -28,7 +28,7 @@ export class CartComponent implements OnInit, OnDestroy{
     confirmedOrder: false,
     editorBoolean: false
   };
-
+  imgDomain = ''
   state: any[] = [];
   addressForm: FormGroup = new FormGroup({
     'street': new FormControl(null, [Validators.required]),
@@ -145,9 +145,7 @@ export class CartComponent implements OnInit, OnDestroy{
       this.getUserCart();
       this.getUserAddress();
       this.fetchCities();
+      this.imgDomain = this._GlobalService.productsImage;
     }
 
-  ngOnDestroy(): void {
-      this.subscription.unsubscribe();
-  }
 }

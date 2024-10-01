@@ -9,6 +9,7 @@ export interface Category {
 
 
 export interface Categories {
+createdAt: any;
 name: any;
 _id: any;
   Category:Category[];

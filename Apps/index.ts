@@ -14,6 +14,7 @@ import { Users } from "../Apps/users/userInterface";
 import { FilterData } from "../Apps/moreInterfaces/filterData";
 import express from 'express';
 import wishlistRoute from "./users/wishlistRoute"
+import couponsRoute from "./coupons/couponsRoute"
 
 declare module 'express'{
   interface Request{
@@ -39,6 +40,7 @@ const mountRoutes = (app: Application) => {
   app.use('/api/v1/address', addressRoute)
   app.use('/api/v1/reviews', reviewsRoute)
   app.use('/api/v1/carts', cartRoute)
+  app.use('/api/v1/coupons', couponsRoute)
   app.use('/api/v1/wishlist', wishlistRoute);
   app.use('/api/v1/orders', ordersRoute)
   app.all( '*', (req:Request, res:Response, next:NextFunction) => {

@@ -23,6 +23,7 @@ export interface Order {
 }
 
 export interface Orders {
+createdAt: string|number|Date;
 totalPrice: string|number;
 price: string|number;
 updatedAt: any;

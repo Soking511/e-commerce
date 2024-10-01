@@ -33,7 +33,8 @@ app.use(compression());
 app.use(mongoSanitize());
 app.use(hpp({ whitelist: ['price', 'category', 'subcategory'] }));
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
-app.use(express.static('uploads'));
+// app.use(express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const i18n = new I18n({
   locales: ['en', 'ar'],

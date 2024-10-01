@@ -18,13 +18,30 @@ import { ApiService } from '../../core/services/api.service';
 import { Subcategories } from '../../shared/interfaces/subcategories';
 import { CartItems, Order } from '../../shared/interfaces/order';
 import { Reviews } from '../../shared/interfaces/reviews';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
+
   standalone: true,
   imports: [FormsModule, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule, CartComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',  animations: [
+    trigger('cardAnimation', [
+      state('normal', style({
+        transform: 'scale(1)',
+        opacity: 1
+      })),
+      state('scaled', style({
+        transform: 'scale(1.05)',
+        opacity: 0.7
+      })),
+      transition('normal <=> scaled', [
+        animate('0.2s ease-in-out')
+      ])
+    ])
+  ]
+
 })
 
 export class HomeComponent {
@@ -48,6 +65,7 @@ export class HomeComponent {
   sort: string = '-createdAt'
   search: string = '';
   currentCart: any = {};
+  addedToCart = false;
 
   constructor(
     private _ProductsService: ProductsService,
@@ -102,15 +120,22 @@ export class HomeComponent {
     })
   }
 
+
   addProductToCart(product: any) {
     this._ApiService.post<any>('carts', { product: product._id }).subscribe({
       next: (res) => {
         this.updateUserCart();
+        this.addedToCart = true;
+
+        setTimeout(() => {
+          this.addedToCart = false;
+        }, 500);
       },
       error: (err) => {
         this._NotificationService.showNotification(err.message, 'error');
       }
     });
+
   }
 
   addProductToWishlist(product: any) {
