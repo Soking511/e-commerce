@@ -2,6 +2,8 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';  // Corr
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { HomeComponent } from "../../../features/home/home.component";
+import { NgModel } from '@angular/forms';
+import { SideCartService } from '../../../shared/services/side-cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,10 +14,9 @@ import { HomeComponent } from "../../../features/home/home.component";
 })
 export class NavbarComponent {
   isLogin: boolean = false;
-  sideCart: boolean = false;
   @Output() cartClicked = new EventEmitter<void>();
 
-  constructor(private _AuthService: AuthService) {
+  constructor(private sideCartService: SideCartService, private _AuthService: AuthService) {
     this._AuthService.currentUser.subscribe({
       next: () => {
         this.isLogin = (this._AuthService.currentUser.getValue() !== null) ? true : false;
@@ -23,11 +24,12 @@ export class NavbarComponent {
     })
   }
 
+  onCartClick() {
+    this.cartClicked.emit(); // Emit the event to toggle the cart
+  }
+
   logout() {
     this._AuthService.logout();
   }
 
-  onCartClick() {
-    this.cartClicked.emit();  // Emit the event when cart is clicked
-  }
 }

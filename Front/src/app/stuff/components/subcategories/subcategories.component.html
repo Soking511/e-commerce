@@ -112,6 +112,12 @@
           <input id="addName" formControlName="name" type="text" class="focus:border-indigo-500 border border-gray-300 rounded block w-full px-3 py-2" placeholder="Enter Subcategory name" required />
         </div>
 
+        <!-- Cover Image Input -->
+        <div class="mb-4">
+          <label for="cover" class="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
+          <input id="cover" type="file" (change)="setSubcategoryImage($event)" class="border rounded-md p-2 w-full" />
+        </div>
+
         <!-- Add Button -->
         <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 border border-blue-500 hover:bg-blue-700 rounded">
           Add Subcategory
@@ -155,6 +161,12 @@
         <div class="mb-4">
           <label for="editName" class="block text-sm font-medium text-gray-700 mb-2">Subcategory Name</label>
           <input id="editName" formControlName="name" [value]="selectSubcategory.name" type="text" class="focus:border-indigo-500 border border-gray-300 rounded block w-full px-3 py-2" placeholder="Enter Subcategory name" required />
+        </div>
+
+        <!-- Cover Image Input -->
+        <div class="mb-4">
+          <label for="cover" class="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
+          <input id="cover" type="file" (change)="setSubcategoryImage($event)" class="border rounded-md p-2 w-full" />
         </div>
 
         <!-- Update Button -->

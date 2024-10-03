@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createSubcategory, deleteSubcategory, getAllSubcategories, getSubcategoryByID, resizeSubcategoryImages, updateSubcategory, uploadSubcategoryImages } from './subcategoryController';
+import { createSubcategory, deleteSubcategory, getAllSubcategories, getSubcategoryByID, resizeSubcategoryImages, updateSubcategory, uploadSubcategoryImage } from './subcategoryController';
 import { createSubcategoryValidator, deleteSubcategoryValidator, getSubcategoryByIDValidator, updateSubcategoryValidator } from '../../utils/validators/subcategoriesValidator';
 import Products from "../../Apps/products/productModel";
 import { deleteChildValidator } from '../../utils/validators/childValidator';
@@ -13,7 +13,7 @@ subcategoryRoute.route( '/' )
     isActive,
     isHaveAccess('admin', 'manager'),
     protectRoutes,
-    uploadSubcategoryImages,
+    uploadSubcategoryImage,
     resizeSubcategoryImages,
     createSubcategoryValidator,
     createSubcategory
@@ -38,7 +38,7 @@ subcategoryRoute.route( '/' )
     isActive,
     isHaveAccess('admin', 'manager'),
     protectRoutes,
-    uploadSubcategoryImages,
+    uploadSubcategoryImage,
     resizeSubcategoryImages,
     updateSubcategoryValidator,
     updateSubcategory

@@ -21,15 +21,18 @@ export class SubcategoriesComponent implements OnInit {
   categories: Categories[] = [];
   editSubcategoryForm = new FormGroup({
     name: new FormControl(null, [Validators.required]),
+    cover: new FormControl(null),
     category: new FormControl(null, [Validators.required])
   })
   addSubCategoryForm = new FormGroup({
     name: new FormControl(null, [Validators.required]),
+    cover: new FormControl(null),
     category: new FormControl(null, [Validators.required])
   })
   selectSubcategory: any;
   editorForm:boolean = false;
   submitForm:boolean = false;
+  uploadImage: File | null = null;
   pagination: Pagination = {};
   limit: number = 10;
   page: number = 1;
@@ -54,6 +57,13 @@ export class SubcategoriesComponent implements OnInit {
     this.selectSubcategory = subcategory == this.selectSubcategory? null:subcategory;
     this.populateForm(subcategory);
 
+  }
+
+  setSubcategoryImage(event: any) {
+    const images = event.target.files;
+    if (images.length) {
+      this.uploadImage = images[0];
+    }
   }
 
   changePage(page:number){
@@ -91,7 +101,14 @@ export class SubcategoriesComponent implements OnInit {
   }
 
   updateSubcategory(form:FormGroup){
-    this._ApiService.update<Subcategories[]>('subcategory', form.value, this.selectSubcategory._id).subscribe({
+    const formData = new FormData();
+
+    Object.keys(form.value).forEach(key => {
+      formData.append(key, form.get(key)?.value);
+    });
+
+    if (this.uploadImage) formData.append('cover', this.uploadImage);
+    this._ApiService.update<Subcategories[]>('subcategory', formData, this.selectSubcategory._id).subscribe({
       next:(res) => {
         this.editorForm = false;
         this.selectSubcategory = null;
@@ -103,13 +120,20 @@ export class SubcategoriesComponent implements OnInit {
   }
 
   addSubcategory(form:FormGroup){
-    this._ApiService.post<Subcategories[]>('subcategory', form.value).subscribe({
+    const formData = new FormData();
+
+    Object.keys(form.value).forEach(key => {
+      formData.append(key, form.get(key)?.value);
+    });
+
+    if (this.uploadImage) formData.append('cover', this.uploadImage);
+    this._ApiService.post<Subcategories[]>('subcategory', formData).subscribe({
       next:(res) => {
         this.submitForm = false;
         this.getSubcategories();
         this._NotificationService.showNotification('Created subcategory', 'success' );
       },
-      error:(err) => { this._NotificationService.showNotification(err.error.errors[0].msg, 'error') }
+      // error:(err) => { this._NotificationService.showNotification(err.error.errors[0].msg, 'error') }
     })
   }
 

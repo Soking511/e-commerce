@@ -5,9 +5,10 @@ import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../core/components/notification/services/notification.service';
 import { AuthService } from '../../core/services/auth.service';
 import { GlobalService } from '../../core/services/global.service';
-import { CartService } from './services/cart.service';
 import { ApiService } from '../../core/services/api.service';
 import { HomeComponent } from '../home/home.component';
+import { CartItems } from '../../shared/interfaces/order';
+import { SideCartService } from '../../shared/services/side-cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -18,16 +19,15 @@ import { HomeComponent } from '../home/home.component';
 })
 
 export class CartComponent implements OnInit{
+  guiPopWindows = { confirmBoolean: false, confirmedOrder: false, editorBoolean: false };
+  userCart: any = {};
+  totalPriceCart: number = 0;
   currentUserCart: any = {};
   currentUserAddress: any = {};
   selectedAddress:any = {};
   pagination: any;
-  subscription:any;
-  guiPopWindows = {
-    confirmBoolean: false,
-    confirmedOrder: false,
-    editorBoolean: false
-  };
+  currentRoute: string = '';
+  sideCart: boolean = false;
   imgDomain = ''
   state: any[] = [];
   addressForm: FormGroup = new FormGroup({
@@ -37,19 +37,12 @@ export class CartComponent implements OnInit{
     'state': new FormControl(null, [Validators.required])
   });
 
-  constructor(
-    private _AuthService: AuthService,
-    private _CartService: CartService,
-    private _NotificationService: NotificationService,
-    private _ApiService: ApiService,
-    private _GlobalService:GlobalService,
-    private _Router:Router
-  ){ }
+  constructor( private _AuthService: AuthService, private _NotificationService: NotificationService, private _ApiService: ApiService, private _sideCartService: SideCartService, private _GlobalService:GlobalService, private _Router:Router ){ }
 
   removeProductFromCart(item: any) {
-    this._CartService.removeProductFromCart(item).subscribe({
+    this._ApiService.delete('carts', item._id).subscribe({
       next: (res) => {
-        this.getUserCart();
+        this.updateUserCart();
       },
       error: (err) => { }
     })
@@ -70,9 +63,10 @@ export class CartComponent implements OnInit{
   }
 
   addProductQuantity(item: any){
-    this._CartService.updateProductQuantity(item, 1).subscribe({
+    this._ApiService.update<CartItems[]>('carts', {quantity: item.quantity+1}, item._id).subscribe({
       next: (res) => {
-        this.getUserCart();
+        // location.reload();
+        this.updateUserCart();
       },
       error: (err) => {
         this._NotificationService.showNotification(err.error.errors[0].msg, 'error')
@@ -81,9 +75,9 @@ export class CartComponent implements OnInit{
   }
 
   reductionProductQuantity(item: any){
-    this._CartService.updateProductQuantity(item, -1).subscribe({
+    this._ApiService.update<CartItems[]>('carts', {quantity: item.quantity-1}, item._id).subscribe({
       next: (res) => {
-        this.getUserCart();
+        this.updateUserCart();
       },
       error: (err) => {
         this._NotificationService.showNotification(err.error.errors[0].msg, 'error')
@@ -91,7 +85,25 @@ export class CartComponent implements OnInit{
     })
   }
 
-  setCurrentAddress(address: any){ this.selectedAddress = ( address._id == this.selectedAddress._id )? '':address }
+  updateUserCart() {
+    this._ApiService.get<any>('carts', undefined, 'user').subscribe({
+      next: (res) => {
+        this._sideCartService.setCartItems(res.data.items);
+      },
+      error: (err) => {
+        console.error('Error fetching cart', err);
+      }
+    });
+  }
+
+  getUserAddress() {
+    this._AuthService.getUserAddress().subscribe({
+      next: (res) => {
+        this.currentUserAddress = res.data;;
+      },
+      error: (err) => { }
+    });
+  }
 
   deleteAddress(addressID: string){
     this._AuthService.deleteUserAddress(addressID).subscribe({
@@ -103,25 +115,6 @@ export class CartComponent implements OnInit{
     })
   }
 
-  getUserCart() {
-    this.subscription = this._CartService.getUserCart().subscribe({
-      next: (res) => {
-        this.currentUserCart['cart'] = res.data;
-      },
-      error: (err) => { }
-    });
-  }
-
-
-  getUserAddress() {
-    this.subscription = this._AuthService.getUserAddress().subscribe({
-      next: (res) => {
-        this.currentUserAddress = res.data;;
-      },
-      error: (err) => { }
-    });
-  }
-
   addUserAddress(formData:any){
     this._AuthService.addUserAddress({'address':[formData.value]}).subscribe({
       next: (res) => {
@@ -131,21 +124,37 @@ export class CartComponent implements OnInit{
     });
   }
 
-  fetchCities() {
-    this._GlobalService.fetchCities().subscribe(
-      (data) => { this.state = data },
-      (error) => { }
-    );
-  }
-
-  showEditor(bool:boolean){ this.guiPopWindows.editorBoolean = bool }
-  showDelete(bool:boolean){ this.guiPopWindows.confirmBoolean = bool }
+  // fetchCities() {
+  //   this._GlobalService.fetchCities().subscribe(
+  //     (data) => { this.state = data },
+  //     (error) => { }
+  //   );
+  // }
 
   ngOnInit(): void {
-      this.getUserCart();
-      this.getUserAddress();
-      this.fetchCities();
-      this.imgDomain = this._GlobalService.productsImage;
-    }
+    this._sideCartService.sideCart$.subscribe(state => {
+      this.sideCart = state;
+    });
 
+    // Subscribe to cart items
+    this._sideCartService.cartItems$.subscribe(items => {
+      this.currentUserCart = items || [];
+      this.totalPriceCart = 0;
+      for ( let i = 0; i < items.length; i++ ){
+        this.totalPriceCart += ( items[i].price * items[i].quantity);
+      }
+      console.log('Updated cart items: ', this.currentUserCart);
+
+    });
+
+    this.getUserAddress();
+    // this.fetchCities();
+    this.imgDomain = this._GlobalService.productsImage;
+    this._Router.events.subscribe(() => {
+      this.currentRoute = this._Router.url;
+      // if ( this.currentRoute !== '/home' ){
+        this.sideCart = false;
+      // }
+    });
+  }
 }

@@ -81,7 +81,6 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-
   // Handle product selection
   selectedProduct(product: Products) {
     this.selectProduct = this.selectProduct === product ? null : product;
@@ -120,16 +119,6 @@ export class ProductsComponent implements OnInit {
     const imageFiles = event.target.files;
     if (imageFiles.length > 0) {
       this.uploadImages = Array.from(imageFiles);
-    }
-  }
-
-  uploadImagesToServer() {
-    if (this.uploadImage) {
-      const formData = new FormData();
-      formData.append('cover', this.uploadImage);
-      this.uploadImages.forEach((image) => {
-        formData.append('images', image);
-      });
     }
   }
 
@@ -198,7 +187,7 @@ export class ProductsComponent implements OnInit {
 
   loadSubCategories(category?: string) {
     const query = category && category !== 'All' ? `&category=${category}` : '';
-    this._ApiService.get<Subcategories[]>('subcategory', undefined, undefined, query).subscribe({
+    this._ApiService.get<Subcategories[]>('subcategory', 50, undefined, query).subscribe({
       next: (res) => {
         this.subcategories = res.data;
       },
@@ -209,7 +198,7 @@ export class ProductsComponent implements OnInit {
   }
 
   loadCategories() {
-    this._ApiService.get<Categories[]>('categories').subscribe({
+    this._ApiService.get<Categories[]>('categories', 50).subscribe({
       next: (res) => {
         this.categories = res.data},
       error: (err) => { }
