@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -39,6 +39,8 @@ export class CartComponent implements OnInit{
 
   constructor( private _AuthService: AuthService, private _NotificationService: NotificationService, private _ApiService: ApiService, private _sideCartService: SideCartService, private _GlobalService:GlobalService, private _Router:Router ){ }
 
+  toggleSideCart() { this._sideCartService.toggleSideCart() }
+
   removeProductFromCart(item: any) {
     this._ApiService.delete('carts', item._id).subscribe({
       next: (res) => {
@@ -65,12 +67,9 @@ export class CartComponent implements OnInit{
   addProductQuantity(item: any){
     this._ApiService.update<CartItems[]>('carts', {quantity: item.quantity+1}, item._id).subscribe({
       next: (res) => {
-        // location.reload();
         this.updateUserCart();
       },
-      error: (err) => {
-        this._NotificationService.showNotification(err.error.errors[0].msg, 'error')
-      }
+      error: (err) => { }
     })
   }
 
@@ -79,9 +78,7 @@ export class CartComponent implements OnInit{
       next: (res) => {
         this.updateUserCart();
       },
-      error: (err) => {
-        this._NotificationService.showNotification(err.error.errors[0].msg, 'error')
-      }
+      error: (err) => { }
     })
   }
 
@@ -90,9 +87,7 @@ export class CartComponent implements OnInit{
       next: (res) => {
         this._sideCartService.setCartItems(res.data.items);
       },
-      error: (err) => {
-        console.error('Error fetching cart', err);
-      }
+      error: (err) => { }
     });
   }
 
@@ -124,37 +119,32 @@ export class CartComponent implements OnInit{
     });
   }
 
-  // fetchCities() {
-  //   this._GlobalService.fetchCities().subscribe(
-  //     (data) => { this.state = data },
-  //     (error) => { }
-  //   );
-  // }
+  fetchCities() {
+    this._GlobalService.fetchCities().subscribe(
+      (data) => { this.state = data },
+      (error) => { }
+    );
+  }
 
   ngOnInit(): void {
     this._sideCartService.sideCart$.subscribe(state => {
       this.sideCart = state;
     });
-
-    // Subscribe to cart items
     this._sideCartService.cartItems$.subscribe(items => {
       this.currentUserCart = items || [];
       this.totalPriceCart = 0;
       for ( let i = 0; i < items.length; i++ ){
         this.totalPriceCart += ( items[i].price * items[i].quantity);
       }
-      console.log('Updated cart items: ', this.currentUserCart);
 
     });
 
     this.getUserAddress();
-    // this.fetchCities();
+    this.fetchCities();
     this.imgDomain = this._GlobalService.productsImage;
     this._Router.events.subscribe(() => {
       this.currentRoute = this._Router.url;
-      // if ( this.currentRoute !== '/home' ){
-        this.sideCart = false;
-      // }
+      this.sideCart = false;
     });
   }
 }

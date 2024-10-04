@@ -35,7 +35,7 @@ import { SideCartService } from '../../shared/services/side-cart.service';
       transition('normal <=> scaled', [
         animate('0.2s ease-in-out')
       ])
-    ]), 
+    ]),
   ]
 })
 
@@ -56,13 +56,7 @@ export class HomeComponent implements OnDestroy {
   search: string = '';
   currentCart: any = {};
 
-  constructor(
-    private _ProductsService: ProductsService,
-    private _ApiService: ApiService,
-    private _SideCartService: SideCartService,
-    private _NotificationService: NotificationService,
-    private cdr: ChangeDetectorRef
-) { }
+  constructor( private _ProductsService: ProductsService, private _ApiService: ApiService, private _SideCartService: SideCartService, private _NotificationService: NotificationService, private cdr: ChangeDetectorRef ) { }
 
 
   getUserCart() {
@@ -72,9 +66,7 @@ export class HomeComponent implements OnDestroy {
         this.updateUserCart();
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Error fetching cart', err);
-      }
+      error: (err) => {}
     });
   }
 
@@ -115,9 +107,7 @@ export class HomeComponent implements OnDestroy {
       next: (res) => {
         this.getUserCart();
       },
-      error: (err) => {
-        console.error('Error adding product to cart', err);
-      }
+      error: (err) => { }
     });
   }
 

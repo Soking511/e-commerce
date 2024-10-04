@@ -157,9 +157,8 @@
                   <p>{{ totalPriceCart + 100 | currency }}</p>
                 </div>
                 <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
-                <div class="mt-6" routerLink="/cart"  routerLinkActive="active">
-
-                  <a class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-white font-medium shadow-sm hover:bg-indigo-700 transition-colors duration-300">Checkout</a>
+                <div class="mt-6" (click)="toggleSideCart()" routerLink="/cart"  routerLinkActive="active">
+                  <a class="cursor-pointer flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-white font-medium shadow-sm hover:bg-indigo-700 transition-colors duration-300">Checkout</a>
                 </div>
                 <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
                   <p>

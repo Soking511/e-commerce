@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,7 +8,6 @@ import { ReviewsService } from './reviews/services/reviews.service';
 import { ProductsService } from './services/products.service';
 import { ApiService } from '../../core/services/api.service';
 import { NotificationService } from '../../core/components/notification/services/notification.service';
-import { CartItems } from '../../shared/interfaces/order';
 import { SideCartService } from '../../shared/services/side-cart.service';
 
 @Component({
@@ -18,8 +17,8 @@ import { SideCartService } from '../../shared/services/side-cart.service';
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss'
 })
+
 export class ProductComponent implements OnInit {
-  subscription: any;
   product: Products = {};
   imgDomain: string = '';
   id: string = '';
@@ -29,11 +28,10 @@ export class ProductComponent implements OnInit {
     rate: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(5)]),
   });
 
-  constructor(
-    private cdr: ChangeDetectorRef, private _ProductsService: ProductsService, private _ApiService:ApiService, private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute, private _NotificationService:NotificationService, private _sideCartService:SideCartService) { }
+  constructor( private cdr: ChangeDetectorRef, private _ProductsService: ProductsService, private _ApiService:ApiService, private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute, private _NotificationService:NotificationService, private _sideCartService:SideCartService) { }
 
   loadProduct(productId: string) {
-    this.subscription = this._ApiService.get<Products>(`products/${productId}`).subscribe({
+    this._ApiService.get<Products>(`products/${productId}`).subscribe({
       next: (res) => { this.product = res.data;},
       error: (err) => { },
     })
@@ -44,9 +42,7 @@ export class ProductComponent implements OnInit {
       next: (res) => {
         this.getUserCart();
       },
-      error: (err) => {
-        console.error('Error adding product to cart', err);
-      }
+      error: (err) => { }
     });
   }
 
@@ -56,9 +52,7 @@ export class ProductComponent implements OnInit {
         this._sideCartService.setCartItems(res.data.items);
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Error fetching cart', err);
-      }
+      error: (err) => { }
     });
   }
 
@@ -72,7 +66,4 @@ export class ProductComponent implements OnInit {
     this.imgDomain = this._ProductsService.productImages;
     this.loadProduct(this.id);
   }
-
-
-
 }
