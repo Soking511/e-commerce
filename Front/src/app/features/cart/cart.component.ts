@@ -69,7 +69,7 @@ export class CartComponent implements OnInit{
       next: (res) => {
         this.updateUserCart();
       },
-      error: (err) => { }
+      error: (err) => { this._NotificationService.showNotification('No More Stock', 'error'); }
     })
   }
 
@@ -78,7 +78,7 @@ export class CartComponent implements OnInit{
       next: (res) => {
         this.updateUserCart();
       },
-      error: (err) => { }
+      error: (err) => { this._NotificationService.showNotification('No More Stock', 'error');}
     })
   }
 

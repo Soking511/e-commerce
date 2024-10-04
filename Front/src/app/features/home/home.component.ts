@@ -127,12 +127,13 @@ export class HomeComponent implements OnDestroy {
       if (at._id=== item.product._id) {
         if ( item.quantity+num >= 1 ){
           let productInCart = item.product;
+          // console.log(item.quantity+num);
           this._ApiService.update<any>(`carts`, { quantity: item.quantity+num }, item._id).subscribe({
             next: (res) => {
               this.getUserCart();
             },
             error: (err) => {
-              this._NotificationService.showNotification(err.message, 'error');
+              this._NotificationService.showNotification('No More Stock', 'error');
             }
           });
         } else this._NotificationService.showNotification('enter valid quantity', 'error');

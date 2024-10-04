@@ -26,8 +26,8 @@ export class OrderDetailsComponent implements OnInit{
 
   ngOnInit(): void {
     this.imageDomain = this._GlobalService.productsImage;
-    this._ApiService.get<Orders>('orders', 1, 'user').subscribe({
-      next: (res) => { this.tempCart = res.data as Orders },
+    this._ApiService.get<Orders[]>('orders', 1, 'user').subscribe({
+      next: (res) => { this.tempCart = res.data as Orders[] },
       error: (error) => { }
     })
     this.clearCart();
