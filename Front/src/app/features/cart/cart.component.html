@@ -140,7 +140,8 @@
                           <div class="flex flex-1 items-end justify-between text-sm">
                             <p class="text-gray-500">Qty {{ item.quantity }}</p>
                             <button type="button" (click)="removeProductFromCart(item)" class="font-medium text-indigo-600 hover:text-indigo-500">
-                              Remove
+                              <!-- Remove -->
+                               <span class="material-symbols-outlined"> delete</span>
                             </button>
                           </div>
                         </div>
@@ -201,21 +202,31 @@
 
         <!-- State (Combobox) -->
         <div class="mb-4">
+          <!-- State Dropdown -->
           <label for="state" class="block text-sm font-medium text-gray-700">State</label>
-          <select id="state" formControlName="state" class="focus:border-gray-500 border border-gray-300 rounded block w-full px-3 py-2" required>
+          <select id="state" formControlName="state" class="focus:border-gray-500 border border-gray-300 rounded block w-full px-3 py-2" (change)="onStateChange($event)" required>
             <option value="" disabled selected>Select your state</option>
-            @for( state of state; track state ){
-              <option [value]=state >{{ state }}</option>
-            }
+            <!-- Corrected *ngFor with a properly closed bracket -->
+            <option *ngFor="let state of state" [value]="state.code">{{ state.name }}</option>
+          </select>
+
+          <!-- City Dropdown -->
+          <label for="city" class="block text-sm font-medium text-gray-700 mt-4">City</label>
+          <select id="city" formControlName="city" class="focus:border-gray-500 border border-gray-300 rounded block w-full px-3 py-2" required>
+            <option value="" disabled selected>Select your city</option>
+            <!-- Ensure *ngFor iterates over selectedState's cities -->
+            <option *ngFor="let city of selectedState" [value]="city.code">{{ city.name }}</option>
           </select>
         </div>
 
+
+
         <!-- Zone (Combobox) -->
-        <div class="mb-4">
+        <!-- <div class="mb-4">
           <label for="city" class="block text-sm font-medium text-gray-700">Zone</label>
           <input id="city" formControlName="city" class="focus:border-gray-500 border border-gray-300 rounded block w-full px-3 py-2" placeholder="Enter your postal code" required>
 
-        </div>
+        </div> -->
 
         <!-- Postal Code -->
         <div class="mb-4">

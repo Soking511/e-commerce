@@ -20,14 +20,14 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
   credentials: true
 }))
-// app.use(cookieParser());
-// app.use(csurf({
-//   cookie: {
-//     httpOnly: true,
-//     secure: true,
-//     sameSite: 'strict'
-//   }
-// }));
+app.use(cookieParser());
+app.use(csurf({
+  cookie: {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict'
+  }
+}));
 app.use(express.json({ limit: '2kb' }));
 app.use(compression());
 app.use(mongoSanitize());

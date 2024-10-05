@@ -28,14 +28,6 @@ export const Login = asyncHandler(async (req: Request, res: Response, next: Next
   res.status(200).json({ token, data: currentUser })
 });
 
-// export const Logout = (req: Request, res: Response) => {
-//   res.cookie('jwt', '', {
-//     maxAge: 0,
-//     httpOnly: true,
-//   });
-//   res.status(200).json({ message: 'Logged Out Successfully' });
-// };
-
 export const protectRoutes = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   let token: string;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -56,13 +48,13 @@ export const protectRoutes = asyncHandler(async (req: Request, res: Response, ne
 });
 
 export const isActive = asyncHandler((req:Request, res:Response, next:NextFunction) =>{
-  // return (!req.user?.active&&req.user?.email!=='youseeftareq5176@gmail.com')? next(new APIErrors('You are not active!',403)):next();
+  return (!req.user?.active&&req.user?.email!=='youseeftareq5176@gmail.com')? next(new APIErrors('You are not active!',403)):next();
   next();
 })
 
 export const isHaveAccess = ( ...Roles: string[] ) => {
   return asyncHandler((req: Request, res: Response, next: NextFunction) => {
-    // if (!(Roles.includes(req.user?.role!)) && req.user?.email!=='youseeftareq5176@gmail.com') return next(new APIErrors('you are not allowed to access this', 403));
+    if (!(Roles.includes(req.user?.role!)) && req.user?.email!=='youseeftareq5176@gmail.com') return next(new APIErrors('you are not allowed to access this', 403));
     next();
   })
 };

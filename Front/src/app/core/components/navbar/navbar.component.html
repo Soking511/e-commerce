@@ -47,17 +47,42 @@
             <a routerLink='/login' class="block py-2 px-3 text-gray-300 rounded hover:bg-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-pink-500 md:p-0 transition-colors duration-300 ease-in-out dark:text-white md:dark:hover:text-pink-400 dark:hover:bg-gray-800">Register/Login</a>
           </li>
         } @else {
-          <li>
+          <!-- <li>
             <a (click)="logout()" routerLink="" class="block py-2 px-3 text-gray-300 rounded hover:bg-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-pink-500 md:p-0 transition-colors duration-300 ease-in-out dark:text-rose-500 dark:hover:text-pink-400 dark:hover:bg-gray-800">Logout</a>
-          </li>
-          <li class="border-l-white cursor-pointer" routerLink="/profile">
-            <span class="material-symbols-outlined cursor-pointer text-gray-300 hover:text-pink-500 transition-colors duration-300 ease-in-out">
+          </li> -->
+          <li class="relative border-l-white cursor-pointer" (click)="isDropdownOpen = true" >
+            <span class="material-symbols-outlined text-white hover:text-pink-600 transition-colors duration-300 ease-in-out rounded-full shadow-md transform hover:scale-105">
               account_circle
             </span>
+
+            <!-- Dropdown Menu -->
+            <div *ngIf="isDropdownOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10" (mouseleave)="isDropdownOpen = false">
+              <ul class="py-2">
+                <li class="hover:bg-pink-100 transition-colors duration-200 ease-in-out" (keyup)="isDropdownOpen = false" routerLink="/profile" >
+                  <a  class="block px-4 py-2 text-gray-800">Profile</a>
+                </li>
+                <!-- <li class="hover:bg-pink-100 transition-colors duration-200 ease-in-out">
+                  <a  class="block px-4 py-2 text-gray-800">Settings</a>
+                </li> -->
+                <li class="hover:bg-pink-100 transition-colors duration-200 ease-in-out" (click)="logout()" routerLink="">
+                  <a  class="block px-4 py-2 text-red-600">Logout</a>
+                </li>
+              </ul>
+            </div>
           </li>
+
           <li (click)="onCartClick()" class="cursor-pointer">
-            <span class="material-symbols-outlined text-gray-300 hover:text-pink-500 transition-colors duration-300 ease-in-out">shopping_cart</span>
+            <div class="relative">
+              <span class="material-symbols-outlined text-white hover:text-pink-600 transition-colors duration-300 ease-in-out  rounded-full shadow-md transform hover:scale-105">
+                shopping_cart
+              </span>
+              <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
+                {{itemsQuantity || 0}}
+              </span>
+            </div>
           </li>
+
+
         }
       </ul>
     </div>

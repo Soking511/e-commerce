@@ -26,13 +26,11 @@ declare module 'express'{
 }
 
 const mountRoutes = (app: Application) => {
-  // app.use((req: Request, res: Response, next: NextFunction) => {
-  //   res.cookie('cookies', req.csrfToken());
-  //   next();
-  // });
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.cookie('cookies', req.csrfToken());
+    next();
+  });
   app.use('/api/v1/categories', categoriesRoute );
-  // app.use('/api/v1/uploads');
-
   app.use('/api/v1/subcategory', subcategoryRoute );
   app.use('/api/v1/products', productsRoute );
   app.use('/api/v1/users', usersRoute)

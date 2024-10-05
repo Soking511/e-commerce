@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from '../../core/services/api.service';
+import { CartItems } from '../interfaces/order';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +31,23 @@ export class SideCartService {
     const currentCart = this.cartItemsSubject.getValue();
     this.cartItemsSubject.next([...currentCart, item]);
   }
-  
+
+  getCart(): CartItems[] {
+    return this.cartItemsSubject.getValue();
+  }
+
+  fetchCart(callback?: () => void) {
+    this._ApiService.get<any>('carts', undefined, 'user').subscribe({
+      next: (res) => {
+        this.setCartItems(res.data.items);
+        if (callback) {
+          callback();
+        }
+      },
+      error: (err) => {},
+    });
+  }
+
   removeFromCart(itemId: string) {
     const currentCart = this.cartItemsSubject.getValue();
     const updatedCart = currentCart.filter(item => item.product._id !== itemId);
@@ -40,5 +57,4 @@ export class SideCartService {
   clearCart() {
     this.cartItemsSubject.next([]);
   }
-
 }

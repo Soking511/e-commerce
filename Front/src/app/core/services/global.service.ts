@@ -26,7 +26,7 @@ export class GlobalService {
 
 
   fetchCities(): Observable<any> {
-    return this._HttpClient.get(`https://rawcdn.githack.com/kamikazechaser/administrative-divisions-db/master/api/EG.json`);
+    return this._HttpClient.get(`https://atfawry.fawrystaging.com/ECommerceWeb/api/lookups/govs`);
   }
 
   get(endpoint: string, ...params: string[]): Observable<any> {

@@ -23,7 +23,7 @@ export const resizeUserImage = asyncHandler(async (req: Request, res: Response, 
 
 // Manager [Section]
 
-export const getAllUsers = getAll<Users>( usersModel, 'User' );
+export const getAllUsers = getAll<Users>( usersModel, 'users' );
 export const getUserByID = getOne<Users>( usersModel );
 export const createUser = POST<Users>( usersModel );
 export const deleteUser = DELETE<Users>( usersModel );
