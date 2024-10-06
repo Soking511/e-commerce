@@ -19,7 +19,7 @@ export class CartService {
     this.apiKey = this._GlobalService.apiKey;
   }
 
-  addProductToCart(item:any, user:any): Observable<any> {
+  addProductToCart(item:any): Observable<any> {
   const form: any = { product: item };
   return this._HttpClient.post(`${this.baseUrl}${this.cartRoute}`, form
     , {

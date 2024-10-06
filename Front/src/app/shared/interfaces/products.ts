@@ -3,7 +3,7 @@ import { Reviews } from "./reviews";
 import { Subcategories } from "./subcategories";
 
 export interface Products {
-  _id?: string;
+  _id?: any;
   name?: string;
   description?: string;
   price?: number;

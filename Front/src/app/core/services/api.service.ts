@@ -47,7 +47,7 @@ export class ApiService {
 
   post<Interface>(route: string, data:any, id:string='') {
     this._AuthService.checkToken();
-
+    console.log(data);
     return this._Http.post<ApiResponse<Interface>>(`${this.baseURL}${this.version}/${route}${id?`/${id}` : ''}`, data, {
       headers: {
         authorization: `Bearer ${localStorage.getItem('user')}`,

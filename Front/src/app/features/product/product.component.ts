@@ -7,6 +7,7 @@ import { ReviewsComponent } from './reviews/reviews.component';
 import { ReviewsService } from './reviews/services/reviews.service';
 import { ProductsService } from './services/products.service';
 import { ApiService } from '../../core/services/api.service';
+import { NotificationService } from '../../core/components/notification/services/notification.service';
 
 @Component({
   selector: 'app-product-details',
@@ -26,7 +27,7 @@ export class ProductComponent implements OnInit {
     rate: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(5)]),
   });
 
-  constructor(private _ProductsService: ProductsService, private _ApiService:ApiService, private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute) { }
+  constructor(private _ProductsService: ProductsService, private _NotificationService:NotificationService, private _ApiService:ApiService, private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute) { }
 
   loadProduct(productId: string) {
     this.subscription = this._ApiService.get<Products>(`products/${productId}`).subscribe({
@@ -35,12 +36,20 @@ export class ProductComponent implements OnInit {
     })
   }
 
+  addProductToCart( product: string ){
+    this._ApiService.post<Products[]>('carts', { product }).subscribe({
+      next: (res) => {
+        // location.reload();
+        this._NotificationService.showNotification('Added To Cart')
+      },
+      error: (err) => { }
+    });
+  }
+
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
     this.imgDomain = this._ProductsService.productImages;
     this.loadProduct(this.id);
   }
-
-
 
 }

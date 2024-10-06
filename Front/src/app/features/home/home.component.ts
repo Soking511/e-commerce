@@ -107,14 +107,14 @@ export class HomeComponent {
   }
 
   loadCategories() {
-    this._ApiService.get<Categories[]>('categories').subscribe({
+    this._ApiService.get<Categories[]>('categories', 50 ).subscribe({
       next: (res) => { this.categories = res.data },
       error: (err) => { }
     })
   }
 
   loadSubCategories(category?:string) {
-    this._ApiService.get<Subcategories[]>('subcategory', undefined, undefined, `${this.categoryForm.get('_id')?.value! !== 'All'? '&category='+category:''}`).subscribe({
+    this._ApiService.get<Subcategories[]>('subcategory', 50, undefined, `${this.categoryForm.get('_id')?.value! !== 'All'? '&category='+category:''}`).subscribe({
       next: (res) => { this.subcategories = res.data },
       error: (err) => { }
     })
@@ -122,7 +122,7 @@ export class HomeComponent {
 
 
   addProductToCart(product: any) {
-    this._ApiService.post<any>('carts', { product: product._id }).subscribe({
+    this._ApiService.post<Products[]>('carts', { product }).subscribe({
       next: (res) => {
         this.updateUserCart();
         this.addedToCart = true;
@@ -135,7 +135,6 @@ export class HomeComponent {
         this._NotificationService.showNotification(err.message, 'error');
       }
     });
-
   }
 
   addProductToWishlist(product: any) {

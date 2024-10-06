@@ -134,7 +134,7 @@ export class ProductsComponent implements OnInit {
   }
 
   // Delete product
-  delete(product: Products) {
+  delete(product: any) {
     this._ApiService.delete('products', product._id).subscribe({
       next: (res) => {
         this.Products();
@@ -161,13 +161,14 @@ export class ProductsComponent implements OnInit {
         this._NotificationService.showNotification('Updated Product', 'success');
         this.Products();
       },
-      error: (err) => { console.error(err); }
+      // error: (err) => { console.error(err); }
     });
   }
 
-  // Add new product
+    // Add new product
   addProduct(form: FormGroup) {
     const formData = new FormData();
+
     Object.keys(form.value).forEach(key => {
       formData.append(key, form.get(key)?.value);
     });
@@ -178,12 +179,17 @@ export class ProductsComponent implements OnInit {
     this._ApiService.post<Products[]>('products', formData).subscribe({
       next: (res) => {
         this.submitForm = false;
-        this.Products();
         this._NotificationService.showNotification('Created Product', 'success');
+        this.Products();
+        form.reset();
       },
-      error: (err) => { console.error(err); }
+      error: (err) => {
+        console.error(err);
+        this._NotificationService.showNotification('Failed to create product', 'error');
+      }
     });
   }
+
 
   showEditor(bool:boolean){
     if ( bool ) this.Products();
@@ -198,7 +204,7 @@ export class ProductsComponent implements OnInit {
 
   loadSubCategories(category?: string) {
     const query = category && category !== 'All' ? `&category=${category}` : '';
-    this._ApiService.get<Subcategories[]>('subcategory', undefined, undefined, query).subscribe({
+    this._ApiService.get<Subcategories[]>('subcategory', 50, undefined, query).subscribe({
       next: (res) => {
         this.subcategories = res.data;
       },
@@ -209,7 +215,7 @@ export class ProductsComponent implements OnInit {
   }
 
   loadCategories() {
-    this._ApiService.get<Categories[]>('categories').subscribe({
+    this._ApiService.get<Categories[]>('categories', 50).subscribe({
       next: (res) => {
         this.categories = res.data},
       error: (err) => { }

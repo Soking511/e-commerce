@@ -166,7 +166,7 @@
       }
     </style>
 
-    <ng-container *ngFor="let product of products;">
+    <ng-container *ngFor="let product of products;" >
       <div class="group card m-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
 
         <!-- Product Image -->
@@ -193,7 +193,7 @@
           <!-- Buttons Section -->
           <div class="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0 md:space-x-4 mt-3 group-hover:opacity-100 transition-opacity duration-300">
             <!-- Add to Cart Section -->
-            <div *ngIf="userCart[product._id!]; else addToCartButton" class="flex items-center w-full md:w-auto">
+            <div *ngIf="userCart[product._id]; else addToCartButton" class="flex items-center w-full md:w-auto">
               <button (click)="updateProductQuantity(product, -1)"
                       class="flex-grow w-full md:w-auto px-4 py-2 text-xs sm:text-sm md:text-base bg-gray-300 rounded-lg hover:bg-gray-400 transition-colors duration-300 flex items-center justify-center shadow-md transform hover:scale-110">
                 <span class="font-bold">-</span>
@@ -214,14 +214,14 @@
                 <!-- Button Container -->
                 <div class="flex justify-center space-x-4 w-full">
                   <!-- Buy Item Button -->
-                  <a (click)="addProductToCart(product); "
+                  <a (click)="addProductToCart(product._id)"
                      [ngClass]="{'add-to-cart-animation': addedToCart}"
-                     class="cursor-pointer flex items-center justify-center w-full sm:w-auto px-4 py-2 text-xs sm:text-sm md:text-base font-medium text-white bg-slate-900 rounded-lg hover:bg-slate-700 transition-transform transform hover:scale-105 shadow-lg duration-300 ease-in-out">
+                     class="cursor-pointer flex items-center justify-center w-full sm:w-auto px-8 py-2 text-xs sm:text-sm md:text-base font-medium text-white bg-slate-900 rounded-lg hover:bg-slate-700 transition-transform transform hover:scale-105 shadow-lg duration-300 ease-in-out">
                     <span class="material-symbols-outlined mr-2 text-lg md:text-xl">add_shopping_cart</span>
                     <span>Buy</span>
                   </a>
                   <a (click)="addProductToWishlist(product)"
-                     class="cursor-pointer flex items-center justify-center w-full sm:w-auto px-4 py-2 text-xs sm:text-sm md:text-base font-medium text-white bg-green-900 rounded-lg hover:bg-green-700 transition-transform transform hover:scale-105 shadow-lg duration-300 ease-in-out">
+                     class="cursor-pointer flex items-center justify-center w-full sm:w-auto px-8 py-2 text-xs sm:text-sm md:text-base font-medium text-white bg-green-900 rounded-lg hover:bg-green-700 transition-transform transform hover:scale-105 shadow-lg duration-300 ease-in-out">
                     <span class="material-symbols-outlined mr-2 text-lg md:text-xl">favorite</span>
                     <span>Love</span>
                   </a>
