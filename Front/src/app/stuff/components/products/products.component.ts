@@ -81,7 +81,6 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-
   // Handle product selection
   selectedProduct(product: Products) {
     this.selectProduct = this.selectProduct === product ? null : product;
@@ -120,16 +119,6 @@ export class ProductsComponent implements OnInit {
     const imageFiles = event.target.files;
     if (imageFiles.length > 0) {
       this.uploadImages = Array.from(imageFiles);
-    }
-  }
-
-  uploadImagesToServer() {
-    if (this.uploadImage) {
-      const formData = new FormData();
-      formData.append('cover', this.uploadImage);
-      this.uploadImages.forEach((image) => {
-        formData.append('images', image);
-      });
     }
   }
 

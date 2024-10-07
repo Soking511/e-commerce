@@ -37,7 +37,7 @@ export const createCashOrder = asyncHandler(async (req: Request, res: Response, 
       const productCatch = await productModel.findOne({ _id: item.product._id });
 
       if (cartCatch && productCatch) {
-        if (!(item.quantity >= productCatch.quantity - item.quantity)) {
+        if (item.quantity >= productCatch.quantity - item.quantity) {
           const cart: any = await cartModel.findByIdAndUpdate( {id: item.product._id}, {
             $pull: { items: { _id: item.product._id } }
           }, { new: true });

@@ -56,7 +56,10 @@ export const removeProductFromCart = asyncHandler(async (req: Request, res: Resp
 export const updateProductQuantity = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const cart: any = await cartModel.findOne({ user: req.user?._id });
   const productIndex: number = cart.items.findIndex((item: CartItems) => item._id!.toString() === req.params.itemId.toString());
+  const product = await productModel.findById(cart.items[productIndex].product._id);
   if (productIndex > -1) {
+    if ( product!.quantity < Number(req.body.quantity) )
+      return next(new Error('product not available more quantity'));
     cart.items[productIndex].quantity = req.body.quantity;
   } else {
     return next(new Error('product not exist in cart'))

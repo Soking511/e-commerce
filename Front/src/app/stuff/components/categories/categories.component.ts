@@ -19,19 +19,29 @@ export class CategoriesComponent  implements OnInit {
   categories: Categories[] = [];
   editCategoryForm = new FormGroup({
     name: new FormControl(null, [Validators.required]),
+    cover: new FormControl(null),
   })
   addCategoryForm = new FormGroup({
     name: new FormControl(null, [Validators.required]),
+    cover: new FormControl(null),
   })
   selectCategory: any;
   editorForm:boolean = false;
   submitForm:boolean = false;
+  uploadImage: File | null = null;
   pagination: Pagination = {};
   limit: number = 10;
   page: number = 1;
   sort='-name'
 
   constructor( private _ApiService:ApiService, private _NotificationService:NotificationService ){}
+
+  setCategoryImage(event: any) {
+    const images = event.target.files;
+    if (images.length) {
+      this.uploadImage = images[0];
+    }
+  }
 
   populateForm(Category: any) {
     this.editCategoryForm.patchValue({
@@ -71,7 +81,15 @@ export class CategoriesComponent  implements OnInit {
   }
 
   updateCategory(form:FormGroup){
-    this._ApiService.update<Categories[]>('categories', form.value, this.selectCategory._id).subscribe({
+    const formData = new FormData();
+
+    Object.keys(form.value).forEach(key => {
+      formData.append(key, form.get(key)?.value);
+    });
+
+    if (this.uploadImage) formData.append('cover', this.uploadImage);
+
+    this._ApiService.update<Categories[]>('categories', formData, this.selectCategory._id).subscribe({
       next:(res) => {
         this.editorForm = false;
         this.selectCategory = null;
@@ -82,16 +100,26 @@ export class CategoriesComponent  implements OnInit {
     })
   }
 
-  addCategory(form:FormGroup){
-    this._ApiService.post<Categories>('categories', form.value).subscribe({
-      next:(res) => {
+  addCategory(form: FormGroup) {
+    const formData = new FormData();
+
+    Object.keys(form.value).forEach(key => {
+      formData.append(key, form.get(key)?.value);
+    });
+    if (this.uploadImage) formData.append('cover', this.uploadImage);
+
+    this._ApiService.post<Categories[]>('categories', formData).subscribe({
+      next: (res) => {
         this.submitForm = false;
-        this._NotificationService.showNotification('Created Category', 'success' );
+        this._NotificationService.showNotification('Created Category', 'success');
         this.getCategories();
       },
-      error:(err) => { this._NotificationService.showNotification(err.error.errors[0].msg, 'error') }
-    })
+      error: (err) => {
+        this._NotificationService.showNotification(err.error?.errors[0]?.msg || 'Error occurred', 'error');
+      }
+    });
   }
+
 
   showEditor(bool:boolean){
     if ( !this.selectCategory &&  bool ){

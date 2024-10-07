@@ -33,6 +33,10 @@ export class ApiService {
     });
   }
 
+  fetch<Interface>(route: string) {
+    return this._Http.get<ApiResponse<Interface>>(route);
+  }
+  
   update<Interface>(route: string, data:any, id?:string) {
     this._AuthService.checkToken();
 

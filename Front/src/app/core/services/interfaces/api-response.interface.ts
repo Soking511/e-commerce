@@ -7,5 +7,7 @@ export interface ApiResponse<Interface> {
   categories: Object,
   subcategories: Object,
   Reviews: Reviews,
+  message?: string;
+  success: boolean;
   Products: Products,
 }

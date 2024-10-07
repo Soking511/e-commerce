@@ -33,30 +33,35 @@ export class ProfileComponent implements OnInit {
   Operations = [
     {
       name: 'My Profile',
+      icon: 'account_circle', // Icon for My Profile
       showSections: false,
     },
     {
       name: 'My Orders',
+      icon: 'shopping_cart', // Icon for My Orders
       showSections: false,
     },
     {
       name: 'Reviews',
+      icon: 'rate_review', // Icon for Reviews
       showSections: false,
     },
     {
       name: 'My Wishlist',
+      icon: 'favorite', // Icon for My Wishlist
       showSections: false,
     },
   ];
 
   AdminOperations = [
-    { name: 'Manage Users', showSections: false },
-    { name: 'Products', showSections: false },
-    { name: 'Categories', showSections: false },
-    { name: 'Subcategories', showSections: false },
-    { name: 'Coupons', showSections: false },
-    { name: 'Orders', showSections: false },
+    { name: 'Manage Users', icon: 'group', showSections: false }, // Icon for Manage Users
+    { name: 'Products', icon: 'inventory', showSections: false }, // Icon for Products
+    { name: 'Categories', icon: 'category', showSections: false }, // Icon for Categories
+    { name: 'Subcategories', icon: 'subdirectory_arrow_right', showSections: false }, // Icon for Subcategories
+    { name: 'Coupons', icon: 'local_offer', showSections: false }, // Icon for Coupons
+    { name: 'Orders', icon: 'list_alt', showSections: false }, // Icon for Orders
   ];
+
   constructor(private _AuthService: AuthService, private _ApiService: ApiService) { }
 
   getCurrentUserInfo() {
@@ -74,7 +79,7 @@ export class ProfileComponent implements OnInit {
   sideBar(bool:boolean){
     this.isSidebarOpen = bool;
   }
-  
+
   selected(Operation:any){
     this.OperationSelected=(this.OperationSelected == Operation)? null:Operation;
     this.Operations.forEach(op => {

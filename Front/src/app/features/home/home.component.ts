@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductComponent } from '../product/product.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -7,22 +7,18 @@ import { CartComponent } from '../cart/cart.component';
 import { FooterComponent } from '../../core/components/footer/footer.component';
 import { NotificationComponent } from '../../core/components/notification/notification.component';
 import { NotificationService } from '../../core/components/notification/services/notification.service';
-import { AuthService } from '../../core/services/auth.service';
 import { Categories } from '../../shared/interfaces/categories';
 import { Pagination } from '../../shared/interfaces/pagination';
 import { Products } from '../../shared/interfaces/products';
-import { CartService } from '../cart/services/cart.service';
 import { ProductsService } from '../product/services/products.service';
 import { BestSellerComponent } from './best-seller/best-seller.component';
 import { ApiService } from '../../core/services/api.service';
 import { Subcategories } from '../../shared/interfaces/subcategories';
-import { CartItems, Order } from '../../shared/interfaces/order';
-import { Reviews } from '../../shared/interfaces/reviews';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { SideCartService } from '../../shared/services/side-cart.service';
 
 @Component({
   selector: 'app-home',
-
   standalone: true,
   imports: [FormsModule, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule, CartComponent],
   templateUrl: './home.component.html',
@@ -39,19 +35,13 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
       transition('normal <=> scaled', [
         animate('0.2s ease-in-out')
       ])
-    ])
+    ]),
   ]
-
 })
 
-export class HomeComponent {
-  // @ViewChild(CartComponent) _CartComponent!: CartComponent;
-  @Input() currentUserCart: any = {};
-  @Input() currentUserAddress: any = {};
-  @Input() selectedAddress: any = {};
-  // @Input() sideCart=false;
-  sideCart: boolean=false;
-  subscription: any;
+export class HomeComponent implements OnDestroy {
+  isLoading = false;
+  currentUserCart: any[] = [];
   products: Products[] = [];
   categories: Categories[] = [];
   subcategories: Subcategories[] = [];
@@ -65,28 +55,19 @@ export class HomeComponent {
   sort: string = '-createdAt'
   search: string = '';
   currentCart: any = {};
-  addedToCart = false;
 
-  constructor(
-    private _ProductsService: ProductsService,
-    private _ApiService: ApiService,
-    private _NotificationService: NotificationService,
-    private _CartService: CartService,
-) { }
+  constructor( private _ProductsService: ProductsService, private _ApiService: ApiService, private _SideCartService: SideCartService, private _NotificationService: NotificationService, private cdr: ChangeDetectorRef ) { }
 
-  updateUserCart( ){
+
+  getUserCart() {
     this._ApiService.get<any>('carts', undefined, 'user').subscribe({
       next: (res) => {
-        this.currentCart['cart'] = res.data;
-        for (let i = 0; i < res.data.items.length; i++) {
-          this.userCart[res.data.items[i].product._id] = {
-            quantity: res.data.items[i].product.quantity || 1,
-            name: res.data.items[i].product.name
-          };
-        }
+        this._SideCartService.setCartItems(res.data.items);
+        this.updateUserCart();
+        this.cdr.detectChanges();
       },
-      error: (err) => { }
-    })
+      error: (err) => {}
+    });
   }
 
   getProductItem(productId: string) {
@@ -96,18 +77,23 @@ export class HomeComponent {
   }
 
   loadProducts() {
-    this._ApiService.get<Products[]>('products', this.limit, undefined, `&page=${this.page}&sort=${this.sort}&search=${this.search}${( this.categoryForm.get('_id')?.value! !== 'All')? ('&category='+this.categoryForm.get('_id')?.value!):''}${( this.subcategoryForm.get('_id')?.value! !== 'All')? ('&subcategory='+this.subcategoryForm.get('_id')?.value!):'' }`).subscribe({
+    this.isLoading = true;
+    this._ApiService.get<Products[]>( 'products', this.limit, undefined, `&page=${this.page}&sort=${this.sort}&search=${this.search}${( this.categoryForm.get('_id')?.value! !== 'All')? ('&category='+this.categoryForm.get('_id')?.value!):''}${( this.subcategoryForm.get('_id')?.value! !== 'All')? ('&subcategory='+this.subcategoryForm.get('_id')?.value!):'' }`).subscribe({
       next: (res) => {
-        console.log(res);
         this.products = res.data;
         this.pagination = res.pagination;
+        this.isLoading = false;
       },
-      error: (err) => { }
+      error: (err) => { this.isLoading = false; }
     })
   }
 
   loadCategories() {
+<<<<<<< HEAD
     this._ApiService.get<Categories[]>('categories', 50 ).subscribe({
+=======
+    this._ApiService.get<Categories[]>('categories', 50).subscribe({
+>>>>>>> fce3fca75a60a96af9e69f88f6c120bbc90801a9
       next: (res) => { this.categories = res.data },
       error: (err) => { }
     })
@@ -120,32 +106,23 @@ export class HomeComponent {
     })
   }
 
-
   addProductToCart(product: any) {
     this._ApiService.post<Products[]>('carts', { product }).subscribe({
       next: (res) => {
-        this.updateUserCart();
-        this.addedToCart = true;
-
-        setTimeout(() => {
-          this.addedToCart = false;
-        }, 500);
+        this.getUserCart();
       },
-      error: (err) => {
-        this._NotificationService.showNotification(err.message, 'error');
-      }
+      error: (err) => { }
     });
   }
 
   addProductToWishlist(product: any) {
     this._ApiService.post<any>(`wishlist`, { product: product._id }).subscribe({
       next: (res) => {
-        this.updateUserCart();
         this._NotificationService.showNotification('Added to wishlist', 'success');
       },
-      // error: (err) => {
-      //   this._NotificationService.showNotification(err.message, 'error');
-      // }
+      error: (err) => {
+        this._NotificationService.showNotification(err.message, 'error');
+      }
     });
   }
 
@@ -154,13 +131,13 @@ export class HomeComponent {
       if (at._id=== item.product._id) {
         if ( item.quantity+num >= 1 ){
           let productInCart = item.product;
+          // console.log(item.quantity+num);
           this._ApiService.update<any>(`carts`, { quantity: item.quantity+num }, item._id).subscribe({
             next: (res) => {
-              this.updateUserCart();
-              console.log('done');
+              this.getUserCart();
             },
             error: (err) => {
-              this._NotificationService.showNotification(err.message, 'error');
+              this._NotificationService.showNotification('No More Stock', 'error');
             }
           });
         } else this._NotificationService.showNotification('enter valid quantity', 'error');
@@ -169,19 +146,45 @@ export class HomeComponent {
     }
   }
 
+  updateUserCart() {
+    this._ApiService.get<any>('carts', undefined, 'user').subscribe({
+      next: (res) => {
+        this.currentCart['cart'] = res.data;
+        for (let i = 0; i < res.data.items.length; i++) {
+          this.userCart[res.data.items[i].product._id] = {
+            quantity: res.data.items[i].product.quantity || 1,
+            name: res.data.items[i].product.name
+          };
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => { }
+    });
+  }
+
   removeProductFromCart(item: any) {
     this._ApiService.delete('carts', item).subscribe({
       next: (res) => {
-        location.reload();
+        this.getUserCart();
+        this.cdr.detectChanges();
       },
-      // error:(err) => { }
-    })
+      error: (err) => { }
+    });
   }
 
 
-  changePage(page: number) {
-    this.page = page;
-    this.loadProducts();
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: Event): void {
+    const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+
+    if (windowBottom >= docHeight * 0.7 && !this.isLoading && this.page < this.pagination.totalPages!) {
+      this.limit+=4;
+      this.loadProducts();
+    }
   }
 
   searchProducts(search: string) {
@@ -189,18 +192,23 @@ export class HomeComponent {
     this.loadProducts();
   }
 
-  showSideCart(bool:boolean){
-    this.sideCart = true;
-  }
-
   ngOnInit(): void {
-
-    this.updateUserCart();
-
+    this.getUserCart();
+    this._SideCartService.cartItems$.subscribe(items => {
+      if (items) {
+        this.currentUserCart = items;
+        this.updateUserCart();
+      } else {
+        this.currentUserCart = [];
+      }
+      this.cdr.detectChanges();
+    });
     this.imgDomain = this._ProductsService.productImages;
     this.loadProducts();
     this.loadCategories();
     this.loadSubCategories();
   }
 
+  ngOnDestroy(): void {
+  }
 }
