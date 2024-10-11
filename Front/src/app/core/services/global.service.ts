@@ -20,6 +20,7 @@ export class GlobalService {
   cartRoute: string = 'api/v1/carts';
   productsImage: string = `${this.baseURL}uploads/products/`;
   usersImage: string = `${this.baseURL}uploads/users/`;
+  categoryImage: string = `${this.baseURL}uploads/categories/`;
   apiKey: string = 'secret123';
   constructor(private _HttpClient:HttpClient) { }
 

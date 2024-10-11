@@ -6,6 +6,7 @@ import { Users } from '../../../shared/interfaces/uesrs';
 import { NgIf, NgClass, CommonModule } from '@angular/common';
 import { Categories } from '../../../shared/interfaces/categories';
 import { Pagination } from '../../../shared/interfaces/pagination';
+import { GlobalService } from '../../../core/services/global.service';
 
 @Component({
   selector: 'app-categories',
@@ -34,7 +35,7 @@ export class CategoriesComponent  implements OnInit {
   page: number = 1;
   sort='-name'
 
-  constructor( private _ApiService:ApiService, private _NotificationService:NotificationService ){}
+  constructor( private _ApiService:ApiService, private _NotificationService:NotificationService, private _GlobalService:GlobalService ){}
 
   setCategoryImage(event: any) {
     const images = event.target.files;
@@ -96,7 +97,7 @@ export class CategoriesComponent  implements OnInit {
         this._NotificationService.showNotification('Updated Category', 'success' );
         this.getCategories();
       },
-      error:(err) => { }
+      // error:(err) => { }
     })
   }
 

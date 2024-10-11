@@ -18,7 +18,7 @@
 
 
               <div class="mt-4 sm:mt-2 flex flex-col sm:flex-row sm:justify-between">
-                <img class="product-image w-24 h-24 object-cover rounded-lg" [src]="imgDomain + item.product.cover" [alt]="item.product.cover">
+                <img class="product-image w-24 h-24 object-cover rounded-lg" loading="lazy" [src]="imgDomain + item.product.cover" [alt]="item.product.cover">
                 <div>
                   <h2 class="text-lg font-bold text-gray-800">{{ item.product.name }}</h2>
                   <p class="mt-1 text-sm text-gray-600">{{ item.price | currency }} per unit</p>
@@ -104,7 +104,7 @@
 } @else if ( currentRoute !== '/cart' ) {
   <!-- && sideCart -->
   <div class="relative z-10" *ngIf="currentUserCart != undefined && sideCart" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
-    <div class="fixed inset-0 bg-gray-100 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+    <div class="fixed inset-0 bg-gray-100 bg-opacity-75 transition-opacity justify-center min-h-screen"  aria-hidden="true"></div>
     <div class="fixed inset-0 overflow-hidden">
       <div class="absolute inset-0 overflow-hidden">
         <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-4 sm:pl-10">
@@ -127,25 +127,34 @@
                 <div class="mt-4">
                   <div class="flow-root">
                     <ul role="list" class="-my-6 divide-y divide-gray-200">
-                      <li class="flex py-6" *ngFor="let item of currentUserCart;">
-                        <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                          <img [src]="imgDomain + item.product.cover" alt="Product image" class="h-full w-full object-cover object-center rounded-md">
-                        </div>
-                        <div class="ml-4 flex flex-1 flex-col">
-                          <div class="flex justify-between text-base font-medium text-gray-900">
-                            <h3>{{ item.product.name }}</h3>
-                            <p class="ml-4">{{ item.price * item.quantity | currency }}</p>
+
+                      @for ( item of currentUserCart; track item ){
+                        <li class="flex py-6">
+                          <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                            <img [src]="imgDomain + item.product.cover" loading="lazy" alt="Product image" class="h-full w-full object-cover object-center rounded-md">
                           </div>
-                          <p class="mt-1 text-sm text-gray-500">{{ item.product.description }}</p>
-                          <div class="flex flex-1 items-end justify-between text-sm">
-                            <p class="text-gray-500">Qty {{ item.quantity }}</p>
-                            <button type="button" (click)="removeProductFromCart(item)" class="font-medium text-indigo-600 hover:text-indigo-500">
-                              <!-- Remove -->
-                               <span class="material-symbols-outlined"> delete</span>
-                            </button>
+                          <div class="ml-4 flex flex-1 flex-col">
+                            <div class="flex justify-between text-base font-medium text-gray-900">
+                              <h3>{{ item.product.name }}</h3>
+                              <p class="ml-4">{{ item.price * item.quantity | currency }}</p>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500">{{ item.product.description }}</p>
+                            <div class="flex flex-1 items-end justify-between text-sm">
+                              <p class="text-gray-500">Qty {{ item.quantity }}</p>
+                              <button type="button" (click)="removeProductFromCart(item)" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                <!-- Remove -->
+                                <span class="material-symbols-outlined"> delete</span>
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      </li>
+                        </li>
+                      } @empty {
+                        <li class="flex flex-col items-center justify-center py-48 text-center"> <!-- Add text-center for proper alignment -->
+                          <span class="material-symbols-outlined" style="font-size: 64px; color: #A0AEC0;">shopping_cart</span>
+                          <h2 class="mt-4 text-lg font-semibold text-gray-700">Your cart is empty</h2>
+                          <p class="mt-2 text-gray-500">Looks like you haven't added anything to your cart yet.</p>
+                        </li>
+                      }
                       <!-- More products... -->
                     </ul>
                   </div>
@@ -203,7 +212,7 @@
         <!-- State (Combobox) -->
         <div class="mb-4">
           <!-- State Dropdown -->
-          <label for="state" class="block text-sm font-medium text-gray-700">State</label>
+          <label for="state" class="block text-sm font-medium text-gray-700">Governorate</label>
           <select id="state" formControlName="state" class="focus:border-gray-500 border border-gray-300 rounded block w-full px-3 py-2" (change)="onStateChange($event)" required>
             <option value="" disabled selected>Select your state</option>
             <!-- Corrected *ngFor with a properly closed bracket -->
@@ -218,17 +227,7 @@
             <option *ngFor="let city of selectedState" [value]="city.code">{{ city.name }}</option>
           </select>
         </div>
-
-
-
-        <!-- Zone (Combobox) -->
-        <!-- <div class="mb-4">
-          <label for="city" class="block text-sm font-medium text-gray-700">Zone</label>
-          <input id="city" formControlName="city" class="focus:border-gray-500 border border-gray-300 rounded block w-full px-3 py-2" placeholder="Enter your postal code" required>
-
-        </div> -->
-
-        <!-- Postal Code -->
+        
         <div class="mb-4">
           <label for="postalCode" class="block text-sm font-medium text-gray-700">Postal Code</label>
           <input id="postalCode" formControlName="postalCode" class="focus:border-gray-500 border border-gray-300 rounded block w-full px-3 py-2" placeholder="Enter your postal code" required>

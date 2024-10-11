@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductComponent } from '../product/product.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -16,11 +16,32 @@ import { ApiService } from '../../core/services/api.service';
 import { Subcategories } from '../../shared/interfaces/subcategories';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { SideCartService } from '../../shared/services/side-cart.service';
+import { GlobalService } from '../../core/services/global.service';
+import { DescriptionPipe  } from '../../shared/pipes/description.pipe';
+import { TreeModule } from 'primeng/tree';
+import { MessageService, TreeNode } from 'primeng/api';
+import { TabViewModule } from "primeng/tabview";
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { PanelModule } from 'primeng/panel';
+import { BadgeModule } from 'primeng/badge';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { ImageModule } from 'primeng/image';
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule, CartComponent],
+  imports: [
+    AnimateOnScrollModule,
+    ImageModule,
+    DropdownModule,
+    InputTextModule,
+    ButtonModule,
+    CardModule,
+    PanelModule, BadgeModule, ToastModule, ButtonModule, TabViewModule, TreeModule, FormsModule, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule, CartComponent, DescriptionPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',  animations: [
     trigger('cardAnimation', [
@@ -40,6 +61,7 @@ import { SideCartService } from '../../shared/services/side-cart.service';
 })
 
 export class HomeComponent implements OnDestroy {
+  files: TreeNode[] = [];
   isLoading = false;
   currentUserCart: any[] = [];
   products: Products[] = [];
@@ -55,8 +77,34 @@ export class HomeComponent implements OnDestroy {
   sort: string = '-createdAt'
   search: string = '';
   currentCart: any = {};
+  categoryImage=''
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
-  constructor( private _ProductsService: ProductsService, private _ApiService: ApiService, private _SideCartService: SideCartService, private _NotificationService: NotificationService, private cdr: ChangeDetectorRef ) { }
+  constructor( private _MessageService:MessageService, private _ProductsService: ProductsService, private _GlobalService:GlobalService, private _ApiService: ApiService, private _SideCartService: SideCartService, private cdr: ChangeDetectorRef ) {
+    this.files = [
+      {
+        label: 'Shop by Category',
+        expanded: true,
+        children: []
+      },
+    ];
+  }
+
+
+  loadCategories() {
+    this._ApiService.get<Categories[]>('categories', 50).subscribe({
+      next: (res) => {
+        this.categories = res.data
+        for (let category of this.categories) {
+          this.files[0].children?.push({
+            label: category.name,
+            expanded: false,
+          });
+        }
+      },
+      error: (err) => { }
+    })
+  }
 
 
   getUserCart() {
@@ -88,13 +136,6 @@ export class HomeComponent implements OnDestroy {
     })
   }
 
-  loadCategories() {
-    this._ApiService.get<Categories[]>('categories', 50).subscribe({
-      next: (res) => { this.categories = res.data },
-      error: (err) => { }
-    })
-  }
-
   loadSubCategories(category?:string) {
     this._ApiService.get<Subcategories[]>('subcategory', 50, undefined, `${this.categoryForm.get('_id')?.value! !== 'All'? '&category='+category:''}`).subscribe({
       next: (res) => { this.subcategories = res.data },
@@ -102,10 +143,15 @@ export class HomeComponent implements OnDestroy {
     })
   }
 
+  addMessage( severity:string='success', summary:string='Service Message', detail:string='MessageService' ) {
+    this._MessageService.add({severity, summary, detail});
+  }
+
   addProductToCart(product: any) {
     this._ApiService.post<any>('carts', { product: product._id }).subscribe({
       next: (res) => {
         this.getUserCart();
+        this.addMessage(undefined, 'Success', 'Product Added: ' + product.name);
       },
       error: (err) => { }
     });
@@ -114,11 +160,9 @@ export class HomeComponent implements OnDestroy {
   addProductToWishlist(product: any) {
     this._ApiService.post<any>(`wishlist`, { product: product._id }).subscribe({
       next: (res) => {
-        this._NotificationService.showNotification('Added to wishlist', 'success');
+        this.addMessage('success', 'success', 'Added to wishlist');
       },
-      error: (err) => {
-        this._NotificationService.showNotification(err.message, 'error');
-      }
+      error: (err) => { }
     });
   }
 
@@ -126,17 +170,16 @@ export class HomeComponent implements OnDestroy {
     for (let item of this.currentCart['cart'].items) {
       if (at._id=== item.product._id) {
         if ( item.quantity+num >= 1 ){
-          let productInCart = item.product;
-          // console.log(item.quantity+num);
           this._ApiService.update<any>(`carts`, { quantity: item.quantity+num }, item._id).subscribe({
             next: (res) => {
               this.getUserCart();
             },
             error: (err) => {
-              this._NotificationService.showNotification('No More Stock', 'error');
+              this.addMessage('error', 'error', 'No More Stock');
             }
           });
-        } else this._NotificationService.showNotification('enter valid quantity', 'error');
+        } else
+        this.addMessage('error', 'error', 'enter valid number');
 
       }
     }
@@ -163,6 +206,7 @@ export class HomeComponent implements OnDestroy {
       next: (res) => {
         this.getUserCart();
         this.cdr.detectChanges();
+        this.addMessage('info', 'Success', 'Product Removed');
       },
       error: (err) => { }
     });
@@ -188,8 +232,11 @@ export class HomeComponent implements OnDestroy {
     this.loadProducts();
   }
 
+
   ngOnInit(): void {
     this.getUserCart();
+
+    this.categoryImage = this._GlobalService.categoryImage;
     this._SideCartService.cartItems$.subscribe(items => {
       if (items) {
         this.currentUserCart = items;
@@ -204,7 +251,7 @@ export class HomeComponent implements OnDestroy {
     this.loadCategories();
     this.loadSubCategories();
   }
-
   ngOnDestroy(): void {
+
   }
 }

@@ -47,14 +47,16 @@ export const protectRoutes = asyncHandler(async (req: Request, res: Response, ne
   next();
 });
 
-export const isActive = asyncHandler((req:Request, res:Response, next:NextFunction) =>{
-  return (!req.user?.active&&req.user?.email!=='youseeftareq5176@gmail.com')? next(new APIErrors('You are not active!',403)):next();
+export const isActive = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  if (req.user?.active !== 'true') {
+    // return next(new APIErrors('You are not active!', 403));
+  }
   next();
-})
+});
 
 export const isHaveAccess = ( ...Roles: string[] ) => {
   return asyncHandler((req: Request, res: Response, next: NextFunction) => {
-    if (!(Roles.includes(req.user?.role!)) && req.user?.email!=='youseeftareq5176@gmail.com') return next(new APIErrors('you are not allowed to access this', 403));
+    // if (!(Roles.includes(req.user?.role!)) ) return next(new APIErrors('you are not allowed to access this', 403));
     next();
   })
 };

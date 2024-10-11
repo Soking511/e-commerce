@@ -102,7 +102,7 @@
         <!-- Cover Image Input -->
         <div class="mb-4">
           <label for="cover" class="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
-          <input id="cover" type="file" (change)="setCategoryImage($event)" class="border rounded-md p-2 w-full" />
+          <input id="cover" formControlName="cover" type="file" (change)="setCategoryImage($event)" class="border rounded-md p-2 w-full" />
         </div>
 
         <!-- Add Button -->
@@ -159,7 +159,7 @@
         <!-- Cover Image Input -->
         <div class="mb-4">
           <label for="cover" class="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
-          <input id="cover" type="file" (change)="setCategoryImage($event)" class="border rounded-md p-2 w-full" />
+          <input id="cover" type="file" formControlName="cover"  (change)="setCategoryImage($event)" class="border rounded-md p-2 w-full" />
         </div>
 
         <!-- Update Button -->

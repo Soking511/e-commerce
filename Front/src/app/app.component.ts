@@ -7,6 +7,7 @@ import { BestSellerComponent } from './features/home/best-seller/best-seller.com
 import { HomeComponent } from './features/home/home.component';
 import { SideCartService } from './shared/services/side-cart.service';
 import { CartComponent } from "./features/cart/cart.component";
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -25,9 +26,20 @@ import { CartComponent } from "./features/cart/cart.component";
 })
 
 export class AppComponent {
-  constructor(private _sideCartService: SideCartService) {}
+  constructor(private _sideCartService: SideCartService, private primengConfig: PrimeNGConfig) {
+    // this.primengConfig.theme.set({
+    //   // preset: Aura,
+    //       options: {
+    //           cssLayer: {
+    //               name: 'primeng',
+    //               order: 'tailwind-base, primeng, tailwind-utilities'
+    //           }
+    //       }
+    //   })
+  }
 
   onCartClicked() {
     this._sideCartService.toggleSideCart();
   }
 }
+
