@@ -149,9 +149,7 @@ export class CartComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this._sideCartService.sideCart$.subscribe(state => {
-      this.sideCart = state;
-    });
+
 
     this._sideCartService.fetchCart();
 
@@ -167,10 +165,10 @@ export class CartComponent implements OnInit{
     this.getUserAddress();
     this.fetchCities();
     this.imgDomain = this._GlobalService.productsImage;
-    this._Router.events.subscribe(() => {
-      this.currentRoute = this._Router.url;
-      this.sideCart = false;
-    });
+    // this._Router.events.subscribe(() => {
+    //   this.currentRoute = this._Router.url;
+    //   this.sideCart = false;
+    // });
   }
 
 }

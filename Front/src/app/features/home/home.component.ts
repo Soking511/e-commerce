@@ -90,7 +90,6 @@ export class HomeComponent implements OnDestroy {
     ];
   }
 
-
   loadCategories() {
     this._ApiService.get<Categories[]>('categories', 50).subscribe({
       next: (res) => {
@@ -105,7 +104,6 @@ export class HomeComponent implements OnDestroy {
       error: (err) => { }
     })
   }
-
 
   getUserCart() {
     this._ApiService.get<any>('carts', undefined, 'user').subscribe({
@@ -220,7 +218,6 @@ export class HomeComponent implements OnDestroy {
     const html = document.documentElement;
     const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
     const windowBottom = windowHeight + window.pageYOffset;
-
     if (windowBottom >= docHeight * 0.7 && !this.isLoading && this.page < this.pagination.totalPages!) {
       this.limit+=4;
       this.loadProducts();
@@ -231,7 +228,6 @@ export class HomeComponent implements OnDestroy {
     this.search = search;
     this.loadProducts();
   }
-
 
   ngOnInit(): void {
     this.getUserCart();
@@ -251,7 +247,7 @@ export class HomeComponent implements OnDestroy {
     this.loadCategories();
     this.loadSubCategories();
   }
-  ngOnDestroy(): void {
 
+  ngOnDestroy(): void {
   }
 }
