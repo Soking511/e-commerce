@@ -4,6 +4,8 @@ import cartModel from './cartModel';
 import productModel from '../products/productModel';
 import couponsModel from '../coupons/couponsModel';
 import { CartItems, Carts } from './cartInterface';
+import { PUT } from '../httpMethods';
+import { Cart } from '../../Front/src/app/shared/interfaces/order';
 
 export const getUserCart = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const cart = await cartModel.findOne({ user: req.user?._id });
@@ -50,6 +52,28 @@ export const removeProductFromCart = asyncHandler(async (req: Request, res: Resp
   }, { new: true });
   calcTotalPrice(cart);
   await cart.save();
+  res.status(200).json({ length: cart.items.length, data: cart });
+});
+
+
+export const updateCart = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const cart = await cartModel.findOne({ user: req.user?._id });
+  if (!cart) return next(new Error("Cart not found"));
+  const productIndex = cart.items.findIndex((item: CartItems) => item._id?.toString() === req.params.itemId.toString());
+
+  if (productIndex === -1) return next(new Error("Product does not exist in cart"));
+  const product = await productModel.findById(cart.items[productIndex].product._id);
+
+  if (!product) return next(new Error("Product not found"));
+  const requestedQuantity = Number(req.body.quantity);
+
+  if (product.quantity < requestedQuantity) {
+    return next(new Error('Insufficient product stock available'));
+  }
+  cart.items[productIndex].quantity = requestedQuantity;
+  calcTotalPrice(cart);
+  await cart.save();
+
   res.status(200).json({ length: cart.items.length, data: cart });
 });
 

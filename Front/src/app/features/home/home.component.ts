@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductComponent } from '../product/product.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -15,7 +15,6 @@ import { BestSellerComponent } from './best-seller/best-seller.component';
 import { ApiService } from '../../core/services/api.service';
 import { Subcategories } from '../../shared/interfaces/subcategories';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { SideCartService } from '../../shared/services/side-cart.service';
 import { GlobalService } from '../../core/services/global.service';
 import { DescriptionPipe  } from '../../shared/pipes/description.pipe';
 import { TreeModule } from 'primeng/tree';
@@ -30,6 +29,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { ImageModule } from 'primeng/image';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
+import { CartService } from '../../shared/services/cart.service';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +41,7 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
     InputTextModule,
     ButtonModule,
     CardModule,
-    PanelModule, BadgeModule, ToastModule, ButtonModule, TabViewModule, TreeModule, FormsModule, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule, CartComponent, DescriptionPipe],
+    PanelModule, BadgeModule, ToastModule, ButtonModule, TabViewModule, TreeModule, FormsModule, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule, DescriptionPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',  animations: [
     trigger('cardAnimation', [
@@ -80,7 +80,14 @@ export class HomeComponent implements OnDestroy {
   categoryImage=''
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
-  constructor( private _MessageService:MessageService, private _ProductsService: ProductsService, private _GlobalService:GlobalService, private _ApiService: ApiService, private _SideCartService: SideCartService, private cdr: ChangeDetectorRef ) {
+  constructor(
+    private _MessageService:MessageService,
+    private _ProductsService: ProductsService,
+    private _GlobalService:GlobalService,
+    private _ApiService: ApiService,
+    private _CartService: CartService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.files = [
       {
         label: 'Shop by Category',
@@ -88,6 +95,30 @@ export class HomeComponent implements OnDestroy {
         children: []
       },
     ];
+  }
+
+  getUserCart() {
+    this._CartService.cart$.subscribe((cart) => {
+      this.currentUserCart = cart;
+      this.cdr.detectChanges();
+    });
+  }
+
+  getProductItem(productId: string) {
+    const productItem = this.currentUserCart.find((item: any) => item.product._id === productId);
+    if (productItem) return productItem;
+  }
+
+  loadProducts() {
+    this.isLoading = true;
+    this._ApiService.get<Products[]>( 'products', this.limit, undefined, `&page=${this.page}&sort=${this.sort}&search=${this.search}${( this.categoryForm.get('_id')?.value! !== 'All')? ('&category='+this.categoryForm.get('_id')?.value!):''}${( this.subcategoryForm.get('_id')?.value! !== 'All')? ('&subcategory='+this.subcategoryForm.get('_id')?.value!):'' }`).subscribe({
+      next: (res) => {
+        this.products = res.data;
+        this.pagination = res.pagination;
+        this.isLoading = false;
+      },
+      error: (err) => { this.isLoading = false; }
+    })
   }
 
   loadCategories() {
@@ -105,35 +136,6 @@ export class HomeComponent implements OnDestroy {
     })
   }
 
-  getUserCart() {
-    this._ApiService.get<any>('carts', undefined, 'user').subscribe({
-      next: (res) => {
-        this._SideCartService.setCartItems(res.data.items);
-        this.updateUserCart();
-        this.cdr.detectChanges();
-      },
-      error: (err) => {}
-    });
-  }
-
-  getProductItem(productId: string) {
-    const cartItems = this.currentCart?.cart?.items || [];
-    const productItem = cartItems.find((item: any) => item.product._id === productId);
-    if (productItem) return productItem;
-  }
-
-  loadProducts() {
-    this.isLoading = true;
-    this._ApiService.get<Products[]>( 'products', this.limit, undefined, `&page=${this.page}&sort=${this.sort}&search=${this.search}${( this.categoryForm.get('_id')?.value! !== 'All')? ('&category='+this.categoryForm.get('_id')?.value!):''}${( this.subcategoryForm.get('_id')?.value! !== 'All')? ('&subcategory='+this.subcategoryForm.get('_id')?.value!):'' }`).subscribe({
-      next: (res) => {
-        this.products = res.data;
-        this.pagination = res.pagination;
-        this.isLoading = false;
-      },
-      error: (err) => { this.isLoading = false; }
-    })
-  }
-
   loadSubCategories(category?:string) {
     this._ApiService.get<Subcategories[]>('subcategory', 50, undefined, `${this.categoryForm.get('_id')?.value! !== 'All'? '&category='+category:''}`).subscribe({
       next: (res) => { this.subcategories = res.data },
@@ -145,66 +147,14 @@ export class HomeComponent implements OnDestroy {
     this._MessageService.add({severity, summary, detail});
   }
 
-  addProductToCart(product: any) {
-    this._ApiService.post<any>('carts', { product: product._id }).subscribe({
-      next: (res) => {
-        this.getUserCart();
-        this.addMessage(undefined, 'Success', 'Product Added: ' + product.name);
-      },
-      error: (err) => { }
-    });
-  }
+  addProductToCart = (product: Products): void => this._CartService.addToCart(product);
+  removeProductFromCart = (productId: string): void => this._CartService.removeFromCart(productId);
+  updateProductQuantity = (product: Products, quantity: number) => this._CartService.updateQuantity(product._id!, quantity);
 
   addProductToWishlist(product: any) {
     this._ApiService.post<any>(`wishlist`, { product: product._id }).subscribe({
       next: (res) => {
         this.addMessage('success', 'success', 'Added to wishlist');
-      },
-      error: (err) => { }
-    });
-  }
-
-  updateProductQuantity(at: any, num:number){
-    for (let item of this.currentCart['cart'].items) {
-      if (at._id=== item.product._id) {
-        if ( item.quantity+num >= 1 ){
-          this._ApiService.update<any>(`carts`, { quantity: item.quantity+num }, item._id).subscribe({
-            next: (res) => {
-              this.getUserCart();
-            },
-            error: (err) => {
-              this.addMessage('error', 'error', 'No More Stock');
-            }
-          });
-        } else
-        this.addMessage('error', 'error', 'enter valid number');
-
-      }
-    }
-  }
-
-  updateUserCart() {
-    this._ApiService.get<any>('carts', undefined, 'user').subscribe({
-      next: (res) => {
-        this.currentCart['cart'] = res.data;
-        for (let i = 0; i < res.data.items.length; i++) {
-          this.userCart[res.data.items[i].product._id] = {
-            quantity: res.data.items[i].product.quantity || 1,
-            name: res.data.items[i].product.name
-          };
-        }
-        this.cdr.detectChanges();
-      },
-      error: (err) => { }
-    });
-  }
-
-  removeProductFromCart(item: any) {
-    this._ApiService.delete('carts', item).subscribe({
-      next: (res) => {
-        this.getUserCart();
-        this.cdr.detectChanges();
-        this.addMessage('info', 'Success', 'Product Removed');
       },
       error: (err) => { }
     });
@@ -233,15 +183,6 @@ export class HomeComponent implements OnDestroy {
     this.getUserCart();
 
     this.categoryImage = this._GlobalService.categoryImage;
-    this._SideCartService.cartItems$.subscribe(items => {
-      if (items) {
-        this.currentUserCart = items;
-        this.updateUserCart();
-      } else {
-        this.currentUserCart = [];
-      }
-      this.cdr.detectChanges();
-    });
     this.imgDomain = this._ProductsService.productImages;
     this.loadProducts();
     this.loadCategories();

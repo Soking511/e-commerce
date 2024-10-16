@@ -8,7 +8,6 @@ import { ReviewsService } from './reviews/services/reviews.service';
 import { ProductsService } from './services/products.service';
 import { ApiService } from '../../core/services/api.service';
 import { NotificationService } from '../../core/components/notification/services/notification.service';
-import { SideCartService } from '../../shared/services/side-cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -28,7 +27,7 @@ export class ProductComponent implements OnInit {
     rate: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(5)]),
   });
 
-  constructor( private cdr: ChangeDetectorRef, private _ProductsService: ProductsService, private _ApiService:ApiService, private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute, private _NotificationService:NotificationService, private _sideCartService:SideCartService) { }
+  constructor( private cdr: ChangeDetectorRef, private _ProductsService: ProductsService, private _ApiService:ApiService, private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute, private _NotificationService:NotificationService) { }
 
   loadProduct(productId: string) {
     this._ApiService.get<Products>(`products/${productId}`).subscribe({
@@ -49,7 +48,6 @@ export class ProductComponent implements OnInit {
   getUserCart() {
     this._ApiService.get<any>('carts', undefined, 'user').subscribe({
       next: (res) => {
-        this._sideCartService.setCartItems(res.data.items);
         this.cdr.detectChanges();
       },
       error: (err) => { }
@@ -59,9 +57,6 @@ export class ProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserCart();
-    this._sideCartService.cartItems$.subscribe(items => {
-      this.cdr.detectChanges();
-    });
     this.id = this._ActivatedRoute.snapshot.params['id'];
     this.imgDomain = this._ProductsService.productImages;
     this.loadProduct(this.id);

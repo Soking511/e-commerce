@@ -1,59 +1,81 @@
 import { Injectable } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject } from 'rxjs';
-import { CartItems } from '../interfaces/order';
 import { ApiService } from '../../core/services/api.service';
+import { ApiResponse } from '../../core/services/interfaces/api-response.interface';
+import { Cart, IItems } from '../interfaces/order';
+import { Products } from '../interfaces/products';
+// import { Products } from '';
+// import { Products } from '@';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CartService {
-  private cart = new BehaviorSubject<CartItems[]>([]);
-  cart$ = this.cart.asObservable();
+export class CartService{
+  private cartItemsSubject = new BehaviorSubject<IItems[]>([]);
+  cart$ = this.cartItemsSubject.asObservable();
 
   constructor(
-    private _ApiService:ApiService
-  ){ }
+    private _ApiService: ApiService,
+    private _MessageService:MessageService,
+  ) { this.loadCart(); }
 
-  getCart(): CartItems[] {
-    return this.cart.getValue();
+  addMessage( severity:string='success', summary:string='Service Message', detail:string='MessageService' ) {
+    this._MessageService.add({severity, summary, detail});
   }
 
-  addToCart(item: CartItems) {
-    const currentCart = this.cart.getValue();
-    this.cart.next([...currentCart, item]);
-  }
-
-  updateQuantity(productId: string, quantity: number) {
-    const currentCart = this.cart.getValue();
-    const index = currentCart.findIndex((item) => item.id === productId);
-    if (index !== -1) {
-      currentCart[index].quantity = quantity;
-    }
-    this.cart.next(currentCart);
-  }
-
-  removeFromCart(itemId: string) {
-    const currentCart = this.cart.getValue();
-    // Ensure the structure matches your data model
-    const updatedCart = currentCart.filter((item) => item.product._id !== itemId);
-    this.cart.next(updatedCart);
-  }
-
-  fetchCart(callback?: () => void) {
-    this._ApiService.get<any>('carts', undefined, 'user').subscribe({
-      next: (res) => {
-        this.setCartItems(res.data.items);
-        if (callback) {
-          callback();
-        }
+  private loadCart(): void {
+    this._ApiService.get<Cart>('carts', 1, 'user').subscribe({
+      next: (response: ApiResponse<Cart>) => {
+        const cartItems = response.data.items || [];
+        this.cartItemsSubject.next(cartItems);
       },
-      error: (err) => {
-        console.error(err); // Add proper error handling
-      },
+      error: (err) => { },
     });
   }
 
-  clearCart() {
-    this.cart.next([]);
+  getCart = (): IItems[] => this.cartItemsSubject.getValue();
+
+  addToCart(product: Products): void {
+    const currentCart = this.getCart();
+    const existingItem = currentCart.find((item) => item.product!._id === product._id);
+    if (existingItem) {
+      this.updateQuantity(product._id!, 1)
+    } else {
+      this._ApiService.post('carts', {product:product._id} ).subscribe({
+          next:() => {
+            this.addMessage('success', 'Success', 'Product added to cart');
+            this.loadCart();
+          },
+          error:() =>{ this.addMessage('error', 'error', 'Product Not Have Quantity');}
+      });
+    }
   }
+
+  removeFromCart(productId: string): void {
+    this._ApiService.delete('carts', productId ).subscribe({
+      next:()=>{
+        this.addMessage('info', 'Success', 'Product removed from cart');
+        this.loadCart();
+      }
+    });
+  }
+
+  updateQuantity(productId: string, quantity: number): void {
+    const currentCart = this.getCart();
+    const productItem = currentCart.find((item) => item.product!._id === productId);
+
+    if (productItem) {
+      if (productItem.quantity!+quantity<=0)
+        return this.removeFromCart(productItem._id!);
+
+      this._ApiService.update('carts', {quantity: productItem.quantity!+quantity}, productItem._id).subscribe({
+        next: () => {
+          this.loadCart();
+        },
+        error:() =>{ this.addMessage('error', 'error', 'Product Not Have Quantity');}
+      });
+    }
+  }
+
 }

@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import Cookies from 'js-cookie';
 import { ApiResponse } from './interfaces/api-response.interface';
+import { catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class ApiService {
     this.apiKey = _GlobalService.apiKey;
   }
 
-  get<Interface>(route: string, quantity?:number, role?:string, query?:string) {
+
+  get<Interface>(route: string, quantity?: number, role?: string, query?: string) {
     if (role) this._AuthService.checkToken();
 
     const headers: { [key: string]: string } = {
@@ -27,16 +29,27 @@ export class ApiService {
 
     if (role) headers['authorization'] = `Bearer ${localStorage.getItem('user')}`;
 
-    return this._Http.get<ApiResponse<Interface>>(`${this.baseURL}${this.version}/${route}${quantity?'?limit='+quantity:''}${(quantity||!query)?'':'?'}${query||''}`, {
-      headers,
-      withCredentials: true,
-    });
+    return this._Http.get<ApiResponse<Interface>>(
+      `${this.baseURL}${this.version}/${route}${quantity ? '?limit=' + quantity : ''}${(quantity || !query) ? '' : '?'}${query || ''}`,
+      { headers, withCredentials: true }
+    ).pipe(
+      catchError((error) => {
+        if (error.status === 0) {
+          return throwError('Connection error');
+        } else if (error.status >= 400 && error.status < 500) {
+          return throwError('Client error');
+        } else if (error.status >= 500) {
+          return throwError('Server error');
+        }
+        return throwError(error);
+      })
+    );
   }
 
   fetch<Interface>(route: string) {
     return this._Http.get<ApiResponse<Interface>>(route);
   }
-  
+
   update<Interface>(route: string, data:any, id?:string) {
     this._AuthService.checkToken();
 

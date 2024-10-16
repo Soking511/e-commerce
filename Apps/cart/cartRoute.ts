@@ -2,13 +2,14 @@
 import { Router } from 'express';
 import { isActive, isHaveAccess, protectRoutes } from '../auth/authController';
 import { addProductToCartValidator, removeProductFromCartValidator, updateProductQuantityValidator } from '../../utils/validators/cartValidator';
-import { getUserCart, addProductToCart, deleteUserCart, applyCoupon, updateProductQuantity, removeProductFromCart } from './cartController';
+import { getUserCart, addProductToCart, deleteUserCart, applyCoupon, updateProductQuantity, removeProductFromCart, updateCart } from './cartController';
 
 const cartRoute: Router = Router()
 cartRoute.use(protectRoutes, isActive, isHaveAccess('user'))
 cartRoute.route('/')
   .get(getUserCart)
   .post(addProductToCartValidator, addProductToCart)
+  .put(updateCart)
   .delete(deleteUserCart);
 
 cartRoute.put('/applyCoupon', applyCoupon)

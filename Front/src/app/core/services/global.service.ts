@@ -33,7 +33,6 @@ export class GlobalService {
   get(endpoint: string, ...params: string[]): Observable<any> {
     const tempString: string = params.join('/');
     const fullUrl = `${endpoint}/${tempString}`;
-    console.log(tempString);
     return this._HttpClient.get(fullUrl);
   }
 

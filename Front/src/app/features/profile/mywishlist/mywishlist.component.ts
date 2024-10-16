@@ -20,7 +20,6 @@ export class MywishlistComponent implements OnInit{
   getWishlistItems(){
     this._ApiService.get<any>( 'wishlist', undefined, 'user').subscribe({
       next: (res) => {
-        console.log(res.data);
         this.products=res.data as any[];
       },
       error: (error)  => { }
