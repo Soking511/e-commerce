@@ -180,13 +180,13 @@ export class HomeComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getUserCart();
 
     this.categoryImage = this._GlobalService.categoryImage;
     this.imgDomain = this._ProductsService.productImages;
     this.loadProducts();
     this.loadCategories();
     this.loadSubCategories();
+    this.getUserCart();
   }
 
   ngOnDestroy(): void {

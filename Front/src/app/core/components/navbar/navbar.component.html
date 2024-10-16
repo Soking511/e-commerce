@@ -1,61 +1,69 @@
-<header class="bg-gray-250 border bg-white ">
+
+
+
+<body>
+  <header class="bg-gray-250 border bg-white">
     <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
       <div class="flex lg:flex-1">
-        <a class="-m-1.5 p-1.5" routerLink="home">
+        <a class="-m-1.5 p-1.5 flex items-center space-x-2" routerLink="home">
           <span class="sr-only">Soking Mart</span>
-          <span class="self-center text-2xl font-semibold whitespace-nowrap text-gray-600 cursor-pointer hover:text-gray-900 transition-colors duration-300 ease-in-out">Soking Mart</span>
+          <!-- Company name icon (optional if logo is needed) -->
+          <span
+            class="material-symbols-outlined text-gray-600 cursor-pointer hover:text-gray-900 transition-colors duration-300 ease-in-out">
+            storefront
+          </span>
+          <span
+            class="text-xl font-bold font-sans text-gray-600 hover:text-gray-900 transition-colors duration-300 ease-in-out">
+            Soking Mart
+          </span>
         </a>
       </div>
+
+
+
+      <!-- Mobile menu button (hamburger icon) -->
       <div class="flex lg:hidden">
-        <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:bg-gray-100 hover:scale-110 transition-transform duration-200 ease-out" aria-controls="navbar-default" aria-expanded="false">
+        <button type="button"
+          class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:bg-gray-100 hover:scale-110 transition-transform duration-200 ease-out"
+          aria-controls="navbar-default" aria-expanded="false">
           <span class="sr-only">Open main menu</span>
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
         </button>
       </div>
+
+      <!-- Desktop menu links with icons -->
       <div class="hidden lg:flex lg:gap-x-12 px-4">
-        <a routerLink="/home" class="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-900 transition-colors duration-300 ease-in-out">
-            <span routerLink='/home' class="material-symbols-outlined"> home </span></a>
-        <ng-template #loggedInMenu>
-          <div class="relative">
-            <!-- Dropdown Menu -->
-            <div *ngIf="isDropdownOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10" (mouseleave)="isDropdownOpen = false">
-              <ul class="py-2">
-                <li class="hover:bg-white transition-colors duration-200 ease-in-out" (keyup)="isDropdownOpen = false" routerLink="/profile">
-                  <a class="block px-4 py-2 text-gray-600">Profile</a>
-                </li>
-                <li class="hover:bg-white transition-colors duration-200 ease-in-out" (click)="logout()">
-                  <a class="block px-4 py-2 text-red-600">Logout</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="relative cursor-pointer" (click)="isSideCartOpen=true">
-            <span class="material-symbols-outlined text-gray-900 hover:text-pink-600 transition-colors duration-300 ease-in-out rounded-full transform hover:scale-105">
-              shopping_cart
-            </span>
-            <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
-              {{itemsQuantity || 0}}
-            </span>
-          </div>
-        </ng-template>
+        <a routerLink="/home"
+          class="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-900 transition-colors duration-300 ease-in-out">
+          <span class="material-symbols-outlined"> home </span>
+        </a>
+        <a routerLink="/categories"
+          class="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-900 transition-colors duration-300 ease-in-out">
+          <span class="material-symbols-outlined"> category </span>
+        </a>
+        <a (click)="isSideCartOpen=true"
+          class="cursor-pointer text-sm font-semibold leading-6 text-gray-900 hover:text-gray-900 transition-colors duration-300 ease-in-out">
+          <span class="material-symbols-outlined"> shopping_cart </span>
+        </a>
       </div>
 
-      <ng-container *ngIf="!isLogin; else loggedInMenu">
-        <a routerLink='/login' class="text-sm font-semibold leading-6 text-gray-300 hover:text-gray-900 transition-colors duration-300 ease-in-out">Register/Login</a>
-      </ng-container>
+      <!-- User account and cart icons -->
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <span (click)="isDropdownOpen = true" class="text-gray-900 material-symbols-outlined text-gray-900 hover:text-pink-600 transition-colors duration-300 ease-in-out rounded-full transform hover:scale-105 cursor-pointer">
+        <span (click)="isDropdownOpen = true"
+          class="text-gray-900 material-symbols-outlined text-gray-900 hover:text-pink-600 transition-colors duration-300 ease-in-out rounded-full transform hover:scale-105 cursor-pointer">
           account_circle
         </span>
       </div>
     </nav>
 
-    <!-- Mobile menu, show/hide based on menu open state. -->
+    <!-- Mobile menu -->
     <div class="lg:hidden" role="dialog" aria-modal="true">
       <div class="fixed inset-0 z-50 bg-black opacity-30"></div>
-      <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+      <div
+        class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
         <div class="flex items-center justify-between">
           <a class="-m-1.5 p-1.5" routerLink="home">
             <span class="sr-only">Soking Mart</span>
@@ -63,7 +71,8 @@
           </a>
           <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
             <span class="sr-only">Close menu</span>
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+              aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
           </button>
@@ -71,17 +80,29 @@
         <div class="mt-6 flow-root">
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
-                <span routerLink='/home' class="material-symbols-outlined"> home </span>
-              <ng-container *ngIf="!isLogin; else mobileLoggedInMenu">
-                <a routerLink='/login' class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors duration-300 ease-in-out">Register/Login</a>
-              </ng-container>
-              <ng-template #mobileLoggedInMenu>
-                <a (click)="isDropdownOpen = true" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors duration-300 ease-in-out">Profile</a>
-                <a (click)="logout()" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors duration-300 ease-in-out">Logout</a>
-              </ng-template>
+              <a routerLink='/home'
+                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors duration-300 ease-in-out">
+                <span class="material-symbols-outlined"> home </span>
+              </a>
+              <a routerLink='/categories'
+                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors duration-300 ease-in-out">
+                <span class="material-symbols-outlined"> category </span>
+              </a>
+              <a (click)="isSideCartOpen=true"
+                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors duration-300 ease-in-out">
+                <span class="material-symbols-outlined"> shopping_cart </span>
+              </a>
+              <a routerLink='/login'
+                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors duration-300 ease-in-out">
+                <span class="material-symbols-outlined"> login </span>
+              </a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </header>
+
+  <app-side-cart [(sideCart)]="isSideCartOpen"></app-side-cart>
+
+</body>

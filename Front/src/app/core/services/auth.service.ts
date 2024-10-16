@@ -40,13 +40,26 @@ export class AuthService {
     }
   }
 
-  checkToken() {
-    const token: any = localStorage.getItem('user');
+checkToken() {
+  const token = localStorage.getItem('user');
+
+  if (!token) {
+    console.error("No token found");
+    this.logout();
+    return;
+  }
+
+  try {
     const decodedToken = jwtDecode(token);
     if (decodedToken.exp! < Date.now() / 1000) {
-      this.logout()
+      this.logout();
     }
+  } catch (error) {
+    console.error("Invalid token", error);
+    this.logout();
   }
+}
+
 
   register(formData: Register): Observable<any> {
     return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/Register`, formData

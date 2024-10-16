@@ -61,8 +61,6 @@ export class NavbarComponent implements OnInit {
     },
   ];
 
-
-
   isSideCartOpen:boolean = false
   selectedUser: MenuItem | null = null;
   isNavbarOpen: boolean = false;

@@ -9,6 +9,7 @@ import { GlobalService } from '../../core/services/global.service';
 import { Products } from '../../shared/interfaces/products';
 import { CartService } from '../../shared/services/cart.service';
 import { HomeComponent } from '../home/home.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-cart',
@@ -38,7 +39,7 @@ export class CartComponent implements OnInit{
   constructor(
     private _AuthService: AuthService,
     private _CartService: CartService,
-    private _NotificationService: NotificationService,
+    private _MessageService: MessageService,
     private _ApiService: ApiService,
     private _GlobalService:GlobalService,
     private cdr:ChangeDetectorRef,
@@ -59,7 +60,7 @@ export class CartComponent implements OnInit{
 
   addOrder() {
     if ( Object.keys(this.selectedAddress).length === 0 )
-      return this._NotificationService.showNotification('Select Address !!', 'error')
+      return this.addMessage('error', 'enter any address', 'you can add new if u want');
 
     this._ApiService.post(`orders`, {address:this.selectedAddress}).subscribe({
       next: (res) => {
@@ -121,11 +122,16 @@ export class CartComponent implements OnInit{
     }
   }
 
+  addMessage( severity:string='success', summary:string='Service Message', detail:string='MessageService' ) {
+    this._MessageService.add({severity, summary, detail});
+  }
+
   getUserCart() {
     this._CartService.cart$.subscribe((cart) => {
       this.currentUserCart = cart;
       if ( cart.length < 1 ){
         this._Router.navigate(['home']);
+        this.addMessage('error', 'you cart is empty', 'Added to wishlist');
       }
       this.totalPriceCart=0;
       for ( const item of cart ){

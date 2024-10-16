@@ -8,6 +8,7 @@ import { ReviewsService } from './reviews/services/reviews.service';
 import { ProductsService } from './services/products.service';
 import { ApiService } from '../../core/services/api.service';
 import { NotificationService } from '../../core/components/notification/services/notification.service';
+import { CartService } from '../../shared/services/cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -27,7 +28,12 @@ export class ProductComponent implements OnInit {
     rate: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(5)]),
   });
 
-  constructor( private cdr: ChangeDetectorRef, private _ProductsService: ProductsService, private _ApiService:ApiService, private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute, private _NotificationService:NotificationService) { }
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private _CartService:CartService,
+    private _ProductsService: ProductsService,
+    private _ApiService:ApiService,
+    private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute, private _NotificationService:NotificationService) { }
 
   loadProduct(productId: string) {
     this._ApiService.get<Products>(`products/${productId}`).subscribe({
@@ -36,14 +42,7 @@ export class ProductComponent implements OnInit {
     })
   }
 
-  addProductToCart(product: any) {
-    this._ApiService.post<any>('carts', { product: product._id }).subscribe({
-      next: (res) => {
-        this.getUserCart();
-      },
-      error: (err) => { }
-    });
-  }
+  addProductToCart = (product: Products): void => this._CartService.addToCart(product);
 
   getUserCart() {
     this._ApiService.get<any>('carts', undefined, 'user').subscribe({

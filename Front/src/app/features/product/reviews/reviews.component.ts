@@ -130,7 +130,7 @@ loadProductReviews(productId: string) {
 
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
-    this._AuthService.checkToken();
+    // this._AuthService.checkToken();
     this.productImage = this._ReviewsService.productImage;
     this.currentUser = this._AuthService.currentUser;
     this.getProduct(this.id);
