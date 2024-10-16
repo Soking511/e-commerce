@@ -42,7 +42,6 @@ export const registerValidator: RequestHandler[] = [
     return true;
   }),
 
-  passwordValidator('password'),
   confirmPasswordValidator('password', 'confirmPassword'),
 
   validatorMiddleware
@@ -54,7 +53,6 @@ export const loginValidator: RequestHandler[] = [
     .notEmpty().withMessage('Email is required')
     .isEmail().withMessage('Invalid email format'),
 
-  passwordValidator('password'),
   validatorMiddleware
 ];
 
@@ -68,7 +66,6 @@ export const forgetPasswordValidator: RequestHandler[] = [
 
 // Reset Password Validator
 export const resetPasswordValidator: RequestHandler[] = [
-  passwordValidator('password'),
   confirmPasswordValidator('password', 'confirmPassword'),
   validatorMiddleware
 ];

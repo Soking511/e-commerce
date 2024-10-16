@@ -11,6 +11,7 @@ export interface Category {
 export interface Categories {
 createdAt: any;
 name: any;
+cover: any,
 _id: any;
   Category:Category[];
 }

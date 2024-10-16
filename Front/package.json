@@ -11,10 +11,12 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^18.2.0",
+    "@angular/cdk": "^18.2.8",
     "@angular/common": "^18.2.0",
     "@angular/compiler": "^18.2.0",
     "@angular/core": "^18.2.0",
     "@angular/forms": "^18.2.0",
+    "@angular/material": "^18.2.8",
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
@@ -26,8 +28,15 @@
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.7.0",
     "node": "^20.18.0",
+<<<<<<< HEAD
+=======
+    "primeflex": "^3.3.1",
+    "primeicons": "^7.0.0",
+    "primeng": "^17.18.11",
+>>>>>>> a64becb93cb1b6b4986a273d1fe0f2d4910c618d
     "rxjs": "~7.8.0",
     "save": "^2.9.0",
+    "tailwindcss-primeui": "^0.3.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
@@ -46,7 +55,9 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "postcss": "^8.4.47",
+    "rollup": "^4.24.0",
     "tailwindcss": "^3.4.12",
-    "typescript": "~5.5.2"
+    "typescript": "^5.5.4",
+    "vite": "^5.4.8"
   }
 }

@@ -5,8 +5,9 @@ import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { NotificationComponent } from './core/components/notification/notification.component';
 import { BestSellerComponent } from './features/home/best-seller/best-seller.component';
 import { HomeComponent } from './features/home/home.component';
-import { SideCartService } from './shared/services/side-cart.service';
+// import { SideCartService } from './shared/services/side-cart.service';
 import { CartComponent } from "./features/cart/cart.component";
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -25,9 +26,12 @@ import { CartComponent } from "./features/cart/cart.component";
 })
 
 export class AppComponent {
-  constructor(private _sideCartService: SideCartService) {}
+  constructor( private primengConfig: PrimeNGConfig) {
+
+  }
 
   onCartClicked() {
-    this._sideCartService.toggleSideCart();
+    // this._sideCartService.toggleSideCart();
   }
 }
+

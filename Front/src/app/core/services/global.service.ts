@@ -20,6 +20,7 @@ export class GlobalService {
   cartRoute: string = 'api/v1/carts';
   productsImage: string = `${this.baseURL}uploads/products/`;
   usersImage: string = `${this.baseURL}uploads/users/`;
+  categoryImage: string = `${this.baseURL}uploads/categories/`;
   apiKey: string = 'secret123';
   constructor(private _HttpClient:HttpClient) { }
 
@@ -32,7 +33,6 @@ export class GlobalService {
   get(endpoint: string, ...params: string[]): Observable<any> {
     const tempString: string = params.join('/');
     const fullUrl = `${endpoint}/${tempString}`;
-    console.log(tempString);
     return this._HttpClient.get(fullUrl);
   }
 
