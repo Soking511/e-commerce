@@ -24,7 +24,7 @@ export class CartService{
     this._MessageService.add({severity, summary, detail});
   }
 
-  private loadCart(): void {
+  loadCart(): void {
     this._ApiService.get<Cart>('carts', 1, 'user').subscribe({
       next: (response: ApiResponse<Cart>) => {
         const cartItems = response.data.items || [];
@@ -78,4 +78,5 @@ export class CartService{
     }
   }
 
+  emptyCart = () => this.cartItemsSubject.next([]);
 }

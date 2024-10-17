@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NotificationService } from '../../core/components/notification/services/notification.service';
 import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { GlobalService } from '../../core/services/global.service';
@@ -46,8 +45,6 @@ export class CartComponent implements OnInit{
     private _Router:Router
   ){ }
 
-  // toggleSideCart() { this._sideCartService.toggleSideCart() }
-
   onStateChange(event: Event) {
     const target = event.target as HTMLSelectElement;
     const stateCode = target.value;
@@ -59,11 +56,11 @@ export class CartComponent implements OnInit{
   }
 
   addOrder() {
-    if ( Object.keys(this.selectedAddress).length === 0 )
-      return this.addMessage('error', 'enter any address', 'you can add new if u want');
+    if ( Object.keys(this.selectedAddress).length < 1 ) return this.addMessage('error', 'enter any address', 'you can add new if u want');
 
     this._ApiService.post(`orders`, {address:this.selectedAddress}).subscribe({
       next: (res) => {
+        this._CartService.emptyCart();
         this._Router.navigate(['/order-details'])
       },
       error: (err) => { }
@@ -122,13 +119,12 @@ export class CartComponent implements OnInit{
     }
   }
 
-  addMessage( severity:string='success', summary:string='Service Message', detail:string='MessageService' ) {
-    this._MessageService.add({severity, summary, detail});
-  }
+  addMessage = ( severity:string='success', summary:string='Service Message', detail:string='MessageService' ) => this._MessageService.add({severity, summary, detail});
 
   getUserCart() {
     this._CartService.cart$.subscribe((cart) => {
       this.currentUserCart = cart;
+      this.cdr.detectChanges();
       if ( cart.length < 1 ){
         this._Router.navigate(['home']);
         this.addMessage('error', 'you cart is empty', 'Added to wishlist');
@@ -137,7 +133,6 @@ export class CartComponent implements OnInit{
       for ( const item of cart ){
         this.totalPriceCart+=item.price!*item.quantity!;
       }
-      this.cdr.detectChanges();
     });
   }
 

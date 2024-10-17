@@ -30,6 +30,7 @@ import { CardModule } from 'primeng/card';
 import { ImageModule } from 'primeng/image';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { CartService } from '../../shared/services/cart.service';
+import { HeroSectionsComponent } from "./hero-sections/hero-sections.component";
 
 @Component({
   selector: 'app-home',
@@ -41,7 +42,9 @@ import { CartService } from '../../shared/services/cart.service';
     InputTextModule,
     ButtonModule,
     CardModule,
-    PanelModule, BadgeModule, ToastModule, ButtonModule, TabViewModule, TreeModule, FormsModule, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule, DescriptionPipe],
+    PanelModule, BadgeModule, ToastModule, ButtonModule, TabViewModule, TreeModule, FormsModule, FooterComponent, BestSellerComponent, ProductComponent, RouterLink, NotificationComponent, CommonModule, ReactiveFormsModule, DescriptionPipe,
+    HeroSectionsComponent
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',  animations: [
     trigger('cardAnimation', [
