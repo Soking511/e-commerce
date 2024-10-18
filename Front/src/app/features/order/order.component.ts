@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NotificationService } from '../../core/components/notification/services/notification.service';
 import { ApiService } from '../../core/services/api.service';
 import { Order, Orders } from '../../shared/interfaces/order';
 
@@ -18,7 +17,6 @@ export class OrderComponent {
 
   constructor(
     private _ApiService: ApiService,
-    private _NotificationService: NotificationService,
   ) { }
 
   getAllOrders(){
@@ -33,7 +31,8 @@ export class OrderComponent {
   removeOrder(OrderID:string) {
     this._ApiService.delete(`orders/${OrderID}`).subscribe({
       next: (res) => {
-        this._NotificationService.showNotification('Category Removed', 'success');
+        // this.addMessage('success', 'Category Removed', 'MessageService');
+
       },
       error: (err) => { }
     })

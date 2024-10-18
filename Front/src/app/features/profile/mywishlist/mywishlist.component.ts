@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '../../../core/components/notification/services/notification.service';
 import { ApiService } from '../../../core/services/api.service';
 import { CommonModule } from '@angular/common';
 
@@ -15,7 +14,7 @@ export class MywishlistComponent implements OnInit{
   confirmDelete:boolean=false;
   products: any = {}
 
-  constructor( private _ApiService:ApiService, private _NotificationService:NotificationService) {}
+  constructor( private _ApiService:ApiService) {}
 
   getWishlistItems(){
     this._ApiService.get<any>( 'wishlist', undefined, 'user').subscribe({
@@ -34,7 +33,7 @@ export class MywishlistComponent implements OnInit{
   deleteItem( product:string ){
     this._ApiService.delete(`wishlist/${product}` ).subscribe({
       next:(res) => {
-        this._NotificationService.showNotification( 'Item Removed', 'success' );
+        // this._NotificationService.showNotification( 'Item Removed', 'success' );
         this.getWishlistItems();
       },
       error:(err) => {}

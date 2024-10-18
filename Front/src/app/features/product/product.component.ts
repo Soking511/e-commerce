@@ -4,10 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Products } from '../../shared/interfaces/products';
 import { ReviewsComponent } from './reviews/reviews.component';
-import { ReviewsService } from './reviews/services/reviews.service';
 import { ProductsService } from './services/products.service';
 import { ApiService } from '../../core/services/api.service';
-import { NotificationService } from '../../core/components/notification/services/notification.service';
 import { CartService } from '../../shared/services/cart.service';
 
 @Component({
@@ -19,7 +17,7 @@ import { CartService } from '../../shared/services/cart.service';
 })
 
 export class ProductComponent implements OnInit {
-  product: Products = {};
+  product: Products = { product: undefined };
   imgDomain: string = '';
   id: string = '';
   reviewError: string = '';
@@ -33,7 +31,8 @@ export class ProductComponent implements OnInit {
     private _CartService:CartService,
     private _ProductsService: ProductsService,
     private _ApiService:ApiService,
-    private _ReviewsService: ReviewsService, private _ActivatedRoute: ActivatedRoute, private _NotificationService:NotificationService) { }
+    private _ActivatedRoute: ActivatedRoute,
+  ) { }
 
   loadProduct(productId: string) {
     this._ApiService.get<Products>(`products/${productId}`).subscribe({

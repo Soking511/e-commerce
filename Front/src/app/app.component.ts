@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './core/components/footer/footer.component';
 import { NavbarComponent } from './core/components/navbar/navbar.component';
-import { NotificationComponent } from './core/components/notification/notification.component';
 import { BestSellerComponent } from './features/home/best-seller/best-seller.component';
 import { HomeComponent } from './features/home/home.component';
 // import { SideCartService } from './shared/services/side-cart.service';
@@ -17,7 +16,6 @@ import { PrimeNGConfig } from 'primeng/api';
     HomeComponent,
     NavbarComponent,
     FooterComponent,
-    NotificationComponent,
     BestSellerComponent,
     CartComponent
 ],

@@ -4,7 +4,6 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ProductComponent } from '../product.component';
-import { NotificationService } from '../../../core/components/notification/services/notification.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Products } from '../../../shared/interfaces/products';
 import { Reviews, ReviewsResponse } from '../../../shared/interfaces/reviews';
@@ -24,7 +23,7 @@ import { Users } from '../../../shared/interfaces/uesrs';
 export class ReviewsComponent implements OnInit, OnDestroy {
   @ViewChild(ProductComponent) productComponent!: ProductComponent;
   subscription: any;
-  product: Products = {};
+  product: Products = { product: undefined };
   reviews: Reviews[] = [];
   currentUser = new BehaviorSubject(null);
   id: string = '';
@@ -47,7 +46,6 @@ export class ReviewsComponent implements OnInit, OnDestroy {
     private _ProductsService: ProductsService,
     private _ActivatedRoute: ActivatedRoute,
     private _ApiService: ApiService,
-    private _NotificationService: NotificationService,
     private _ProductComponent: ProductComponent,
     private _Router: Router
   ) { }
@@ -78,7 +76,7 @@ loadProductReviews(productId: string) {
         location.reload();
       },
       error: (err) => {
-        this._NotificationService.showNotification('Failed to delete review', 'error');
+        // this._NotificationService.showNotification('Failed to delete review', 'error');
       }
     });
   }
@@ -87,13 +85,13 @@ loadProductReviews(productId: string) {
     this._ApiService.post<Reviews>(`products/${productID}/reviews`, reviewForm.value).subscribe({
       next: (res) => {
         location.reload();
-        this._NotificationService.showNotification('Review Added successfully!', 'success');
+        // this._NotificationService.showNotification('Review Added successfully!', 'success');
       },
       error: (err) => {
         if (err.error.errors) {
-          this._NotificationService.showNotification(err.error.errors[0].msg, 'error')
+          // this._NotificationService.showNotification(err.error.errors[0].msg, 'error')
         } else {
-          this._NotificationService.showNotification('Login please !', 'error')
+          // this._NotificationService.showNotification('Login please !', 'error')
         }
       }
     })
@@ -103,13 +101,13 @@ loadProductReviews(productId: string) {
     this._ApiService.update<Reviews>(`reviews/${this.currentReviewID}`, reviewForm.value).subscribe({
       next: (res) => {
         location.reload();
-        this._NotificationService.showNotification('Review Updated successfully!', 'success');
+        // this._NotificationService.showNotification('Review Updated successfully!', 'success');
       },
       error: (err) => {
         if (err.error.errors) {
-          this._NotificationService.showNotification(err.error.errors[0].msg, 'error')
+          // this._NotificationService.showNotification(err.error.errors[0].msg, 'error')
         } else {
-          this._NotificationService.showNotification('Login please !', 'error')
+          // this._NotificationService.showNotification('Login please !', 'error')
         }
       }
     })

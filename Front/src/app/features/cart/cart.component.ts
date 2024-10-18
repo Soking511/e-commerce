@@ -9,6 +9,9 @@ import { Products } from '../../shared/interfaces/products';
 import { CartService } from '../../shared/services/cart.service';
 import { HomeComponent } from '../home/home.component';
 import { MessageService } from 'primeng/api';
+import { AddressService } from '../address/address.service';
+import { Address, AddressForm, City } from '../../shared/interfaces/address.address';
+import { IItems } from '../../shared/interfaces/order';
 
 @Component({
   selector: 'app-cart',
@@ -21,23 +24,23 @@ import { MessageService } from 'primeng/api';
 export class CartComponent implements OnInit{
   guiPopWindows = { confirmBoolean: false, confirmedOrder: false, editorBoolean: false };
   totalPriceCart: number = 0;
-  currentUserCart: any = {};
+  currentUserCart: IItems[] = [];
   currentUserAddress: any = {};
-  selectedAddress:any = {};
-  selectedState: any[] = [];
+  selectedState: City[] = [];
+  selectedAddress: any;
   imgDomain = ''
   state: any[] = [];
   loading: boolean = false;
-  addressForm: FormGroup = new FormGroup({
-    'street': new FormControl(null, [Validators.required]),
-    'postalCode': new FormControl(null, [Validators.required]),
-    'city': new FormControl(null, [Validators.required]),
-    'state': new FormControl(null, [Validators.required])
+  addressForm: FormGroup<AddressForm> = new FormGroup<AddressForm>({
+    street: new FormControl('', Validators.required),
+    postalCode: new FormControl('', Validators.required),
+    city: new FormControl('', Validators.required),
+    state: new FormControl('', Validators.required),
   });
 
   constructor(
-    private _AuthService: AuthService,
     private _CartService: CartService,
+    private _AddressService: AddressService,
     private _MessageService: MessageService,
     private _ApiService: ApiService,
     private _GlobalService:GlobalService,
@@ -56,7 +59,7 @@ export class CartComponent implements OnInit{
   }
 
   addOrder() {
-    if ( Object.keys(this.selectedAddress).length < 1 ) return this.addMessage('error', 'enter any address', 'you can add new if u want');
+    if (!this.selectedAddress) return this.addMessage('error', 'enter any address', 'you can add new if u want');
 
     this._ApiService.post(`orders`, {address:this.selectedAddress}).subscribe({
       next: (res) => {
@@ -69,55 +72,8 @@ export class CartComponent implements OnInit{
 
   removeProductFromCart = (productId: string): void => this._CartService.removeFromCart(productId);
   updateProductQuantity = (product: Products, quantity: number) => this._CartService.updateQuantity(product._id!, quantity);
-
-  getUserAddress() {
-    this._ApiService.get('address', undefined, 'user').subscribe({
-      next: (res) => {
-        if (Array.isArray(res.data)) {
-          this.currentUserAddress = res.data;
-        } else {
-          this.currentUserAddress = [];
-        }
-      },
-      error: (err) => {
-        this.currentUserAddress = [];
-      }
-    });
-  }
-
-  deleteAddress(addressID: string){
-    this._AuthService.deleteUserAddress(addressID).subscribe({
-      next:(res)=>{
-        this.getUserAddress();
-        this.selectedAddress = {}
-      },
-      error:(err)=>{ }
-    })
-  }
-
-  addUserAddress(formData:any){
-    this._AuthService.addUserAddress({'address':[formData.value]}).subscribe({
-      next: (res) => {
-        location.reload();
-      },
-      error: (err) => { }
-    });
-  }
-
-  fetchCities(): void {
-    if (this.state.length === 0 && !this.loading) {
-      this.loading = true;
-      this._ApiService.fetch<any[]>('https://atfawry.fawrystaging.com/ECommerceWeb/api/lookups/govs').subscribe({
-        next: (res) => {
-          if (res) {
-            this.state = res as any;
-          }
-          this.loading = false;
-        },
-        error: (err) => { }
-      });
-    }
-  }
+  // addUserAddress = (addressForm:FormGroup) => this._AddressService.addUserAddress(addressForm);
+  // deleteAddress = (addressSelected:string) => this._AddressService.deleteAddress(addressSelected);
 
   addMessage = ( severity:string='success', summary:string='Service Message', detail:string='MessageService' ) => this._MessageService.add({severity, summary, detail});
 
@@ -135,11 +91,56 @@ export class CartComponent implements OnInit{
       }
     });
   }
+  fetchCities(){
+    if (this.state.length === 0 && !this.loading) {
+      this.loading = true;
+      this._ApiService.fetch<any[]>('https://atfawry.fawrystaging.com/ECommerceWeb/api/lookups/govs').subscribe({
+        next: (res) => {
+          if (res) {
+            this.state = res as any;
+          }
+          this.loading = false;
+        },
+        error: (err) => { }
+      });
+    }
+  }
+
+  getUserAddress() {
+    this._ApiService.get('address', undefined, 'user').subscribe({
+      next: (res) => {
+        if (Array.isArray(res.data)) {
+          this.currentUserAddress = res.data;
+          this.selectedAddress = res.data[0];
+        }
+      },
+      error: (err) => { }
+    });
+  }
+
+  deleteAddress(addressID: string){
+    this._ApiService.delete('address', addressID).subscribe({
+      next:(res)=>{
+        this.getUserAddress();
+        // this.selectedAddress = {}
+      },
+      error:(err)=>{ }
+    })
+  }
+
+  addUserAddress(formData:any){
+    this._ApiService.post('address', {'address':[formData.value]}).subscribe({
+      next: (res) => {
+        location.reload();
+      },
+      error: (err) => { }
+    });
+  }
 
   ngOnInit(): void {
-    this.getUserCart();
     this.getUserAddress();
     this.fetchCities();
+    this.getUserCart();
     this.imgDomain = this._GlobalService.productsImage;
   }
 

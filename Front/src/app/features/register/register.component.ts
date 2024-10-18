@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { ApiService } from '../../core/services/api.service';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +24,11 @@ export class RegisterComponent {
     confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20)])
   })
 
-  constructor(private _AuthService:AuthService, private _Router:Router){ }
+  constructor(
+    private _AuthService:AuthService,
+    private _ApiService:ApiService,
+    private _Router:Router
+  ){ }
 
   register(formData:FormGroup){
     this._AuthService.register(formData.value).subscribe({

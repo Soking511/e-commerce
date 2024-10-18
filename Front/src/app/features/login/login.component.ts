@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
-import { NotificationService } from '../../core/components/notification/services/notification.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
@@ -22,7 +21,11 @@ export class LoginComponent implements OnInit {
     password: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20)])
   });
 
-  constructor(private _MessageService:MessageService, private _AuthService:AuthService, private _Router:Router, private _NotificationService: NotificationService){ }
+  constructor(
+    private _MessageService:MessageService,
+    private _AuthService:AuthService,
+    private _Router:Router
+  ){ }
 
 
   login(formData:FormGroup){
@@ -34,9 +37,7 @@ export class LoginComponent implements OnInit {
         this._Router.navigate(['/home']);
       },
       error:(err) => {
-        // this._NotificationService.showNotification(err.error.message, 'error')
         this._MessageService.add({severity:'error', detail:err.error.message});
-        // this._MessageService.add({severity, summary, detail});
       }
     })
   }

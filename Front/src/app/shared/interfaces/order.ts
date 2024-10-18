@@ -2,15 +2,15 @@ import { Products } from "./products";
 import { UserAddress, Users } from "./uesrs";
 
 export interface IItems {
-  _id?: string;
-  product?: Products;
+  _id: string;
+  product: Products;
   quantity?: number;
   price?: number;
 }
 
 export interface Cart {
   _id?: string;
-  items?: IItems[];  
+  items?: IItems[];
 }
 
 export interface Order {

@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../core/services/api.service';
 import { NgClass, NgIf } from '@angular/common';
-import { NotificationService } from '../../../core/components/notification/services/notification.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Pagination } from '../../../shared/interfaces/pagination';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-users',
   standalone: true,
   imports: [NgIf, NgClass, ReactiveFormsModule],
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'] // Fix 'styleUrl' to 'styleUrls'
+  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
   users: any[] = [];
@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
   });
   addUserForm = new FormGroup({
     name: new FormControl(null, [Validators.required]),
-    email: new FormControl(null, [Validators.required, Validators.email]), // Added email validator
+    email: new FormControl(null, [Validators.required, Validators.email]),
     password: new FormControl(null, [Validators.required]),
     confirmPassword: new FormControl(null, [Validators.required]),
     phone: new FormControl(null, [Validators.required]),
@@ -38,7 +38,12 @@ export class UsersComponent implements OnInit {
   sort = '-name';
   uploadImage: File | null = null; // Specify type
 
-  constructor(private apiService: ApiService, private notificationService: NotificationService) {}
+  // Define addMessage function
+  addMessage = (severity: string = 'success', summary: string = 'Service Message', detail: string = 'MessageService') => {
+    this._MessageService.add({ severity, summary, detail });
+  };
+
+  constructor(private apiService: ApiService, private _MessageService: MessageService) {}
 
   populateForm(user: any) {
     this.editUserForm.patchValue({
@@ -63,7 +68,7 @@ export class UsersComponent implements OnInit {
         this.pagination = res.pagination;
       },
       error: (err) => {
-        this.notificationService.showNotification('Error fetching users', 'error');
+        this.addMessage('error', 'Error fetching users', 'Failed to retrieve user data.'); // Use addMessage
       }
     });
   }
@@ -80,14 +85,14 @@ export class UsersComponent implements OnInit {
       this.apiService.delete('users', user._id).subscribe({
         next: (res) => {
           this.getUsers();
-          this.notificationService.showNotification(`User: ${user.name} deleted`, 'success');
+          this.addMessage('success', 'User deleted', `User: ${user.name} deleted`); // Use addMessage
         },
         error: (err) => {
-          this.notificationService.showNotification('Error deleting user', 'error');
+          this.addMessage('error', 'Error deleting user', 'Failed to delete user.'); // Use addMessage
         }
       });
     } else {
-      this.notificationService.showNotification("You can't delete the Manager account", 'error');
+      this.addMessage('error', "You can't delete the Manager account", ''); // Use addMessage
     }
   }
 
@@ -109,11 +114,11 @@ export class UsersComponent implements OnInit {
       next: (res) => {
         this.isEditing = false;
         this.selectedUser = null;
-        this.notificationService.showNotification('Updated User', 'success');
+        this.addMessage('success', 'Updated User', 'User has been successfully updated.'); // Use addMessage
         this.getUsers();
       },
       error: (err) => {
-        this.notificationService.showNotification('Error updating user', 'error');
+        this.addMessage('error', 'Error updating user', 'Failed to update user.'); // Use addMessage
       }
     });
   }
@@ -129,22 +134,22 @@ export class UsersComponent implements OnInit {
     this.apiService.post<any>('users', formData).subscribe({
       next: (res) => {
         this.isAdding = false;
-        this.notificationService.showNotification('Created User', 'success');
+        this.addMessage('success', 'Created User', 'User has been successfully created.'); // Use addMessage
         this.getUsers();
       },
       error: (err) => {
-        this.notificationService.showNotification(err.error.errors[0]?.msg || 'Error creating user', 'error');
+        this.addMessage('error', 'Error creating user', err.error.errors[0]?.msg || 'Failed to create user.'); // Use addMessage
       }
     });
   }
 
   toggleEditor(bool: boolean) {
     if (!this.selectedUser && bool) {
-      this.notificationService.showNotification('Select a user to update!', 'error');
+      this.addMessage('error', 'Select a user to update!', ''); // Use addMessage
     } else if (this.selectedUser?.role !== 'manager') {
       this.isEditing = bool;
     } else {
-      this.notificationService.showNotification("You can't update the Manager account", 'error');
+      this.addMessage('error', "You can't update the Manager account", ''); // Use addMessage
     }
   }
 

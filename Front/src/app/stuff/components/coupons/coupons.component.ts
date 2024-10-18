@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NotificationService } from '../../../core/components/notification/services/notification.service';
 import { ApiService } from '../../../core/services/api.service';
 import { Pagination } from '../../../shared/interfaces/pagination';
 import { CommonModule } from '@angular/common';
@@ -36,7 +35,7 @@ export class CouponsComponent implements OnInit {
   page: number = 1;
   sort = '-name';
 
-  constructor(private _ApiService: ApiService, private _NotificationService: NotificationService) { }
+  constructor(private _ApiService: ApiService) { }
 
   formatDate(date: Date): string {
     const year = date.getFullYear();
@@ -79,7 +78,7 @@ export class CouponsComponent implements OnInit {
     this._ApiService.delete('coupons', coupon._id).subscribe({
       next: (res) => {
         this.getCoupons();
-        this._NotificationService.showNotification(`Coupon: ${coupon.name} [Deleted]`);
+        // this._NotificationService.showNotification(`Coupon: ${coupon.name} [Deleted]`);
       },
       error: (err) => { }
     });
@@ -90,7 +89,7 @@ export class CouponsComponent implements OnInit {
       next: (res) => {
         this.editorForm = false;
         this.selectCoupon = null;
-        this._NotificationService.showNotification('Updated Coupon', 'success');
+        // this._NotificationService.showNotification('Updated Coupon', 'success');
         this.getCoupons();
       },
       error: (err) => { }
@@ -101,22 +100,22 @@ export class CouponsComponent implements OnInit {
     this._ApiService.post<Coupons>('coupons', form.value).subscribe({
       next: (res) => {
         this.submitForm = false;
-        this._NotificationService.showNotification('Created Coupon', 'success');
+        // this._NotificationService.showNotification('Created Coupon', 'success');
         this.getCoupons();
       },
       error: (err) => {
-        this._NotificationService.showNotification(err.error.errors[0].msg, 'error');
+        // this._NotificationService.showNotification(err.error.errors[0].msg, 'error');
       }
     });
   }
 
   showEditor(bool: boolean) {
     if (!this.selectCoupon && bool) {
-      this._NotificationService.showNotification('Select Coupon To Update !!', 'error');
+      // this._NotificationService.showNotification('Select Coupon To Update !!', 'error');
     } else if (this.selectCoupon.role !== 'manager') {
       this.editorForm = bool;
     } else {
-      this._NotificationService.showNotification(`You Can't Update Manager Account`, 'error');
+      // this._NotificationService.showNotification(`You Can't Update Manager Account`, 'error');
     }
   }
 

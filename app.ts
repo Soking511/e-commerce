@@ -36,6 +36,7 @@ app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
 // app.use(express.static('uploads'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
 const i18n = new I18n({
   locales: ['en', 'ar'],
   directory: path.join(__dirname, 'locales'),

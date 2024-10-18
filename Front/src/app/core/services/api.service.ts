@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { GlobalService } from './global.service';
 import { AuthService } from './auth.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Cookies from 'js-cookie';
 import { ApiResponse } from './interfaces/api-response.interface';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +19,10 @@ export class ApiService {
     this.apiKey = _GlobalService.apiKey;
   }
 
-
-  get<Interface>(route: string, quantity?: number, role?: string, query?: string) {
+  get<Interface>(route: string, quantity?: number, role?: string, query?: string):Observable<any> {
     if (role) this._AuthService.checkToken();
 
-    const headers: { [key: string]: string } = {
-      "X-API-KEY": this.apiKey,
-    };
+    const headers: { [key: string]: string } = { "X-API-KEY": this.apiKey };
 
     if (role) headers['authorization'] = `Bearer ${localStorage.getItem('user')}`;
 
@@ -41,16 +38,15 @@ export class ApiService {
         } else if (error.status >= 500) {
           return throwError('Server error');
         }
-        return throwError(error);
+        return throwError('error');
       })
     );
+
   }
 
-  fetch<Interface>(route: string) {
-    return this._Http.get<ApiResponse<Interface>>(route);
-  }
+  fetch = <Interface>(route: string) => this._Http.get<ApiResponse<Interface>>(route);
 
-  update<Interface>(route: string, data:any, id?:string) {
+  update<Interface>(route: string, data:any, id?:string):Observable<any> {
     this._AuthService.checkToken();
 
     return this._Http.put<ApiResponse<Interface>>(`${this.baseURL}${this.version}/${route}${id?`/${id}` : ''}`, data, {
@@ -62,7 +58,7 @@ export class ApiService {
     })
   }
 
-  post<Interface>(route: string, data:any, id:string='') {
+  post<Interface>(route: string, data:any, id:string=''):Observable<any> {
     this._AuthService.checkToken();
 
     return this._Http.post<ApiResponse<Interface>>(`${this.baseURL}${this.version}/${route}${id?`/${id}` : ''}`, data, {
@@ -74,7 +70,7 @@ export class ApiService {
     })
   }
 
-  delete(route: string, id?:string) {
+  delete(route: string, id?:string):Observable<any> {
     this._AuthService.checkToken();
 
     return this._Http.delete(`${this.baseURL}${this.version}/${route}${id?`/${id}` : ''}`, {

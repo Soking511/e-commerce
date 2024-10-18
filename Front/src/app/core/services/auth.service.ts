@@ -17,7 +17,6 @@ export class AuthService {
   private userRoute: string = '';
   private addressRoute: string = '';
   currentUser = new BehaviorSubject(null);
-  // authPhoto: string = 'images/phone.svg'
   usersImage: string = '';
 
   constructor(private _GlobalService: GlobalService, private _HttpClient: HttpClient, private _Router: Router) {
@@ -40,14 +39,14 @@ export class AuthService {
     }
   }
 
-checkToken() {
-  const token = localStorage.getItem('user');
+  checkToken() {
+    const token = localStorage.getItem('user');
 
-  if (!token) {
-    console.error("No token found");
-    this.logout();
-    return;
-  }
+    if (!token) {
+      console.error("No token found");
+      this.logout();
+      return;
+    }
 
   try {
     const decodedToken = jwtDecode(token);
@@ -60,8 +59,8 @@ checkToken() {
   }
 }
 
-
   register(formData: Register): Observable<any> {
+    // this._
     return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/Register`, formData
       , {
         headers: {
@@ -72,45 +71,41 @@ checkToken() {
   }
 
   login(formData: Login): Observable<any> {
-    return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/login`, formData
-      , {
-        headers: {
-          "X-API-KEY": `${this.apiKey}`,
-          "X-CSRF-Token": `${Cookies.get('cookies')}`
-        }, withCredentials: true
-      })
+    return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/login`, formData, {
+      headers: {
+        "X-API-KEY": `${this.apiKey}`,
+        "X-CSRF-Token": `${Cookies.get('cookies')}`
+      }, withCredentials: true
+    })
   }
 
   sendMail(formData: SendMail): Observable<any> {
-    return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/forgetPassword`, formData
-      , {
-        headers: {
-          "X-API-KEY": `${this.apiKey}`,
-          "X-CSRF-Token": `${Cookies.get('cookies')}`,
-        }, withCredentials: true
-      })
+    return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/forgetPassword`, formData, {
+      headers: {
+        "X-API-KEY": `${this.apiKey}`,
+        "X-CSRF-Token": `${Cookies.get('cookies')}`,
+      }, withCredentials: true
+    })
   }
 
   verifyCode(formData: VerifyCode): Observable<any> {
-    return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/verifyCode`, formData
-      , {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('verify')}`,
-          "X-API-KEY": `${this.apiKey}`,
-          "X-CSRF-Token": `${Cookies.get('cookies')}`
-        }, withCredentials: true
-      })
+    return this._HttpClient.post(`${this.baseUrl}${this.authRoute}/verifyCode`, formData, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('verify')}`,
+        "X-API-KEY": `${this.apiKey}`,
+        "X-CSRF-Token": `${Cookies.get('cookies')}`
+      }, withCredentials: true
+    })
   }
 
   resetPassword(formData: ResetPassword): Observable<any> {
-    return this._HttpClient.put(`${this.baseUrl}${this.authRoute}/resetCode`, formData
-      , {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('verify')}`,
-          "X-API-KEY": `${this.apiKey}`,
-          "X-CSRF-Token": `${Cookies.get('cookies')}`
-        }, withCredentials: true
-      })
+    return this._HttpClient.put(`${this.baseUrl}${this.authRoute}/resetCode`, formData, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('verify')}`,
+        "X-API-KEY": `${this.apiKey}`,
+        "X-CSRF-Token": `${Cookies.get('cookies')}`
+      }, withCredentials: true
+    })
   }
 
   logout() {
@@ -124,9 +119,9 @@ checkToken() {
       headers: {
         authorization: `Bearer ${localStorage.getItem('user')}`,
         "X-API-KEY": `${this.apiKey}`,
-        }, withCredentials: true
-      })
-    }
+      }, withCredentials: true
+    })
+  }
 
   updateUser(formData:any, userID:string): Observable<any> {
     return this._HttpClient.put(`${this.baseUrl}${this.userRoute}/${userID}`, formData, {
@@ -137,53 +132,5 @@ checkToken() {
       }, withCredentials: true
     })
   }
-
-  getUserAddress(): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}${this.addressRoute}`
-      , {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('user')}`,
-          "X-API-KEY": `${this.apiKey}`,
-        }, withCredentials: true
-      })
-    }
-
-  addUserAddress(formData:any): Observable<any> {
-    return this._HttpClient.post(`${this.baseUrl}${this.addressRoute}`, formData
-      , {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('user')}`,
-          "X-API-KEY": `${this.apiKey}`,
-          "X-CSRF-Token": `${Cookies.get('cookies')}`
-        }, withCredentials: true
-      })
-    }
-
-  updateUserAddress(): Observable<any> {
-    return this._HttpClient.put(`${this.baseUrl}${this.addressRoute}`
-      , {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('user')}`,
-          "X-API-KEY": `${this.apiKey}`,
-        }, withCredentials: true
-      })
-    }
-
-
-  deleteUserAddress(addressId:string): Observable<any> {
-    const form: any = {
-      addressId: addressId
-    };
-
-    return this._HttpClient.delete(`${this.baseUrl}${this.addressRoute}/${addressId}`
-      , {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('user')}`,
-          "X-API-KEY": `${this.apiKey}`,
-          "X-CSRF-Token": `${Cookies.get('cookies')}`
-        }, withCredentials: true
-      })
-    }
-
 
 }

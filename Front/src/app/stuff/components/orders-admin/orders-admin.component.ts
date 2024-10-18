@@ -1,7 +1,6 @@
 import { NgIf, NgClass, CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NotificationService } from '../../../core/components/notification/services/notification.service';
 import { ApiService } from '../../../core/services/api.service';
 import { Pagination } from '../../../shared/interfaces/pagination';
 import { Orders } from '../../../shared/interfaces/order';
@@ -29,7 +28,7 @@ export class OrdersAdminComponent implements OnInit {
   page: number = 1;
   sort='-name'
 
-  constructor( private _ApiService:ApiService, private _NotificationService:NotificationService ){}
+  constructor( private _ApiService:ApiService ){}
 
   populateForm(order: any) {
     this.editOrderForm.patchValue({
@@ -62,7 +61,7 @@ export class OrdersAdminComponent implements OnInit {
     this._ApiService.delete('Orders', order._id).subscribe({
     next: (res) => {
       this.getOrders();
-      this._NotificationService.showNotification( `order: ${order._id} [Deleted]`)
+      // this._NotificationService.showNotification( `order: ${order._id} [Deleted]`)
     },
       error: (err) => { }
     })
@@ -73,7 +72,7 @@ export class OrdersAdminComponent implements OnInit {
       next:(res) => {
         this.editorForm = false;
         this.selectOrder = null;
-        this._NotificationService.showNotification('Updated order', 'success' );
+        // this._NotificationService.showNotification('Updated order', 'success' );
         this.getOrders();
       },
       error:(err) => { }
@@ -84,21 +83,21 @@ export class OrdersAdminComponent implements OnInit {
     this._ApiService.post<Orders>('orders', form.value).subscribe({
       next:(res) => {
         this.submitForm = false;
-        this._NotificationService.showNotification('Created order', 'success' );
+        // this._NotificationService.showNotification('Created order', 'success' );
         this.getOrders();
       },
-      error:(err) => { this._NotificationService.showNotification(err.error.errors[0].msg, 'error') }
+      error:(err) => { }
     })
   }
 
   showEditor(bool:boolean){
     if ( !this.selectOrder &&  bool ){
-      this._NotificationService.showNotification('Select order To Update !!', 'error')
+      // this._NotificationService.showNotification('Select order To Update !!', 'error')
     } else
     if (  this.selectOrder.role != 'manager'){
       this.editorForm = bool;
-    } else
-    this._NotificationService.showNotification(`You Can't Update Manager Account`, 'error');
+    } 
+    // this._NotificationService.showNotification(`You Can't Update Manager Account`, 'error');
   }
 
   showFieldAdd(bool:boolean){

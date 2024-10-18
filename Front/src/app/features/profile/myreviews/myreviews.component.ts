@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Reviews } from '../../../shared/interfaces/reviews';
 import { ApiService } from '../../../core/services/api.service';
 import { CommonModule } from '@angular/common';
-import { NotificationService } from '../../../core/components/notification/services/notification.service';
 
 @Component({
   selector: 'app-myreviews',
@@ -15,7 +14,7 @@ export class MyreviewsComponent implements OnInit{
   currentReviewID:string='';
   confirmDelete:boolean=false;
 
-  constructor( private _ApiService:ApiService, private _NotificationService:NotificationService) {}
+  constructor( private _ApiService:ApiService) {}
 
   reviews: any = {}
   getReviews(){
@@ -35,7 +34,7 @@ export class MyreviewsComponent implements OnInit{
   deleteReview( review:string ){
     this._ApiService.delete(`reviews/${review}` ).subscribe({
       next:(res) => {
-        this._NotificationService.showNotification( 'Review Deleted', 'success' );
+        // this._NotificationService.showNotification( 'Review Deleted', 'success' );
         this.getReviews();
       },
       error:(err) => {}

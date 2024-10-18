@@ -5,8 +5,6 @@ import { ApiService } from '../../core/services/api.service';
 import { ApiResponse } from '../../core/services/interfaces/api-response.interface';
 import { Cart, IItems } from '../interfaces/order';
 import { Products } from '../interfaces/products';
-// import { Products } from '';
-// import { Products } from '@';
 
 @Injectable({
   providedIn: 'root',

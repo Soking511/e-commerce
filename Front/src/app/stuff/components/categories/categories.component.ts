@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NotificationService } from '../../../core/components/notification/services/notification.service';
 import { ApiService } from '../../../core/services/api.service';
 import { Users } from '../../../shared/interfaces/uesrs';
 import { NgIf, NgClass, CommonModule } from '@angular/common';
@@ -35,7 +34,7 @@ export class CategoriesComponent  implements OnInit {
   page: number = 1;
   sort='-name'
 
-  constructor( private _ApiService:ApiService, private _NotificationService:NotificationService, private _GlobalService:GlobalService ){}
+  constructor( private _ApiService:ApiService, private _GlobalService:GlobalService ){}
 
   setCategoryImage(event: any) {
     const images = event.target.files;
@@ -75,7 +74,7 @@ export class CategoriesComponent  implements OnInit {
     this._ApiService.delete('categories', category._id).subscribe({
     next: (res) => {
       this.getCategories();
-      this._NotificationService.showNotification( `category: ${category.name} [Deleted]`)
+      // this._NotificationService.showNotification( `category: ${category.name} [Deleted]`)
     },
       error: (err) => { }
     })
@@ -94,7 +93,7 @@ export class CategoriesComponent  implements OnInit {
       next:(res) => {
         this.editorForm = false;
         this.selectCategory = null;
-        this._NotificationService.showNotification('Updated Category', 'success' );
+        // this._NotificationService.showNotification('Updated Category', 'success' );
         this.getCategories();
       },
       // error:(err) => { }
@@ -112,11 +111,11 @@ export class CategoriesComponent  implements OnInit {
     this._ApiService.post<Categories[]>('categories', formData).subscribe({
       next: (res) => {
         this.submitForm = false;
-        this._NotificationService.showNotification('Created Category', 'success');
+        // this._NotificationService.showNotification('Created Category', 'success');
         this.getCategories();
       },
       error: (err) => {
-        this._NotificationService.showNotification(err.error?.errors[0]?.msg || 'Error occurred', 'error');
+        // this._NotificationService.showNotification(err.error?.errors[0]?.msg || 'Error occurred', 'error');
       }
     });
   }
@@ -124,12 +123,12 @@ export class CategoriesComponent  implements OnInit {
 
   showEditor(bool:boolean){
     if ( !this.selectCategory &&  bool ){
-      this._NotificationService.showNotification('Select Category To Update !!', 'error')
+      // this._NotificationService.showNotification('Select Category To Update !!', 'error')
     } else
     if (  this.selectCategory.role != 'manager'){
       this.editorForm = bool;
-    } else
-    this._NotificationService.showNotification(`You Can't Update Manager Account`, 'error');
+    } 
+    // this._NotificationService.showNotification(`You Can't Update Manager Account`, 'error');
   }
 
   showFieldAdd(bool:boolean){

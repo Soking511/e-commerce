@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NotificationService } from '../../../core/components/notification/services/notification.service';
 import { ApiService } from '../../../core/services/api.service';
 import { Pagination } from '../../../shared/interfaces/pagination';
 import { Products } from '../../../shared/interfaces/products';
@@ -63,7 +62,7 @@ export class ProductsComponent implements OnInit {
   subcategoryForm = new FormGroup({ _id: new FormControl("All", [Validators.required]), name: new FormControl(null, [Validators.required]) });
   imageDomain=''
 
-  constructor(private _ApiService: ApiService, private _NotificationService: NotificationService, private _GlobalService:GlobalService) {}
+  constructor(private _ApiService: ApiService, private _GlobalService:GlobalService) {}
 
   // Select category handler
   selectCategory(category: any) {
@@ -127,7 +126,6 @@ export class ProductsComponent implements OnInit {
     this._ApiService.delete('products', product._id).subscribe({
       next: (res) => {
         this.Products();
-        this._NotificationService.showNotification(`Product: ${product.name} [Deleted]`);
       },
       error: (err) => { console.error(err); }
     });
@@ -147,7 +145,6 @@ export class ProductsComponent implements OnInit {
       next: (res) => {
         this.editorForm = false;
         this.selectProduct = null;
-        this._NotificationService.showNotification('Updated Product', 'success');
         this.Products();
       },
       error: (err) => { console.error(err); }
@@ -168,7 +165,6 @@ export class ProductsComponent implements OnInit {
       next: (res) => {
         this.submitForm = false;
         this.Products();
-        this._NotificationService.showNotification('Created Product', 'success');
       },
       error: (err) => { console.error(err); }
     });

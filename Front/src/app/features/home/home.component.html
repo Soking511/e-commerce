@@ -1,7 +1,4 @@
 
-
-
-
 <section class="relative overflow-hidden w-[75%] mx-auto px-4">
   <div class="relative">
 
@@ -37,20 +34,6 @@
 
   </div>
 </section>
-
-
-<!-- <div class="h-full p-4">
-  <div class="mb-4">
-    <input
-      type="text"
-      placeholder="Search products..."
-      class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-      [(ngModel)]="search"
-    />
-  </div>
-
-  <p-tree [value]="files" class="mt-4"></p-tree>
-</div> -->
 
 <app-hero-sections/>
 
@@ -99,101 +82,8 @@
       </form>
   </div>
 
-
-
-  <style>
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-
-    .scrolling-categories {
-      overflow: hidden; /* Hide overflow */
-      white-space: nowrap; /* Prevent line breaks */
-      position: relative; /* Position for absolute children */
-      max-width: 100%; /* Restrict width */
-    }
-
-    .animate-scroll {
-      display: inline-block; /* Inline block to respect width */
-      animation: scroll 60s linear infinite; /* Continuous scroll */
-    }
-
-    .category-card {
-      display: inline-block; /* Inline block for horizontal layout */
-      background: white;
-      border-radius: 0.5rem;
-      padding: 1rem;
-      text-align: center;
-      min-width: 300px;
-      transition: transform 6s ease, box-shadow 0.2s ease;
-      margin-right: 1rem; /* Space between cards */
-    }
-
-    .category-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .category-image {
-      width: 100%;
-      height: 24rem;
-      object-fit: cover;
-      border-radius: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .category-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-  </style>
-
-
-
   <p class="flex text-2xl font-bold tracking-tight text-gray-900 py-4 ">&nbsp; Products:</p>
   <div class="flex flex-wrap justify-center animation-duration-1000" pAnimateOnScroll enterClass="fadein" leaveClass="fadeout">
-    <style>
-      /* Card Animation Styles */
-      .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .card:hover {
-        transform: scale(1.05); /* Scale up on hover */
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
-      }
-
-      /* Animation for adding an item to the cart */
-      @keyframes addToCart {
-        50% {
-          transform: scale(1.2);
-          opacity: 0.8;
-        }
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      .add-to-cart-animation {
-        animation: addToCart 0.5s ease forwards; /* Apply animation */
-      }
-
-      /* Responsive adjustments */
-      @media (max-width: 1024px) {
-        .card {
-          width: 45%; /* Adjust width for tablets */
-        }
-      }
-
-      @media (max-width: 768px) {
-        .card {
-          width: 100%; /* Full width on mobile */
-          margin-bottom: 1rem;
-        }
-      }
-    </style>
 
     <ng-container *ngFor="let product of products;" >
       <div loading="lazy" class="group card m-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105">
@@ -276,13 +166,6 @@
 
   </div>
 
-
-
-
-
-
-
-
 </div>
 
 @if( products.length === 0 ){
@@ -294,39 +177,6 @@
     </div>
   </main>
 }
-
-<style>
-  .fade-in {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  }
-
-  .fade-in-active {
-    opacity: 1;
-    transform: translateY(0);
-  }
-</style>
-
-<!-- <div class="flex items-center gap-8 justify-center max-w-lg mx-auto py-16">
-  <button (click)="changePage(pagination.prev!)" [disabled]="pagination.currentPage == 1" class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover hover:bg-slate-800 hover:border-slate-800 focus focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-      <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-    </svg>
-  </button>
-
-  <p class="text-slate-600">
-    Page <strong class="text-slate-800">{{pagination.currentPage}}</strong> of&nbsp;<strong class="text-slate-800">{{pagination.totalPages}}</strong>
-  </p>
-
-  <button [disabled]="pagination.currentPage == pagination.totalPages" (click)="changePage(pagination.next!)" class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover hover:bg-slate-800 hover:border-slate-800 focus focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-      <path fill-rule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-    </svg>
-  </button>
-</div> -->
-
-
 
 <app-best-seller></app-best-seller>
 
