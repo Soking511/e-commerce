@@ -12,25 +12,24 @@ const hpp_1 = __importDefault(require("hpp"));
 const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const csurf_1 = __importDefault(require("csurf"));
 const db_1 = __importDefault(require("../config/db"));
 const index_1 = __importDefault(require("../Apps/index"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use((0, cors_1.default)({
-    origin: ['http://localhost:4200'],
+    origin: ['http://localhost:4200', 'https://e-commerce-rose-five.vercel.app/'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
     credentials: true
 }));
 app.use((0, cookie_parser_1.default)());
-app.use((0, csurf_1.default)({
-    cookie: {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict'
-    }
-}));
+// app.use(csurf({
+//   cookie: {
+//     httpOnly: true,
+//     secure: true,
+//     sameSite: 'strict'
+//   }
+// }));
 app.use(express_1.default.json({ limit: '2kb' }));
 app.use((0, compression_1.default)());
 app.use((0, express_mongo_sanitize_1.default)());

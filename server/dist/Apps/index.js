@@ -17,10 +17,10 @@ const orderRoute_1 = __importDefault(require("./order/orderRoute"));
 const wishlistRoute_1 = __importDefault(require("./users/wishlistRoute"));
 const couponsRoute_1 = __importDefault(require("./coupons/couponsRoute"));
 const mountRoutes = (app) => {
-    app.use((req, res, next) => {
-        res.cookie('cookies', req.csrfToken());
-        next();
-    });
+    // app.use((req: Request, res: Response, next: NextFunction) => {
+    //   res.cookie('cookies', req.csrfToken());
+    //   next();
+    // });
     app.use('/api/v1/categories', categoriesRoute_1.default);
     app.use('/api/v1/subcategory', subcategoryRoute_1.default);
     app.use('/api/v1/products', productRoute_1.default);
