@@ -5,13 +5,13 @@
   "protobufjs": "^7.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node dist/app.js",
     "dev": "nodemon app.ts",
-    "prod": "NODE_ENV=product node ./dist/app.js",
+    "prod": "NODE_ENV=production node dist/app.js",
     "build": "tsc"
   },
   "engines": {
-    "node": "20.15.1"
+    "node":"20.15.1"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +20,6 @@
   "dependencies": {
     "@angular/cli": "^18.2.4",
     "@angular/core": "^18.2.4",
-    "@vercel/node": "^3.2.23",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
@@ -28,7 +27,7 @@
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1",
+    "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
     "express-mongo-sanitize": "^2.2.0",
     "express-validator": "^7.2.0",
@@ -72,6 +71,6 @@
     "raw-loader": "^4.0.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.5.4"
   }
 }
