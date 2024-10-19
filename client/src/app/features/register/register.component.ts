@@ -37,13 +37,13 @@ export class RegisterComponent {
         this._AuthService.saveCurrentUser();
         this._Router.navigate(['/home']);
       },
-      error:(err) => {
-        err.error.errors.map((error: any) => {
-          if (error.path === 'email' || error.path === 'password' || error.path === 'phone')
-            this.messageError = error.msg;
+      // error:(err) => {
+      //   err.error.errors.map((error: any) => {
+      //     if (error.path === 'email' || error.path === 'password' || error.path === 'phone')
+      //       this.messageError = error.msg;
 
-        })
-      }
+      //   })
+      // }
     })
   }
 }
