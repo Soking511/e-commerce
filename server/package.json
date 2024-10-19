@@ -5,13 +5,10 @@
   "protobufjs": "^7.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "node dist/app.js",
     "dev": "nodemon app.ts",
-    "prod": "NODE_ENV=production node dist/app.js",
+    "prod": "NODE_ENV=product node ./dist/app.js",
+    "start": "NODE_ENV=product node ./dist/app.js",
     "build": "tsc"
-  },
-  "engines": {
-    "node":"20.15.1"
   },
   "keywords": [],
   "author": "",
