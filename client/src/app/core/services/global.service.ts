@@ -18,9 +18,9 @@ export class GlobalService {
   addressRoute: string = 'api/v1/address';
   reviewsRoute: string = 'api/v1/reviews';
   cartRoute: string = 'api/v1/carts';
-  productsImage: string = `${this.baseURL}uploads/products/`;
-  usersImage: string = `${this.baseURL}uploads/users/`;
-  categoryImage: string = `${this.baseURL}uploads/categories/`;
+  productsImage: string = `https://raw.githubusercontent.com/Soking511/e-commerce/refs/heads/main/server/uploads/products/`;
+  usersImage: string = `https://raw.githubusercontent.com/Soking511/e-commerce/refs/heads/main/server/uploads/users/`;
+  categoryImage: string = `https://raw.githubusercontent.com/Soking511/e-commerce/refs/heads/main/server/uploads/categories/`;
   apiKey: string = 'secret123';
   constructor(private _HttpClient:HttpClient) { }
 
