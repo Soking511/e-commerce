@@ -50,15 +50,15 @@ app.get('/', (req, res) => {
 
 dbConnection();
 mountRoutes(app);
-// let server: Server;
-// server = app.listen(process.env.PORT || 3300, () => {
-//   console.log(`App is listen on port ${process.env.PORT}`);
-// });
+let server: Server;
+server = app.listen(process.env.PORT || 3300, () => {
+  console.log(`App is listen on port ${process.env.PORT}`);
+});
 
-// process.on('unhandledRejection', (err: Error) => {
-//   console.error(`unhandledRejection Error : ${err.name} | ${err.message}`);
-//   server.close(() => {
-//     console.error('Application is shutting down...')
-//     process.exit(1);
-//   })
-// });
+process.on('unhandledRejection', (err: Error) => {
+  console.error(`unhandledRejection Error : ${err.name} | ${err.message}`);
+  server.close(() => {
+    console.error('Application is shutting down...')
+    process.exit(1);
+  })
+});
