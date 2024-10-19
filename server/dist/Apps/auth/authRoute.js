@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const authValidator_1 = require("../../utils/validators/authValidator");
+const authController_1 = require("./authController");
+const express_1 = require("express");
+const authRoute = (0, express_1.Router)();
+authRoute.post('/register', authValidator_1.registerValidator, authController_1.Register);
+authRoute.post('/login', authValidator_1.loginValidator, authController_1.Login);
+authRoute.post('/forgetPassword', authValidator_1.forgetPasswordValidator, authController_1.forgetPassword);
+authRoute.post('/verifyCode', authController_1.checkResetCodeVerification);
+authRoute.put('/resetCode', authValidator_1.resetPasswordValidator, authController_1.applyResetCode);
+// authRoute.post('/logout', Logout);
+exports.default = authRoute;
