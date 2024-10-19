@@ -15,7 +15,7 @@ import { I18n } from 'i18n';
 const app: express.Application = express()
 dotenv.config()
 app.use(cors({
-  origin: ['http://localhost:4200'],
+  origin: ['http://localhost:4200', 'https://e-commerce-bc0xjpfu8-soking511s-projects.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
   credentials: true
