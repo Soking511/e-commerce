@@ -9,8 +9,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import csurf from 'csurf';
-import dbConnection from './config/db';
-import mountRoutes from './Apps/index';
+import dbConnection from '../config/db';
+import mountRoutes from '../Apps/index';
 import { I18n } from 'i18n';
 const app: express.Application = express()
 dotenv.config()
@@ -48,7 +48,7 @@ app.use(i18n.init);
 dbConnection();
 mountRoutes(app);
 let server: Server;
-server = app.listen(process.env.PORT, () => {
+server = app.listen(process.env.PORT || 3300, () => {
   console.log(`App is listen on port ${process.env.PORT}`);
 });
 
