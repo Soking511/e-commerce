@@ -12,8 +12,8 @@ const hpp_1 = __importDefault(require("hpp"));
 const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const db_1 = __importDefault(require("../config/db"));
-const index_1 = __importDefault(require("../Apps/index"));
+const db_1 = __importDefault(require("./config/db"));
+const index_1 = __importDefault(require("./Apps/index"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use((0, cors_1.default)({
