@@ -9,13 +9,13 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import csurf from 'csurf';
-import dbConnection from '../config/db';
-import mountRoutes from '../Apps/index';
+import dbConnection from './config/db';
+import mountRoutes from './Apps/index';
 import { I18n } from 'i18n';
 const app: express.Application = express()
 dotenv.config()
 app.use(cors({
-  origin: ['http://localhost:4200', 'https://e-commerce-rose-five.vercel.app/'],
+  origin: ['http://localhost:4200', 'https://e-commerce-rose-five.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
   credentials: true
@@ -32,7 +32,7 @@ app.use(express.json({ limit: '2kb' }));
 app.use(compression());
 app.use(mongoSanitize());
 app.use(hpp({ whitelist: ['price', 'category', 'subcategory'] }));
-app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
+// app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
 // app.use(express.static('uploads'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
