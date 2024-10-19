@@ -4,7 +4,6 @@ import cartModel from './cartModel';
 import productModel from '../products/productModel';
 import couponsModel from '../coupons/couponsModel';
 import { CartItems, Carts } from './cartInterface';
-import { PUT } from '../httpMethods';
 
 export const getUserCart = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const cart = await cartModel.findOne({ user: req.user?._id });
