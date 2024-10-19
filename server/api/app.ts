@@ -14,12 +14,12 @@ import mountRoutes from '../Apps/index';
 import { I18n } from 'i18n';
 const app: express.Application = express()
 dotenv.config()
-app.use(cors({
-  origin: ['http://localhost:4200', 'https://e-commerce-rose-five.vercel.app/'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
-  credentials: true
-}))
+// app.use(cors({
+//   origin: ['http://localhost:4200', 'https://e-commerce-rose-five.vercel.app/'],
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
+//   credentials: true
+// }))
 app.use(cookieParser());
 app.use(csurf({
   cookie: {
