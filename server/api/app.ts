@@ -36,17 +36,17 @@ app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
 // app.use(express.static('uploads'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.get('/api', (req, res) => {
+app.get('/', (req, res) => {
   res.json({ message: 'Hello from Vercel!' });
 });
 
-const i18n = new I18n({
-  locales: ['en', 'ar'],
-  directory: path.join(__dirname, 'locales'),
-  defaultLocale: 'en',
-  queryParameter: 'lang'
-})
-app.use(i18n.init);
+// const i18n = new I18n({
+//   locales: ['en', 'ar'],
+//   directory: path.join(__dirname, 'locales'),
+//   defaultLocale: 'en',
+//   queryParameter: 'lang'
+// })
+// app.use(i18n.init);
 
 dbConnection();
 mountRoutes(app);
