@@ -16,7 +16,7 @@ const index_1 = __importDefault(require("./Apps/index"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use((0, cors_1.default)({
-    origin: 'https://e-commerce-rose-five.vercel.app',
+    origin: 'https://soking-mart.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
     credentials: true
