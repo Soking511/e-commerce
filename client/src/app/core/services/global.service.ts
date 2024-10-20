@@ -24,8 +24,6 @@ export class GlobalService {
   apiKey: string = 'secret123';
   constructor(private _HttpClient:HttpClient) { }
 
-
-
   fetchCities(): Observable<any> {
     return this._HttpClient.get(`https://atfawry.fawrystaging.com/ECommerceWeb/api/lookups/govs`);
   }
