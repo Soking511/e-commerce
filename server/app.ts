@@ -11,42 +11,31 @@ import cookieParser from 'cookie-parser';
 import csurf from 'csurf';
 import dbConnection from './config/db';
 import mountRoutes from './Apps/index';
-import { I18n } from 'i18n';
 const app: express.Application = express()
 dotenv.config()
 app.use(cors({
+  // origin:  'https://mart.soking.tech',
   origin:  'https://soking.tech',
+  // origin:  'http://localhost:4200',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
   credentials: true
 }))
+
 app.use(cookieParser());
-// app.use(csurf({
-//   cookie: {
-//     httpOnly: true,
-//     secure: true,
-//     sameSite: 'strict'
-//   }
-// }));
+app.use(csurf({
+  cookie: {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict'
+  }
+}));
 app.use(express.json({ limit: '2kb' }));
 app.use(compression());
 app.use(mongoSanitize());
 app.use(hpp({ whitelist: ['price', 'category', 'subcategory'] }));
-// app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
-// app.use(express.static('uploads'));
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello from Vercel!' });
-});
-
-// const i18n = new I18n({
-//   locales: ['en', 'ar'],
-//   directory: path.join(__dirname, 'locales'),
-//   defaultLocale: 'en',
-//   queryParameter: 'lang'
-// })
-// app.use(i18n.init);
 
 dbConnection();
 mountRoutes(app);
