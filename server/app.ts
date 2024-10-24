@@ -15,7 +15,7 @@ import { I18n } from 'i18n';
 const app: express.Application = express()
 dotenv.config()
 app.use(cors({
-  origin:  'https://soking-mart.vercel.app',
+  origin:  'https://soking.tech',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-API-KEY'],
   credentials: true
